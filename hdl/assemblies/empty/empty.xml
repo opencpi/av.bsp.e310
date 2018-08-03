@@ -1,0 +1,5 @@
+<!-- The empty HDL assembly xml file -->
+<HdlAssembly>
+  <!-- Remove this instance and replace it with real ones -->
+  <instance worker='nothing'/>
+</HdlAssembly>

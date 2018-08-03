@@ -1,0 +1,4 @@
+<HdlContainer platform="xsim">
+  <Device Worker="ad5662" Floating='1'/>
+  <Device Worker="ad5662_em" Floating='1'/>
+</HdlContainer>

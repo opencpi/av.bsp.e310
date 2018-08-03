@@ -1,0 +1,73 @@
+<HdlDevice language='vhdl' spec='e3xx_mimo_xcvr_filter-spec'>
+    <!-- Properties -
+         These are what get exposed to the
+         proxy worker -->
+    <Property name='TX_ENABLE1A'  type='bool'  writable='true'/>
+    <Property name='TX_ENABLE2A'  type='bool'  writable='true'/>
+    <Property name='TX_ENABLE1B'  type='bool'  writable='true'/>
+    <Property name='TX_ENABLE2B'  type='bool'  writable='true'/>
+
+    <Property name='VCTXRX1_V1' type='bool'  writable='true'/>
+    <Property name='VCTXRX1_V2' type='bool'  writable='true'/>
+    <Property name='VCTXRX2_V1' type='bool'  writable='true'/>
+    <Property name='VCTXRX2_V2' type='bool'  writable='true'/>
+
+    <Property name='VCRX1_V1' type='bool'  writable='true'/>
+    <Property name='VCRX1_V2' type='bool'  writable='true'/>
+    <Property name='VCRX2_V1' type='bool'  writable='true'/>
+    <Property name='VCRX2_V2' type='bool'  writable='true'/>
+
+    <Property name='TX_BANDSEL'   type='uchar' writable='true'/>
+
+    <Property name='RX1_BANDSEL'  type='uchar' writable='true'/>
+    <Property name='RX1B_BANDSEL' type='uchar' writable='true'/>
+    <Property name='RX1C_BANDSEL' type='uchar' writable='true'/>
+
+    <Property name='RX2_BANDSEL'  type='uchar' writable='true'/>
+    <Property name='RX2B_BANDSEL' type='uchar' writable='true'/>
+    <Property name='RX2C_BANDSEL' type='uchar' writable='true'/>
+
+    <Property name='LED_TXRX1_TX' type='bool' writable='true'/>
+    <Property name='LED_TXRX1_RX' type='bool' writable='true'/>
+    <Property name='LED_RX1_RX'   type='bool' writable='true'/>
+
+    <Property name='LED_TXRX2_TX' type='bool' writable='true'/>
+    <Property name='LED_TXRX2_RX' type='bool' writable='true'/>
+    <Property name='LED_RX2_RX'   type='bool' writable='true'/>
+
+    <!-- Signals -
+         These represent the signals
+         on the daughterboard connector -->
+    <Signal output='TX_ENABLE1A'/>
+    <Signal output='TX_ENABLE2A'/>
+    <Signal output='TX_ENABLE1B'/>
+    <Signal output='TX_ENABLE2B'/>
+
+    <Signal output='VCTXRX1_V1'/>
+    <Signal output='VCTXRX1_V2'/>
+    <Signal output='VCTXRX2_V1'/>
+    <Signal output='VCTXRX2_V2'/>
+
+    <Signal output='VCRX1_V1'/>
+    <Signal output='VCRX1_V2'/>
+    <Signal output='VCRX2_V1'/>
+    <Signal output='VCRX2_V2'/>
+
+    <Signal output='TX_BANDSEL'   width='3'/>
+
+    <Signal output='RX1_BANDSEL'  width='3'/>
+    <Signal output='RX1B_BANDSEL' width='2'/>
+    <Signal output='RX1C_BANDSEL' width='2'/>
+
+    <Signal output='RX2_BANDSEL'  width='3'/>
+    <Signal output='RX2C_BANDSEL' width='2'/>
+    <Signal output='RX2B_BANDSEL' width='2'/>
+
+    <Signal output='LED_TXRX1_TX'/>
+    <Signal output='LED_TXRX1_RX'/>
+    <Signal output='LED_RX1_RX'/>
+
+    <Signal output='LED_TXRX2_TX'/>
+    <Signal output='LED_TXRX2_RX'/>
+    <Signal output='LED_RX2_RX'/>
+</HdlDevice>

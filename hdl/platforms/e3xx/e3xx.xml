@@ -1,0 +1,39 @@
+<!-- This file defines the e3xx HDL platform -->
+<HdlPlatform Language="VHDL" spec="platform-spec">
+  <specproperty name='platform' value='e3xx'/>
+  <specproperty name="nSlots" value='1'/>
+  <specproperty name="slotNames" value='e3xx_conn'/>
+  <!-- These next two lines must be present in all platforms -->
+  <metadata master="true"/>
+  <timebase master="true"/>
+  <!-- This platform worker provides a control plane -->
+  <cpmaster master='true'/>
+  <!-- Set your time server frequency -->
+  <device worker='time_server'>
+    <property name='frequency' value='100e6'/>
+  </device>
+  <sdp name="zynq" master='true' count='4'/>
+  <property name='useGP1' type='bool' parameter='1' default='false'/>
+  <property name="axi_error" type="bool" arraylength='4' volatile='true'/>
+  <property name="sdpDropCount" type='uchar' volatile='true'/>
+  <!-- The E310 Daughter Board slot.
+  -->
+  <slot name='E3XX_CONN' type='e3xx_conn'>
+    <!-- We only mention signals that don't have the canonical signal name -->
+  </slot>
+
+  <!-- debug properties -->
+  <property name="debug_state" type="Ulonglong" arraylength='4' volatile='true' debug='false'/>
+  <property name="debug_state1" type="Ulonglong" arraylength='4' volatile='true' debug='false'/>
+  <property name="debug_state2" type="Ulonglong" arraylength='4' volatile='true' debug='false'/>
+
+  <signal input="PPS_EXT_IN"     /> <!-- 1 PPS input to FPGA from PPS External-->
+
+  <!-- This ONSWITCH_DB signal and property are needed to force a pullup on this pin.
+       Even if there is a pullup in the XDC, it may be optimized out without this property.
+       The pullup is required, or the radio (when running xilinx13_3) will freeze up indefinitely
+       when OpenCPI attempts to load the FPGA with a bitstream. -->
+  <signal input="ONSWITCH_DB"    />
+  <property name="onswitch_db_p" type="bool" volatile="true"/>
+
+</HdlPlatform>

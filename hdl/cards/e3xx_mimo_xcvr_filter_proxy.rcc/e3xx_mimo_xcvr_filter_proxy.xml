@@ -1,0 +1,9 @@
+<RccWorker language='c++' spec='e3xx_mimo_xcvr_filter_proxy-spec' slave='e3xx_mimo_xcvr_filter.hdl' >
+<!--<RccWorker language='c++' spec='e3xx_mimo_xcvr_filter_proxy-spec'>-->
+    <Property name='rx_frequency_MHz' type='double' writable='true' readable='true' writeSync='true'/>
+    <Property name='tx_frequency_MHz' type='double' writable='true' readable='true' writeSync='true'/>
+    <Property name='trxa_mode' type='Enum' enums='rx,tx,off' writable='true' readable='true' writeSync='true' default='off'/>
+    <Property name='rx2a_mode' type='Enum' enums='rx,off'    writable='true' readable='true' writeSync='true' default='off'/>
+    <Property name='trxb_mode' type='Enum' enums='rx,tx,off' writable='true' readable='true' writeSync='true' default='off'/>
+    <Property name='rx2b_mode' type='Enum' enums='rx,off'    writable='true' readable='true' writeSync='true' default='off'/>
+</RccWorker>

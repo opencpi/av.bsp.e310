@@ -1,0 +1,8 @@
+  <device name="ad5662"                    card="e3xx_mimo_xcvr"/>
+  <device name="e3xx_mimo_xcvr_filter"     card="e3xx_mimo_xcvr"/>
+
+  <!-- comm buses (e.g. I2C/SPI) -->
+  <device name="e3xx_i2c"                  card="e3xx_mimo_xcvr"/>
+  <device name="ad9361_spi"  card="e3xx_mimo_xcvr">
+    <property name="CP_CLK_FREQ_HZ_p" value="100e6"/> <!-- we MUST provide to this worker the e3xx's control plane clock freq value -->
+  </device>

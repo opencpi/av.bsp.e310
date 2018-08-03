@@ -1,0 +1,11 @@
+<HdlDevice language='vhdl' spec='ad5662-spec' RawProperties='True'>
+
+  <ControlInterface Timeout='512'>
+    <Property name='voltageScale' type='ulong' readable='1' writable='1'/>
+  </ControlInterface>
+
+  <Signal output='TUNE_DAC_SYNCn'        />      <!-- Pin 20  -->
+  <Signal output='TUNE_DAC_SCLK'         />      <!-- Pin 22  -->
+  <Signal output='TUNE_DAC_SDIN'         />      <!-- Pin 24  -->
+  <Signal input='VCTCXO_TO_MB'           />      <!-- Pin 30  -->
+</HdlDevice>

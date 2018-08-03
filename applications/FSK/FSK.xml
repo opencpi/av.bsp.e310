@@ -1,0 +1,4 @@
+<!-- The FSK application xml file -->
+<application>
+  <instance component='ocpi.core.nothing'/>
+</application>

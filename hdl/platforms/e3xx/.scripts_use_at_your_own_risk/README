@@ -1,0 +1,61 @@
+-------------------------------------------------------------------------------
+Basic Usage of Utility Scripts:
+-------------------------------------------------------------------------------
+# To generate configuration files
+./create_cfgs.py 2 3 5 6
+# or
+make Configs="2 3 5 6"
+
+# To remove generated files:
+make clean
+
+# Before using these generated files, you will need to copy the XDC and XML
+files into the platform worker directory at "../".
+
+-------------------------------------------------------------------------------
+Overview:
+-------------------------------------------------------------------------------
+This directory contains utility scripts and templates for generating
+the configuration XML and XDC files for each platform configuration.
+Right now, the utility script (create_cfgs.py) supports AD9361 modes
+2, 3, 5 and 6. Reference the XML for the ad9361_data_sub.hdl worker
+for the table of data modes and indeces. For convenience:
+  Modes 2 and 3 are CMOS Single Port Full Duplex (3 is ports swapped)
+  Modes 5 and 6 are CMOS Dual   Port Full Duplex (6 is ports swapped)
+
+For ease of use, running "make" here will run the create_cfgs.py
+script. It uses the Make variable "Configs" to choose which configs
+to generate. For now it is set to only "2".
+
+"make clean" here will remove all generated files and leave only the
+scripts and templates.
+
+-------------------------------------------------------------------------------
+Details of the configuration generation:
+-------------------------------------------------------------------------------
+The various supported AD9361 configurations for the E3xx are mapped to their
+fields in create_cfgs.py's  SIGNAL_MODES dictionary. Here, we map modes like
+"2" to its details like which PINs are associated with RX vs TX, and the fact
+that it is not LVDS, is not half-duplex, is single-port.... This information
+is important for generating the XDC constraints for each configuration.
+
+The XML files for each configuration share some common content. This content
+is located in the template-configs/common.xml which contains the device
+workers present regardless of how many R and T channels are present in the
+XML. Then, the remainder of the XML is generated in create_cfgs.py based on
+the number of R and T channels for this platform configuration
+(get_devices_xml). Finally, each configuration will use its own constraints
+file which is named in the XML header. This header is also generated in
+create_cfgs.py (get_header_text).
+
+The DATA_CLK_Delay, RX_Data_Delay, FB_CLK_Delay and TX_Data_Delay
+values are set in this script and used to set the corresponding device
+worker parameters (e.g. for the data_sub worker). These values should match
+the calculations done in e3xx_timing.xdc for setting [min/max]_[rx/tx]_delay.
+
+The XDC files are generated based on the above SIGNAL_MODES dictionary along
+with the templates in e3xx.xdc (base configuration with no RX or TX path)
+and e3xx_timing.xdc (contains the data clock information and some other
+timing constraints). e3xx_timing.xdc contains the delay variables
+[min/max]_[rx/tx]_delay which are used to set the input and output delay
+constraints for each RX/TX pin (get_constr_text).

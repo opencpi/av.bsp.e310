@@ -1,0 +1,4 @@
+<!-- The rx_app application xml file -->
+<application>
+  <instance component='ocpi.core.nothing'/>
+</application>

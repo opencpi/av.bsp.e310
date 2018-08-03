@@ -1,0 +1,143 @@
+<!-- This is the card definition file for cards of type: e3xx_mimo_xcvr
+     Add <signal> elements for each signal in the slot
+     See: http://files.ettus.com/schematics/e310/e310_db.pdf -->
+<card type="e3xx_conn">
+  <device worker='ad9361_adc'/>
+  <device worker='ad9361_adc'/>
+  <device worker='ad9361_adc_sub'>
+    <Property name='LVDS_P' value='false'/>
+  </device>
+  <device worker='ad9361_dac'/>
+  <device worker='ad9361_dac'/>                           <!--ad9361 ad9361 --> 
+  <device worker='ad9361_dac_sub'>                      <!--pin    name   -->
+    <Property name='LVDS_P' value='false'/>
+  </device>
+
+  <device worker='ad9361_spi'>
+    <Signal name='SPI_DI'        slot='CAT_MOSI'    />    <!-- J4            -->
+    <Signal name='SPI_CLK'       slot='CAT_SCLK'    />    <!-- J5            -->
+    <Signal name='RESETB'        slot='CAT_RESET'   />    <!-- K5            -->
+    <Signal name='SPI_ENB'       slot='CAT_CS'      />    <!-- K6            -->
+    <Signal name='SPI_DO'        slot='CAT_MISO'    />    <!-- L6            -->
+  </device>
+  <device worker='ad9361_data_sub'>
+    <Signal name='DATA_CLK_P'    slot='CAT_DATA_CLK'/>    <!-- G11           -->
+    <Signal name='DATA_CLK_N'    slot=''            />    <!-- H11           -->
+    <Signal name='RX_FRAME_P'    slot='CAT_RX_FRAME'/>
+    <Signal name='RX_FRAME_N'    slot=''            />
+    <Signal name='FB_CLK_P'      slot='CAT_FB_CLK'  />    <!-- F10           -->
+    <Signal name='FB_CLK_N'      slot=''            />
+    <Signal name='TX_FRAME_P'    slot='CAT_TX_FRAME'/>    <!-- G9            -->
+    <Signal name='TX_FRAME_N'    slot=''            />
+    <Signal name='TXNRX'         slot='CAT_TXNRX'   />    <!-- H4            -->
+    <Signal name='ENABLE'        slot='CAT_ENABLE'  />    <!-- H4            -->
+    <Signal name='P0_D_5_0(0)'   slot='CAT_P0_D_0'  />    <!-- E12   TX_D0_N -->
+    <Signal name='P0_D_5_0(1)'   slot='CAT_P0_D_1'  />    <!-- D11   TX_D0_P -->
+    <Signal name='P0_D_5_0(2)'   slot='CAT_P0_D_2'  />    <!-- E11   TX_D1_N -->
+    <Signal name='P0_D_5_0(3)'   slot='CAT_P0_D_3'  />    <!-- D10   TX_D1_P -->
+    <Signal name='P0_D_5_0(4)'   slot='CAT_P0_D_4'  />    <!-- E10   TX_D2_N -->
+    <Signal name='P0_D_5_0(5)'   slot='CAT_P0_D_5'  />    <!-- D9    TX_D2_P -->
+    <Signal name='P0_D_11_6(0)'  slot='CAT_P0_D_6'  />    <!-- E9    TX_D3_N -->
+    <Signal name='P0_D_11_6(1)'  slot='CAT_P0_D_7'  />    <!-- D8    TX_D3_P -->
+    <Signal name='P0_D_11_6(2)'  slot='CAT_P0_D_8'  />    <!-- E8    TX_D4_N -->
+    <Signal name='P0_D_11_6(3)'  slot='CAT_P0_D_9'  />    <!-- D7    TX_D4_P -->
+    <Signal name='P0_D_11_6(4)'  slot='CAT_P0_D_10' />    <!-- F8    TX_D5_N -->
+    <Signal name='P0_D_11_6(5)'  slot='CAT_P0_D_11' />    <!-- E7    TX_D5_P -->
+
+    <Signal name='P1_D_5_0(0)'   slot='CAT_P1_D_0'  />    <!-- K11   RX_D0_N -->
+    <Signal name='P1_D_5_0(1)'   slot='CAT_P1_D_1'  />    <!-- J12   RX_D0_P -->
+    <Signal name='P1_D_5_0(2)'   slot='CAT_P1_D_2'  />    <!-- K10   RX_D1_N -->
+    <Signal name='P1_D_5_0(3)'   slot='CAT_P1_D_3'  />    <!-- J11   RX_D1_P -->
+    <Signal name='P1_D_5_0(4)'   slot='CAT_P1_D_4'  />    <!-- K9    RX_D2_N -->
+    <Signal name='P1_D_5_0(5)'   slot='CAT_P1_D_5'  />    <!-- J10   RX_D2_P -->
+    <Signal name='P1_D_11_6(0)'  slot='CAT_P1_D_6'  />    <!-- K8    RX_D3_N -->
+    <Signal name='P1_D_11_6(1)'  slot='CAT_P1_D_7'  />    <!-- J9    RX_D3_P -->
+    <Signal name='P1_D_11_6(2)'  slot='CAT_P1_D_8'  />    <!-- K7    RX_D4_N -->
+    <Signal name='P1_D_11_6(3)'  slot='CAT_P1_D_9'  />    <!-- J8    RX_D4_P -->
+    <Signal name='P1_D_11_6(4)'  slot='CAT_P1_D_10' />    <!-- J7    RX_D5_N -->
+    <Signal name='P1_D_11_6(5)'  slot='CAT_P1_D_11' />    <!-- H8    RX_D5_P -->
+
+    <Property name='LVDS_P' value='false'/>
+  </device>
+
+  <device worker='ad9361_config'/>
+
+  <device worker='e3xx_mimo_xcvr_filter'>
+    <Signal name='TX_BANDSEL(0)'       slot='TX_BANDSEL_0'   /> <!--    -->
+    <Signal name='TX_BANDSEL(1)'       slot='TX_BANDSEL_1'   /> <!--    -->
+    <Signal name='TX_BANDSEL(2)'       slot='TX_BANDSEL_2'   /> <!--    -->
+
+    <Signal name='RX1_BANDSEL(0)'      slot='RX1_BANDSEL_0'  /> <!--    -->
+    <Signal name='RX1_BANDSEL(1)'      slot='RX1_BANDSEL_1'  /> <!--    -->
+    <Signal name='RX1_BANDSEL(2)'      slot='RX1_BANDSEL_2'  /> <!--    -->
+
+    <Signal name='RX2_BANDSEL(0)'      slot='RX2_BANDSEL_0'  /> <!--    -->
+    <Signal name='RX2_BANDSEL(1)'      slot='RX2_BANDSEL_1'  /> <!--    -->
+    <Signal name='RX2_BANDSEL(2)'      slot='RX2_BANDSEL_2'  /> <!--    -->
+
+    <Signal name='RX2C_BANDSEL(0)'     slot='RX2C_BANDSEL_0' /> <!--    -->
+    <Signal name='RX2C_BANDSEL(1)'     slot='RX2C_BANDSEL_1' /> <!--    -->
+
+    <Signal name='RX1B_BANDSEL(0)'     slot='RX1B_BANDSEL_0' /> <!--    -->
+    <Signal name='RX1B_BANDSEL(1)'     slot='RX1B_BANDSEL_1' /> <!--    -->
+
+    <Signal name='RX1C_BANDSEL(0)'     slot='RX1C_BANDSEL_0' /> <!--    -->
+    <Signal name='RX1C_BANDSEL(1)'     slot='RX1C_BANDSEL_1' /> <!--    -->
+
+    <Signal name='RX2B_BANDSEL(0)'     slot='RX2B_BANDSEL_0' /> <!--    -->
+    <Signal name='RX2B_BANDSEL(1)'     slot='RX2B_BANDSEL_1' /> <!--    -->
+
+    <Signal name='TX_ENABLE1A'         slot='TX_ENABLE1A'    /> <!--    -->
+    <Signal name='TX_ENABLE2A'         slot='TX_ENABLE2A'    /> <!--    -->
+    <Signal name='TX_ENABLE1B'         slot='TX_ENABLE1B'    /> <!--    -->
+    <Signal name='TX_ENABLE2B'         slot='TX_ENABLE2B'    /> <!--    -->
+
+    <Signal name='VCTXRX1_V1'          slot='VCTXRX1_V1'     /> <!--    -->
+    <Signal name='VCTXRX1_V2'          slot='VCTXRX1_V2'     /> <!--    -->
+    <Signal name='VCTXRX2_V1'          slot='VCTXRX2_V1'     /> <!--    -->
+    <Signal name='VCTXRX2_V2'          slot='VCTXRX2_V2'     /> <!--    -->
+    <Signal name='VCRX1_V1'            slot='VCRX1_V1'       /> <!--    -->
+    <Signal name='VCRX1_V2'            slot='VCRX1_V2'       /> <!--    -->
+    <Signal name='VCRX2_V1'            slot='VCRX2_V1'       /> <!--    -->
+    <Signal name='VCRX2_V2'            slot='VCRX2_V2'       /> <!--    -->
+
+    <Signal name='LED_TXRX1_TX'        slot='LED_TXRX1_TX'   /> <!--    -->
+    <Signal name='LED_TXRX1_RX'        slot='LED_TXRX1_RX'   /> <!--    -->
+    <Signal name='LED_RX1_RX'          slot='LED_RX1_RX'     /> <!--    -->
+    <Signal name='LED_TXRX2_TX'        slot='LED_TXRX2_TX'   /> <!--    -->
+    <Signal name='LED_TXRX2_RX'        slot='LED_TXRX2_RX'   /> <!--    -->
+    <Signal name='LED_RX2_RX'          slot='LED_RX2_RX'     /> <!--    -->
+  </device>
+
+  <device worker='stm_mc24c02'/>
+  <device worker='e3xx_i2c'>
+    <Signal name='SCL'                 slot='DB_SCL'         /> <!--    -->
+    <Signal name='SDA'                 slot='DB_SDA'         /> <!--    -->
+  </device>
+
+  <!-- unimplemented DAC control -->
+  <device worker='ad5662'>
+    <Signal name='TUNE_DAC_SYNCn'      slot='TCXO_DAC_SYNCn' />
+    <Signal name='TUNE_DAC_SCLK'       slot='TCXO_DAC_SCLK'  />
+    <Signal name='TUNE_DAC_SDIN'       slot='TCXO_DAC_SDIN'  />
+    <Signal name='VCTCXO_TO_MB'        slot='TCXO_CLK'       />
+  </device>
+
+  <!-- unimplemented pin control -->
+  <!--
+    <Signal name='CAT_BBCLK_OUT'       slot='CAT_BBCLK_OUT'  />
+    <Signal name='CAT_SYNC'            slot='CAT_SYNC'       />
+    <Signal name='CAT_TXNRX'           slot='CAT_TXNRX'      />
+    <Signal name='CAT_ENABLE'          slot='CAT_ENABLE'     />
+    <Signal name='CAT_ENAGC'           slot='CAT_ENAGC'      />
+
+    <Signal name='CAT_CTRL_IN0'        slot='CAT_CTRL_IN0'   />
+    <Signal name='CAT_CTRL_IN1'        slot='CAT_CTRL_IN1'   />
+    <Signal name='CAT_CTRL_IN2'        slot='CAT_CTRL_IN2'   />
+    <Signal name='CAT_CTRL_IN3'        slot='CAT_CTRL_IN3'   />
+
+    <Signal name='CAT_CTRL_OUT0'       slot='CAT_CTRL_OUT0'  />
+    <Signal name='CAT_CTRL_OUT1'       slot='CAT_CTRL_OUT1'  />
+    <Signal name='CAT_CTRL_OUT2'       slot='CAT_CTRL_OUT2'  />
+    <Signal name='CAT_CTRL_OUT3'       slot='CAT_CTRL_OUT3'  />-->
+</card>

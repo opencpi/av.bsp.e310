@@ -1,0 +1,28 @@
+<HdlConfig Constraints="e3xx_mimo_xcvr_mode_2_cmos">
+  <device name="ad5662"                    card="e3xx_mimo_xcvr"/>
+  <device name="e3xx_mimo_xcvr_filter"     card="e3xx_mimo_xcvr"/>
+
+  <!-- comm buses (e.g. I2C/SPI) -->
+  <device name="e3xx_i2c"                  card="e3xx_mimo_xcvr"/>
+  <device name="ad9361_spi"  card="e3xx_mimo_xcvr">
+    <property name="CP_CLK_FREQ_HZ_p" value="100e6"/> <!-- we MUST provide to this worker the e3xx's control plane clock freq value -->
+  </device>
+  <device name="ad9361_data_sub" card="e3xx_mimo_xcvr">
+    <property name="lvds_p" value="false"/>
+    <property name="half_duplex_p" value="false"/>
+    <property name="single_port_p" value="true"/>
+    <property name="swap_ports_p" value="false"/>
+    <property name="DATA_CLK_Delay" value="11"/>
+    <property name="RX_Data_Delay" value="0"/>
+    <property name="FB_CLK_Delay" value="12"/>
+    <property name="TX_Data_Delay" value="0"/>
+  </device>
+  <device name="ad9361_config" card="e3xx_mimo_xcvr"/>
+  <device name="ad9361_dac_sub" card="e3xx_mimo_xcvr">
+    <property name="lvds_p" value="false"/>
+    <property name="half_duplex_p" value="false"/>
+    <property name="single_port_p" value="true"/>
+  </device>
+  <device name="ad9361_dac0" card="e3xx_mimo_xcvr"/>
+  <device name="ad9361_dac1" card="e3xx_mimo_xcvr"/>
+</HdlConfig>
