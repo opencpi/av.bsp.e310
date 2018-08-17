@@ -32,7 +32,9 @@
          level proxy is included, typically that proxy should set this value -->
     <!--property name="rx_rf_port_input" value=""/--> <!-- relying on ACI -->
   </instance>
-  <instance component="ocpi.assets.misc_comps.data_src"/>
+  <instance component="ocpi.assets.misc_comps.data_src">
+    <property name="LFSR_bit_reverse" value="false"/>
+  </instance>
   <instance component="ocpi.assets.devices.ad9361_adc_sub">
     <!-- this app xml is intended to use only the CMOS mode 2 of the AD9361,
          so it must enforce CMOS artifact matching by setting here all of the

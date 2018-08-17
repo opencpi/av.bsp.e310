@@ -3,15 +3,28 @@
      implements the ad9361_config_proxy OCS). If the application overrides
      the ad9361_config_proxy instance name to something other than
      ad9361_config_proxy, this worker's app_inst_name_ad9361_config_proxy
-     property should be set to the instance name. -->
-<RccWorker language='c++' spec='rx_spec' controloperations="initialize">
+     property should be set to the instance name. The same is true for
+     ad9361_adc_sub, ad9361_data_sub, and e3xx_mimo_xcvr_filter_proxy. -->
+<!--  ________________________________________________________________________________________________________  -->
+<!-- +                                                                                                        + -->
+<!-- |                       e3xx_rx.rcc                                                                      | -->
+<!-- +________________________________________________________________________________________________________+ -->
+<!--   ^                             ^                     ^                       ^                            -->
+<!--   |  slave                      | slave               | slave                 | slave                      -->
+<!--   |  interface                  | interface           | interface             | interface                  -->
+<!--   |  (ACI)                      | (ACI)               | (ACI)                 | (ACI)                      -->
+<!--  _V_______________________    __V_______________   ___V_______________    ____V__________________________  -->
+<!-- +                         +  +                  + +                   +  +                               + -->
+<!-- | ad9361_config_proxy.rcc |  |ad9361_adc_sub.hdl| |ad9361_data_sub.hdl|  |e3xx_mimo_xcvr_filter_proxy.rcc| -->
+<!-- +_________________________+  +__________________+ +___________________+  +_______________________________+ -->
+<!--                                                                         -->
+<RccWorker language='c++' spec='rx_spec'>
 
   <!-- OCS Parameters -->
 
   <!-- OWD Parameters -->
 
-  <Property Name="e3xx_num" Type="ushort" Parameter="true" Default="3" Description="Valid values are 2 or 3."/>
-  <Property Name="TYPE_p" Type="enum" Enums="e3xx" Parameter="true" Default="e3xx" Description="The purpose of this property is to provide the option for an application XML to specifiy this property in order to enforce use of a parameterized build for a particular frontend type."/>
+  <Property Name="TYPE_p" Type="enum" Enums="e3xx" Parameter="true" Default="e3xx" Description="The purpose of this property is to provide the option for an application XML to specify this property in order to enforce use of a parameterized build for a particular frontend type."/>
 
   <Property Name="NOT_SUPPORTED_p" Type="double" Parameter="true" Default="-1" Description="This value, when assigned to a frontend property, e.g. rf_gain_dB, indicates that the frontend setting corresponding to said property is not supported by the frontend hardware controlled by this worker."/>
 
@@ -27,7 +40,6 @@
   <Property Name="BB_GAIN_STEP_DB_p"     Type="double" Parameter="true" Default="NOT_SUPPORTED_p"/>
   <Property Name="FREQUENCY_MAX_MHZ_p"   Type="double" Parameter="true" Default="6000"/>
   <Property Name="FREQUENCY_MIN_MHZ_p"   Type="double" Parameter="true" Default="70"/>
-  <Property Name="SAMPLE_RATE_MAX_MHZ_p" Type="double" Parameter="true" Default="30.72"/>
   <!--Property Name="SAMPLE_RATE_MIN_MHZ_p" Type="double" Parameter="true" Default="2.083334"/--> <!-- TODO / FIXME framework removes precision and uses 2.08334-->
   <Property Name="SAMPLE_RATE_MIN_MHZ_p" Type="double" Parameter="true" Default="2.08334"/>
 
@@ -38,25 +50,25 @@
   <Property Name="BB_CUTOFF_FREQUENCY_MAX_MHZ_p" Type="double"
                                                  Parameter="true"
                                                  Default="AD9361_RX_BBBW_NO_OS_MAX_MHZ_p * 1.4"
-                                                 Description="The minimum configurable cutoff frequency in MHz of the e3xx's AD9361's third-order Butterworth Rx anti-aliasing filter. The Rx filter is normally calibrated to 1.4x the BBBW. For more information, see AD9361_Reference_Manual_UG-570.pdf p. 9."/>
+                                                 Description="The maximum configurable cutoff frequency in MHz of the e3xx's AD9361's third-order Butterworth Rx anti-aliasing filter. The Rx filter is normally calibrated to 1.4x the BBBW. For more information, see AD9361_Reference_Manual_UG-570.pdf p. 9."/>
   <Property Name="BB_CUTOFF_FREQUENCY_MIN_MHZ_p" Type="double"
                                                  Parameter="true"
                                                  Default="AD9361_RX_BBBW_NO_OS_MIN_MHZ_p * 1.4"
-                                                 Description="The maximum configurable cutoff frequency in MHz of the e3xx's AD9361's third-order Butterworth Rx anti-imaging filter. The Rx filter is normally calibrated to 1.6x the BBBW. For more information, see AD9361_Reference_Manual_UG-570.pdf p. 9."/>
+                                                 Description="The minimum configurable cutoff frequency in MHz of the e3xx's AD9361's third-order Butterworth Rx anti-imaging filter. The Rx filter is normally calibrated to 1.4x the BBBW. For more information, see AD9361_Reference_Manual_UG-570.pdf p. 9."/>
 
   <!-- OCS Properties -->
 
   <!-- When a write to the property occurs, this property's written value is
        applied to hardware. When a read of this property occurs, the read value
-       is the in-situ value (actual value which is currently assigned in
-       hardware, which may be slightly different than a previously written value
-       due to rounding  that occurs when assigning hardware register values
-       and/or No-OS API rounding that must occur before hardware register
-       rounding occurs). -->
+       is the (nominal) in-situ value (actual value which is currently assigned in
+       hardware, which may be slightly different than a previously written
+       property value due to rounding  that occurs before writing hardware
+       register values and/or No-OS API rounding) with double floating point
+       precision. -->
   <SpecProperty Name="rf_gain_dB" Volatile="true"
                                   ReadSync="true"
                                   WriteSync="true"
-                                  Default="1"/> <!-- gain is LO-dependant due to No-OS gain tables, default of 1 is valid for all LO freqs (0 isn't) -->
+                                  Default="1"/> <!-- gain is LO-dependent due to No-OS gain tables, default of 1 is valid for all LO freqs (0 isn't) -->
   <SpecProperty Name="bb_gain_dB" WriteSync="true"
                                   Default="NOT_SUPPORTED_p"/> <!-- TODO / FIXME - remove Writable from OCS for this property and remove WriteSync from the OWD for this property, the only reason we need WriteSync here is to ensure any write to this property of a value other than NOT_SUPPORTED_p causes a failure. -->
   <SpecProperty Name="frequency_MHz" Volatile="true"
@@ -70,20 +82,19 @@
   <SpecProperty Name="rf_cutoff_frequency_MHz" WriteSync="true"
                                                Default="NOT_SUPPORTED_p"/> <!-- TODO / FIXME - remove Writable from OCS for this property and remove WriteSync from the OWD for this property, the only reason we need WriteSync here is to ensure any write to this property of a value other than NOT_SUPPORTED_p causes a failure. -->
 
-  <!-- The cutoff frequency in MHz of the FMCOMMS2/3's AD9361's third-order
-       Butterworth Tx anti-imaging filter. The Tx filter is located just after
-       the DAC in the Tx signal path and is normally calibrated to 0.7x the
-       desired complex bandwidth of the Butterworth filter. For more
-       information, see AD9361_Reference_Manual_UG-570.pdf p. 10. Example:
+  <!-- The cutoff frequency in MHz of the e3xx's AD9361's third-order
+       Butterworth Rx anti-aliasing filter. The Rx filter is located just before
+       the ADC in the Rx signal path and is normally calibrated to 1.4x the
+       baseband channel bandwidth (BBBW). For more
+       information, see AD9361_Reference_Manual_UG-570.pdf p. 9. Example:
         _________________________________________________________
        | Standard | Sample | Desired   | Desired   | Butterworth |
        |          | Rate   | baseband  | baseband  | filter      |
        |          | (Msps) | analog    | analog    | cutoff      |
        |          |        | filter    | filter    | frequency   |
-       |          |        | passband  | passband  | (MHz)       |
-       |          |        | complex   | bandwidth |             |
-       |          |        | bandwidth | (MHz)     |             |
-       |          |        | (MHz)     |           |             |
+       |          |        | passband  | cutoff    | (MHz)       |
+       |          |        | bandwidth | frequency |             |
+       |          |        | (MHz)     | (MHz)     |             |
        |__________|________|___________|___________|_____________|
        | LTE 10   | 15.36  | 10        | 5         | 7           |
        | LTE 20   | 30.72  | 20        | 10        | 14          |
@@ -162,7 +173,7 @@
   <SpecProperty Name="frequency_step_MHz" ReadSync="true"
                                           WriteSync="true"/>  <!-- TODO / FIXME - remove Writable from OCS for this property and remove WriteSync from the OWD for this property, the only reason we need WriteSync here is to ensure any write to this property causes a failure. -->
   
-  <SpecProperty Name="sample_rate_max_MHz" Default="SAMPLE_RATE_MAX_MHZ_p"
+  <SpecProperty Name="sample_rate_max_MHz" ReadSync="true"
                                            WriteSync="true"/>  <!-- TODO / FIXME - remove Writable from OCS for this property and remove WriteSync from the OWD for this property, the only reason we need WriteSync here is to ensure any write to this property causes a failure. -->
   <SpecProperty Name="sample_rate_min_MHz" Default="SAMPLE_RATE_MIN_MHZ_p"
                                            WriteSync="true"/>  <!-- TODO / FIXME - remove Writable from OCS for this property and remove WriteSync from the OWD for this property, the only reason we need WriteSync here is to ensure any write to this property causes a failure. -->
@@ -247,22 +258,10 @@
                           Volatile="true"
                           ReadSync="true"
                           WriteSync="true"
-                          Default="reference_clk_rate_Hz 40e6,duplex_mode FDD,are_using_REF_CLK_SMA false,SMA_channel RX2A">
-    <Member Name="reference_clk_rate_Hz" Type="double"
-                                         Description="Schematic crystal Y101 frequency"/>
-    <Member Name="duplex_mode"           Type="enum"
-                                         Enums="TDD,FDD"/>
-    <Member Name="are_using_REF_CLK_SMA" Type="bool"/>
-    <Member Name="SMA_channel"           Type="enum"
-                                         Enums="TRXA,RX2A,RX2B,TRXB"
-                                         Description="Indicates which SMA connector on the E3XX that the RX data stream controlled by an instance of this worker corresponds to."/>
+                          Default="duplex_mode FDD,SMA_channel RX2A">
+    <Member Name="duplex_mode" Type="enum" Enums="TDD,FDD"/>
+    <Member Name="SMA_channel" Type="enum" Enums="TRXA,RX2A,RX2B,TRXB"
+                               Description="Indicates which SMA connector on the E3XX that the RX data stream controlled by an instance of this worker corresponds to."/>
   </Property>
-  <Property Name="LO_source" Type="enum"
-                             Enums="internal,external"
-                             Readable="true"
-                             Writable="true"
-                             WriteSync="true"
-                             Default="internal"
-                             Description="The value 'external' should only be used if an external-to-the-FMCOMMS2/3 clock drives the TP102 test point on the FMCOMMS2/3 PCB."/>
 
 </RccWorker>

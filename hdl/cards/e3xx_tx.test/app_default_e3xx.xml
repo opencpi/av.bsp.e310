@@ -15,8 +15,8 @@
        control plane interface to this worker -->
   <Instance Component="ocpi.assets.devices.ad9361_config_proxy" Slave="ad9361_config"/>
 
-  <Instance component='ties.bsp.e310.devices.e3xx_mimo_xcvr_filter'/>
-  <Instance component='ties.bsp.e310.devices.e3xx_mimo_xcvr_filter_proxy' slave='e3xx_mimo_xcvr_filter' name='e3xx_mimo_xcvr_filter_proxy'/>
+  <Instance component='ocpi.bsp.e310.devices.e3xx_mimo_xcvr_filter'/>
+  <Instance component='ocpi.bsp.e310.devices.e3xx_mimo_xcvr_filter_proxy' slave='e3xx_mimo_xcvr_filter' name='e3xx_mimo_xcvr_filter_proxy'/>
   <!-- Unit Under Test -->
   <Instance Component="ocpi.core.tx">      <!-- intended to be:                   e3xx_tx.rcc -->
     <Property Name="TYPE_p" Value="e3xx"/> <!-- forces runtime artifact matching: e3xx_tx.rcc -->

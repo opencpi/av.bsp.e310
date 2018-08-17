@@ -1,4 +1,7 @@
-<HdlDevice language='vhdl' spec='ad5662-spec' RawProperties='True'>
+<!-- TODO/FIXME - This is an implementation that REQUIRES the only item on the
+     SPI bus being the AD5662; that aspect needs to be refactored for generic
+     non-E3XX usage." -->
+<HdlDevice language='vhdl' spec='e3xx_mimo_xcvr_ad5662-spec' RawProperties='True'>
 
   <ControlInterface Timeout='512'>
     <Property name='voltageScale' type='ulong' readable='1' writable='1'/>

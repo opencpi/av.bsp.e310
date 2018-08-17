@@ -133,7 +133,7 @@ $ /opt/opencpi/projects/new_project_source bsp_e310 bsp_e310
 $ ls
 assets_project  core_project  bsp_e310
 $ ocpidev show projects
-ocpi.assets ocpi.cdk ocpi.core ties.bsp.e310
+ocpi.assets ocpi.cdk ocpi.core ocpi.bsp.e310
 <can verify paths with --table option>
 $ for proj in core_project assets_project bsp_e310; do \
 ocpidev -d $proj build --rcc-platform xilinx13_4; \

@@ -1,3 +1,21 @@
+# This file is protected by Copyright. Please refer to the COPYRIGHT file
+# distributed with this source distribution.
+#
+# This file is part of OpenCPI <http://www.opencpi.org>
+#
+# OpenCPI is free software: you can redistribute it and/or modify it under the
+# terms of the GNU Lesser General Public License as published by the Free
+# Software Foundation, either version 3 of the License, or (at your option) any
+# later version.
+#
+# OpenCPI is distributed in the hope that it will be useful, but WITHOUT ANY
+# WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR
+# A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+# details.
+#
+# You should have received a copy of the GNU Lesser General Public License along
+# with this program. If not, see <http://www.gnu.org/licenses/>.
+
 ###############################################################################
 # Pin mapping
 ###############################################################################
@@ -500,7 +518,7 @@ set_property IOSTANDARD LVCMOS33 [get_ports {PL_GPIO[4]}]
 set_property PACKAGE_PIN E15 [get_ports {PL_GPIO[5]}]
 set_property IOSTANDARD LVCMOS33 [get_ports {PL_GPIO[5]}]
 set_property PULLDOWN TRUE [get_ports {PL_GPIO[*]}]
-create_clock -name clk_fpga_0 -period 10.000 [get_nets {ftop/pfconfig_metadata_out*[clk]}]
+create_clock -name clk_fpga_1 -period 10.000 [get_pins {ftop/pfconfig_i/e3xx_i/worker/ps/ps/PS7_i/FCLKCLK[1]}]
 ###############################################################################
 # Timing Constraints for E310 daughter board signals
 ###############################################################################
@@ -532,7 +550,7 @@ set_input_jitter E3XX_CONN_TCXO_CLK 0.100
 # Asynchronous clock domains
 set_clock_groups -asynchronous \
   -group [get_clocks -include_generated_clocks E3XX_CONN_CAT_DATA_CLK] \
-  -group [get_clocks -include_generated_clocks clk_fpga_0]
+  -group [get_clocks -include_generated_clocks clk_fpga_1]
 
 # Setup ADC (AD9361) interface constraints.
 

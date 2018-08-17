@@ -18,8 +18,8 @@
     <Property Name="ad9361_init" Value="reference_clk_rate 40e6,one_rx_one_tx_mode_use_rx_num 1,one_rx_one_tx_mode_use_tx_num 1,frequency_division_duplex_mode_enable 1,xo_disable_use_ext_refclk_enable 0,two_t_two_r_timing_enable 1,pp_tx_swap_enable 1,pp_rx_swap_enable 1,tx_channel_swap_enable 1,rx_channel_swap_enable 1,delay_rx_data 0,rx_data_clock_delay 0,rx_data_delay 4,tx_fb_clock_delay 7,tx_data_delay 0"/>
   </Instance>
 
-  <Instance Component='ties.bsp.e310.devices.e3xx_mimo_xcvr_filter'/>
-  <Instance Component='ties.bsp.e310.devices.e3xx_mimo_xcvr_filter_proxy' Slave='e3xx_mimo_xcvr_filter' Name='e3xx_mimo_xcvr_filter_proxy'/>
+  <Instance Component='ocpi.bsp.e310.devices.e3xx_mimo_xcvr_filter'/>
+  <Instance Component='ocpi.bsp.e310.devices.e3xx_mimo_xcvr_filter_proxy' Slave='e3xx_mimo_xcvr_filter' Name='e3xx_mimo_xcvr_filter_proxy'/>
 
   <!-- Unit Under Test -->
   <Instance Component="ocpi.core.rx">

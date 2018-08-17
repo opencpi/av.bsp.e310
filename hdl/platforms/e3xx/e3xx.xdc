@@ -1,3 +1,21 @@
+# This file is protected by Copyright. Please refer to the COPYRIGHT file
+# distributed with this source distribution.
+#
+# This file is part of OpenCPI <http://www.opencpi.org>
+#
+# OpenCPI is free software: you can redistribute it and/or modify it under the
+# terms of the GNU Lesser General Public License as published by the Free
+# Software Foundation, either version 3 of the License, or (at your option) any
+# later version.
+#
+# OpenCPI is distributed in the hope that it will be useful, but WITHOUT ANY
+# WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR
+# A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+# details.
+#
+# You should have received a copy of the GNU Lesser General Public License along
+# with this program. If not, see <http://www.gnu.org/licenses/>.
+
 ###############################################################################
 # Pin mapping
 ###############################################################################
@@ -139,48 +157,48 @@ set_property PACKAGE_PIN J18 [get_ports {E3XX_CONN_DB_EXP_1_8V_9}]
 set_property IOSTANDARD LVCMOS18 [get_ports {E3XX_CONN_DB_EXP_1_8V_9}]
 
 #Pin 35
-set_property PACKAGE_PIN U5 [get_ports {E3XX_CONN_CAT_CTRL_IN_2}]
-set_property IOSTANDARD LVCMOS18 [get_ports {E3XX_CONN_CAT_CTRL_IN_2}]
+#set_property PACKAGE_PIN U5 [get_ports {E3XX_CONN_CAT_CTRL_IN_2}]
+#set_property IOSTANDARD LVCMOS18 [get_ports {E3XX_CONN_CAT_CTRL_IN_2}]
 
 #Pin 36
 set_property PACKAGE_PIN J20 [get_ports {E3XX_CONN_DB_EXP_1_8V_10}]
 set_property IOSTANDARD LVCMOS18 [get_ports {E3XX_CONN_DB_EXP_1_8V_10}]
 
 #Pin 37
-set_property PACKAGE_PIN U6 [get_ports {E3XX_CONN_CAT_CTRL_IN_3}]
-set_property IOSTANDARD LVCMOS18 [get_ports {E3XX_CONN_CAT_CTRL_IN_3}]
+#set_property PACKAGE_PIN U6 [get_ports {E3XX_CONN_CAT_CTRL_IN_3}]
+#set_property IOSTANDARD LVCMOS18 [get_ports {E3XX_CONN_CAT_CTRL_IN_3}]
 
 #Pin 38
 set_property PACKAGE_PIN K19 [get_ports {E3XX_CONN_DB_EXP_1_8V_11}]
 set_property IOSTANDARD LVCMOS18 [get_ports {E3XX_CONN_DB_EXP_1_8V_11}]
 
 #Pin 39
-set_property PACKAGE_PIN AB5 [get_ports {E3XX_CONN_CAT_CTRL_OUT_0}]
-set_property IOSTANDARD LVCMOS18 [get_ports {E3XX_CONN_CAT_CTRL_OUT_0}]
+#set_property PACKAGE_PIN AB5 [get_ports {E3XX_CONN_CAT_CTRL_OUT_0}]
+#set_property IOSTANDARD LVCMOS18 [get_ports {E3XX_CONN_CAT_CTRL_OUT_0}]
 
 #Pin 40
 set_property PACKAGE_PIN K20 [get_ports {E3XX_CONN_CAT_CTRL_OUT_4}]
 set_property IOSTANDARD LVCMOS18 [get_ports {E3XX_CONN_CAT_CTRL_OUT_4}]
 
 #Pin 41
-set_property PACKAGE_PIN AB6 [get_ports {E3XX_CONN_CAT_CTRL_OUT_1}]
-set_property IOSTANDARD LVCMOS18 [get_ports {E3XX_CONN_CAT_CTRL_OUT_1}]
+#set_property PACKAGE_PIN AB6 [get_ports {E3XX_CONN_CAT_CTRL_OUT_1}]
+#set_property IOSTANDARD LVCMOS18 [get_ports {E3XX_CONN_CAT_CTRL_OUT_1}]
 
 #Pin 42
 set_property PACKAGE_PIN L19 [get_ports {E3XX_CONN_CAT_CTRL_OUT_5}]
 set_property IOSTANDARD LVCMOS18 [get_ports {E3XX_CONN_CAT_CTRL_OUT_5}]
 
 #Pin 43
-set_property PACKAGE_PIN AB7 [get_ports {E3XX_CONN_CAT_CTRL_OUT_2}]
-set_property IOSTANDARD LVCMOS18 [get_ports {E3XX_CONN_CAT_CTRL_OUT_2}]
+#set_property PACKAGE_PIN AB7 [get_ports {E3XX_CONN_CAT_CTRL_OUT_2}]
+#set_property IOSTANDARD LVCMOS18 [get_ports {E3XX_CONN_CAT_CTRL_OUT_2}]
 
 #Pin 44
 set_property PACKAGE_PIN V12 [get_ports {E3XX_CONN_CAT_CTRL_OUT_6}]
 set_property IOSTANDARD LVCMOS18 [get_ports {E3XX_CONN_CAT_CTRL_OUT_6}]
 
 #Pin 45
-set_property PACKAGE_PIN AA4 [get_ports {E3XX_CONN_CAT_CTRL_OUT_3}]
-set_property IOSTANDARD LVCMOS18 [get_ports {E3XX_CONN_CAT_CTRL_OUT_3}]
+#set_property PACKAGE_PIN AA4 [get_ports {E3XX_CONN_CAT_CTRL_OUT_3}]
+#set_property IOSTANDARD LVCMOS18 [get_ports {E3XX_CONN_CAT_CTRL_OUT_3}]
 
 #Pin 46
 set_property PACKAGE_PIN W12 [get_ports {E3XX_CONN_CAT_CTRL_OUT_7}]
@@ -225,15 +243,15 @@ set_property IOSTANDARD LVCMOS18 [get_ports E3XX_CONN_CAT_MISO]
 # 5V
 
 #Pin 58
-set_property PACKAGE_PIN V4 [get_ports {E3XX_CONN_CAT_CTRL_IN_0}]
-set_property IOSTANDARD LVCMOS18 [get_ports {E3XX_CONN_CAT_CTRL_IN_0}]
+#set_property PACKAGE_PIN V4 [get_ports {E3XX_CONN_CAT_CTRL_IN_0}]
+#set_property IOSTANDARD LVCMOS18 [get_ports {E3XX_CONN_CAT_CTRL_IN_0}]
 
 #Pin 59
 # 5V
 
 #Pin 60
-set_property PACKAGE_PIN V5 [get_ports {E3XX_CONN_CAT_CTRL_IN_1}]
-set_property IOSTANDARD LVCMOS18 [get_ports {E3XX_CONN_CAT_CTRL_IN_1}]
+#set_property PACKAGE_PIN V5 [get_ports {E3XX_CONN_CAT_CTRL_IN_1}]
+#set_property IOSTANDARD LVCMOS18 [get_ports {E3XX_CONN_CAT_CTRL_IN_1}]
 
 #Pin 61
 # 1.8V
@@ -267,12 +285,12 @@ set_property PACKAGE_PIN AB4 [get_ports E3XX_CONN_CAT_ENABLE]
 set_property IOSTANDARD LVCMOS18 [get_ports E3XX_CONN_CAT_ENABLE]
 
 #Pin 70
-set_property PACKAGE_PIN M19 [get_ports E3XX_CONN_CAT_BBCLK_OUT]
-set_property IOSTANDARD LVCMOS18 [get_ports E3XX_CONN_CAT_BBCLK_OUT]
+#set_property PACKAGE_PIN M19 [get_ports E3XX_CONN_CAT_BBCLK_OUT]
+#set_property IOSTANDARD LVCMOS18 [get_ports E3XX_CONN_CAT_BBCLK_OUT]
 
 #Pin 71
-set_property PACKAGE_PIN AB2 [get_ports E3XX_CONN_CAT_ENAGC]
-set_property IOSTANDARD LVCMOS18 [get_ports E3XX_CONN_CAT_ENAGC]
+#set_property PACKAGE_PIN AB2 [get_ports E3XX_CONN_CAT_ENAGC]
+#set_property IOSTANDARD LVCMOS18 [get_ports E3XX_CONN_CAT_ENAGC]
 
 #Pin 72
 # GND
@@ -281,8 +299,8 @@ set_property IOSTANDARD LVCMOS18 [get_ports E3XX_CONN_CAT_ENAGC]
 # GND
 
 #Pin 74
-set_property PACKAGE_PIN T16 [get_ports E3XX_CONN_CAT_SYNC]
-set_property IOSTANDARD LVCMOS18 [get_ports E3XX_CONN_CAT_SYNC]
+#set_property PACKAGE_PIN T16 [get_ports E3XX_CONN_CAT_SYNC]
+#set_property IOSTANDARD LVCMOS18 [get_ports E3XX_CONN_CAT_SYNC]
 
 #Pin 78
 set_property PACKAGE_PIN N15 [get_ports {E3XX_CONN_CAT_P1_D_11}]
@@ -500,16 +518,15 @@ set_property IOSTANDARD LVCMOS33 [get_ports {PL_GPIO[4]}]
 set_property PACKAGE_PIN E15 [get_ports {PL_GPIO[5]}]
 set_property IOSTANDARD LVCMOS33 [get_ports {PL_GPIO[5]}]
 set_property PULLDOWN TRUE [get_ports {PL_GPIO[*]}]
-
 ###############################################################################
 # Timing Constraints
 ###############################################################################
-create_clock -name clk_fpga_0 -period 10.000 [get_pins {ftop/pfconfig_i/e3xx_i/worker/ps/ps/PS7_i/FCLKCLK[0]}]
+create_clock -name clk_fpga_1 -period 10.000 [get_pins {ftop/pfconfig_i/e3xx_i/worker/ps/ps/PS7_i/FCLKCLK[1]}]
 
 ###############################################################################
 ## Asynchronous paths
 ###############################################################################
-set_false_path -from [get_ports E3XX_CONN_CAT_CTRL_OUT]
+#set_false_path -from [get_ports E3XX_CONN_CAT_CTRL_OUT]
 set_false_path -to   [get_ports E3XX_CONN_CAT_RESET]
 set_false_path -to   [get_ports E3XX_CONN_RX*_BANDSEL*]
 set_false_path -to   [get_ports E3XX_CONN_TX_BANDSEL*]
@@ -524,16 +541,16 @@ set_false_path -to   [get_ports E3XX_CONN_VCTX*]
 
 # 10MHz / PPS References
 create_clock -period 100.000 -name PPS_EXT_IN [get_nets PPS_EXT_IN]
-create_clock -period 100.000 -name GPS_PPS [get_nets GPS_PPS]
+#create_clock -period 100.000 -name GPS_PPS [get_nets GPS_PPS]
 
 # Asynchronous clock domains
-set_clock_groups -asynchronous \
-  -group [get_clocks -include_generated_clocks PPS_EXT_IN] \
-  -group [get_clocks -include_generated_clocks GPS_PPS]
+#set_clock_groups -asynchronous \
+#  -group [get_clocks -include_generated_clocks PPS_EXT_IN] \
+#  -group [get_clocks -include_generated_clocks GPS_PPS]
 
-set_clock_groups -asynchronous \
-  -group [get_clocks -include_generated_clocks PPS_EXT_IN] \
-  -group [get_clocks -include_generated_clocks GPS_PPS]
+#set_clock_groups -asynchronous \
+#  -group [get_clocks -include_generated_clocks PPS_EXT_IN] \
+#  -group [get_clocks -include_generated_clocks GPS_PPS]
 
 ###############################################################################
 ## Asynchronous paths

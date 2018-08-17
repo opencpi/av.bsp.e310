@@ -1,5 +1,10 @@
 <HdlAssembly>
   <Connection Name="in_to_asm_rx_path_from_adc" External="consumer">
+    <Port Instance="iqstream_max_calculator_adc" Name="in"/>
+  </Connection>
+  <Instance Worker="iqstream_max_calculator" Name="iqstream_max_calculator_adc"/>
+  <Connection>
+    <Port Instance="iqstream_max_calculator_adc" Name="out"/>
     <Port Instance="fifo" Name="in"/>
   </Connection>
   <Instance Worker="fifo">
@@ -15,7 +20,12 @@
     <Property Name="LFSR_SEED_p" Value='1,1,1,1,1,1,1,1,1,1,1,1'/>
     <Property Name="ZLM_WHEN_NUM_SAMPLES_REACHED_p" Value="false"/>
   </Instance>
-  <Connection Name="out_from_asm_tx_path_to_dac" External="producer">
+  <Connection>
     <Port Instance="data_src" Name="out"/>
+    <Port Instance="iqstream_max_calculator_dac" Name="in"/>
+  </Connection>
+  <Instance Worker="iqstream_max_calculator" Name="iqstream_max_calculator_dac"/>
+  <Connection Name="out_from_asm_tx_path_to_dac" External="producer">
+    <Port Instance="iqstream_max_calculator_dac" Name="out"/>
   </Connection>
 </HdlAssembly>

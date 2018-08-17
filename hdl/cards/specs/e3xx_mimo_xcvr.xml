@@ -116,7 +116,7 @@
   </device>
 
   <!-- unimplemented DAC control -->
-  <device worker='ad5662'>
+  <device worker='e3xx_mimo_xcvr_ad5662'>
     <Signal name='TUNE_DAC_SYNCn'      slot='TCXO_DAC_SYNCn' />
     <Signal name='TUNE_DAC_SCLK'       slot='TCXO_DAC_SCLK'  />
     <Signal name='TUNE_DAC_SDIN'       slot='TCXO_DAC_SDIN'  />

@@ -1,13 +1,34 @@
--- THIS FILE WAS ORIGINALLY GENERATED ON Sun Jan  7 14:15:38 2018 EST
--- BASED ON THE FILE: ad5662.xml
--- YOU *ARE* EXPECTED TO EDIT IT
--- This file initially contains the architecture skeleton for worker: ad5662
+-- This file is protected by Copyright. Please refer to the COPYRIGHT file
+-- distributed with this source distribution.
+--
+-- This file is part of OpenCPI <http://www.opencpi.org>
+--
+-- OpenCPI is free software: you can redistribute it and/or modify it under the
+-- terms of the GNU Lesser General Public License as published by the Free
+-- Software Foundation, either version 3 of the License, or (at your option) any
+-- later version.
+--
+-- OpenCPI is distributed in the hope that it will be useful, but WITHOUT ANY
+-- WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR
+-- A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+-- details.
+--
+-- You should have received a copy of the GNU Lesser General Public License
+-- along with this program. If not, see <http://www.gnu.org/licenses/>.
 
+-- THIS FILE WAS ORIGINALLY GENERATED ON Sun Jan  7 14:15:38 2018 EST
+-- BASED ON THE FILE: e3xx_mimo_xcvr_ad5662.xml
+-- YOU *ARE* EXPECTED TO EDIT IT
+-- This file initially contains the architecture skeleton for worker: e3xx_mimo_xcvr_ad5662
+
+-- TODO/FIXME - This is an implementation that REQUIRES the only item on the
+-- SPI bus being the AD5662; that aspect needs to be refactored for generic
+-- non-E3XX usage.
 library IEEE; use IEEE.std_logic_1164.all; use ieee.numeric_std.all;
 library ocpi; use ocpi.types.all; -- remove this to avoid all ocpi name collisions
 library util; use util.util.all; use util.types.all;
 
-architecture rtl of ad5662_worker is
+architecture rtl of e3xx_mimo_xcvr_ad5662_worker is
 
   -- Internal signals
   constant data_width_c  : natural := 18;
@@ -21,9 +42,9 @@ architecture rtl of ad5662_worker is
   signal   renable       : bool_t := bfalse;
 
   -- signals interface
-  signal SPI_DI_s     : std_logic := '0';
-  signal SPI_CLK_s    : std_logic := '0';
-  signal SPI_ENB_s    : std_logic := '0';
+  signal TUNE_DAC_SDIN_s  : std_logic := '0';
+  signal TUNE_DAC_SCLK_s  : std_logic := '0';
+  signal TUNE_DAC_SYNCn_s : std_logic := '0';
 
 begin
 
@@ -65,17 +86,19 @@ begin
       rdata   => rdata,
       done    => done,
       sdo     => '0',
-      sclk    => SPI_CLK_s,
-      sen     => SPI_ENB_s,
-      sdio    => SPI_DI_s);
+      sclk    => TUNE_DAC_SCLK_s,
+      sen     => TUNE_DAC_SYNCn_s,
+      sdio    => TUNE_DAC_SDIN_s);
 
   signals : entity work.signals
     port map(
-      w_SPI_DI     => SPI_DI_s,
-      w_SPI_CLK    => SPI_CLK_s,
-      w_SPI_ENB    => SPI_ENB_s,
-      SPI_DI       => TUNE_DAC_SDIN,
-      SPI_CLK      => TUNE_DAC_SCLK,
-      SPI_ENB      => TUNE_DAC_SYNCn);
+      w_TUNE_DAC_SDIN  => TUNE_DAC_SDIN_s,
+      w_TUNE_DAC_SCLK  => TUNE_DAC_SCLK_s,
+      w_TUNE_DAC_SYNCn => TUNE_DAC_SYNCn_s,
+      w_VCTCXO_TO_MB   => open,
+      TUNE_DAC_SDIN    => TUNE_DAC_SDIN,
+      TUNE_DAC_SCLK    => TUNE_DAC_SCLK,
+      TUNE_DAC_SYNCn   => TUNE_DAC_SYNCn,
+      VCTCXO_TO_MB     => VCTCXO_TO_MB);
 
 end rtl;

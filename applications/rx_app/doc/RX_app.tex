@@ -181,7 +181,7 @@ The following workers, sorted by component library name, must be built prior to 
 	\begin{minipage}[t]{.33\textwidth}
 	\textbf{E310}
 	\begin{itemize}
-		\item ties.bsp.e310.devices
+		\item ocpi.bsp.e310.devices
 			\subitem ad9361\_adc.hdl
 			\subitem ad9361\_adc\_sub.hdl
 			\subitem ad9361\_config.hdl
@@ -192,7 +192,7 @@ The following workers, sorted by component library name, must be built prior to 
 			\subitem e3xx\_mimo\_xcvr\_filter.hdl
 			\subitem e3xx\_i2c.hdl
 			\subitem e3xx\_rx.rcc
-			\subitem ad5662.hdl
+			\subitem e3xx\_mimo\_xcvr\_ad5662.hdl
 	\end{itemize}
 	\end{minipage} \medskip
 
@@ -304,8 +304,8 @@ Matchstiq-Z1 additionally requires the following:
 	\end{itemize}
 E310 additionally requires the following:
 	\begin{itemize}
-		\item ties.bsp.e310.devices library location
-		\item ties.bsp.e310 bitstream directory location
+		\item ocpi.bsp.e310.devices library location
+		\item ocpi.bsp.e310 bitstream directory location
 	\end{itemize}
 
 \noindent Note that the Stratix IV GX230/Zipper/MyriadRF and ML605/Zipper/MyriadRF hardware setups require the intended slot-specific bitstream's file location to occur first in OCPI\_LIBRARY\_PATH. This is necessary because ocpirun's aritifact compatibility test cannot currently differentiate between slot-connected device workers for multiple bitstreams that contain the same device worker, in the scenario where what differentiates the bitstreams is the device worker's slot connectivity. Examples of library paths that could be used can be seen below:\par\medskip

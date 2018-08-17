@@ -214,7 +214,7 @@ The FSK App may be run in one of five available modes. The modes are \textit{fil
 	\hline
 	ad9361\_spi.hdl & • & x & x & x &   \\
 	\hline
-	ad5662.hdl & • & x & x & x &   \\
+	e3xx\_mimo\_xcvr\_ad5662.hdl & • & x & x & x &   \\
 	\hline
 	\rowcolor{blue}
 	I2C Command and Control & filerw & rx & tx & txrx & bbloopback \\
@@ -696,9 +696,9 @@ tx\_bb\_gain    &       -1 (default) \\
 	\end{itemize}
 Ettus E310 additionally requires the following:
 	\begin{itemize}
-		\item ties.bsp.e310 bitstream directory location
-		\item ties.bsp.e310.devices library location
-		\item ties.bsp.e310.cards library location
+		\item ocpi.bsp.e310 bitstream directory location
+		\item ocpi.bsp.e310.devices library location
+		\item ocpi.bsp.e310.cards library location
 	\end{itemize}
 Matchstiq-Z1 additionally requires the following:
 	\begin{itemize}

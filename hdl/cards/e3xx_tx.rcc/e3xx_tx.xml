@@ -1,10 +1,30 @@
+<!-- When instantiated within an OpenCPI application, this worker must be
+     instantiated alongside the ad9361_config_proxy.rcc worker (which
+     implements the ad9361_config_proxy OCS). If the application overrides
+     the ad9361_config_proxy instance name to something other than
+     ad9361_config_proxy, this worker's app_inst_name_ad9361_config_proxy
+     property should be set to the instance name. The same is true for
+     ad9361_adc_sub, ad9361_data_sub, and e3xx_mimo_xcvr_filter_proxy. -->
+<!--  ___________________________________________________________________________________  -->
+<!-- +                                                                                   + -->
+<!-- |                       e3xx_tx.rcc                                                 | -->
+<!-- +___________________________________________________________________________________+ -->
+<!--   ^                              ^                       ^                            -->
+<!--   |  slave                       | slave                 | slave                      -->
+<!--   |  interface                   | interface             | interface                  -->
+<!--   |  (ACI)                       | (ACI)                 | (ACI)                      -->
+<!--  _V_______________________    ___V_______________    ____V__________________________  -->
+<!-- +                         +  +                   +  +                               + -->
+<!-- | ad9361_config_proxy.rcc |  |ad9361_data_sub.hdl|  |e3xx_mimo_xcvr_filter_proxy.rcc| -->
+<!-- +_________________________+  +___________________+  +_______________________________+ -->
+<!--                                                                                       -->
 <RccWorker language='c++' spec='tx_spec'>
 
   <!-- OCS Parameters -->
 
   <!-- OWD Parameters -->
 
-  <Property Name="TYPE_p" Type="enum" Enums="e3xx" Parameter="true" Default="e3xx" Description="The purpose of this property is to provide the option for an application XML to specifiy this property in order to enforce use of a parameterized build for a particular frontend type."/>
+  <Property Name="TYPE_p" Type="enum" Enums="e3xx" Parameter="true" Default="e3xx" Description="The purpose of this property is to provide the option for an application XML to specify this property in order to enforce use of a parameterized build for a particular frontend type."/>
 
   <Property Name="NOT_SUPPORTED_p" Type="double" Parameter="true" Default="-1" Description="This value, when assigned to a frontend property, e.g. rf_gain_dB, indicates that the frontend setting corresponding to said property is not supported by the frontend hardware controlled by this worker."/>
 
@@ -14,18 +34,17 @@
   <Property Name="AD9361_TX_BBBW_NO_OS_MAX_MHZ_p" Type="double" Parameter="true" Default="20"/>
   <Property Name="AD9361_TX_BBBW_NO_OS_MIN_MHZ_p" Type="double" Parameter="true" Default="0.625"/>
 
-  <Property Name="AD9361_TX_ATTENUATION_MAX_MILLIDB_P" Type="double" Parameter="true" Default="89.750"/>
+  <Property Name="AD9361_TX_ATTENUATION_MAX_MILLIDB_P" Type="double" Parameter="true" Default="89750"/>
   <Property Name="AD9361_TX_ATTENUATION_MIN_MILLIDB_P" Type="double" Parameter="true" Default="0"/>
 
-  <Property Name="RF_GAIN_MAX_DB_p"      Type="double" Parameter="true" Default="-AD9361_TX_ATTENUATION_MIN_MILLIDB_P"/>
-  <Property Name="RF_GAIN_MIN_DB_p"      Type="double" Parameter="true" Default="-AD9361_TX_ATTENUATION_MAX_MILLIDB_P"/>
+  <Property Name="RF_GAIN_MAX_DB_p"      Type="double" Parameter="true" Default="-AD9361_TX_ATTENUATION_MIN_MILLIDB_P/1000"/>
+  <Property Name="RF_GAIN_MIN_DB_p"      Type="double" Parameter="true" Default="-AD9361_TX_ATTENUATION_MAX_MILLIDB_P/1000"/>
   <Property Name="RF_GAIN_STEP_DB_p"     Type="double" Parameter="true" Default="0.250"/>
   <Property Name="BB_GAIN_MAX_DB_p"      Type="double" Parameter="true" Default="NOT_SUPPORTED_p"/>
   <Property Name="BB_GAIN_MIN_DB_p"      Type="double" Parameter="true" Default="NOT_SUPPORTED_p"/>
   <Property Name="BB_GAIN_STEP_DB_p"     Type="double" Parameter="true" Default="NOT_SUPPORTED_p"/>
   <Property Name="FREQUENCY_MAX_MHZ_p"   Type="double" Parameter="true" Default="6000"/>
   <Property Name="FREQUENCY_MIN_MHZ_p"   Type="double" Parameter="true" Default="70"/>
-  <Property Name="SAMPLE_RATE_MAX_MHZ_p" Type="double" Parameter="true" Default="30.72"/>
   <!--Property Name="SAMPLE_RATE_MIN_MHZ_p" Type="double" Parameter="true" Default="2.083334"/--> <!-- TODO / FIXME framework removes precision and uses 2.08334-->
   <Property Name="SAMPLE_RATE_MIN_MHZ_p" Type="double" Parameter="true" Default="2.08334"/>
 
@@ -36,11 +55,11 @@
   <Property Name="BB_CUTOFF_FREQUENCY_MAX_MHZ_p" Type="double"
                                                  Parameter="true"
                                                  Default="AD9361_TX_BBBW_NO_OS_MAX_MHZ_p * 1.6"
-                                                 Description="The minimum configurable cutoff frequency in MHz of the E310's AD9361's third-order Butterworth Tx anti-imaging filter. The Tx filter is normally calibrated to 1.6x the BBBW. For more information, see AD9361_Reference_Manual_UG-570.pdf p. 10."/>
+                                                 Description="The minimum configurable cutoff frequency in MHz of the E3XX's AD9361's third-order Butterworth Tx anti-imaging filter. The Tx filter is normally calibrated to 1.6x the BBBW. For more information, see AD9361_Reference_Manual_UG-570.pdf p. 10."/>
   <Property Name="BB_CUTOFF_FREQUENCY_MIN_MHZ_p" Type="double"
                                                  Parameter="true"
                                                  Default="AD9361_TX_BBBW_NO_OS_MIN_MHZ_p * 1.6"
-                                                 Description="The maximum configurable cutoff frequency in MHz of the E310's AD9361's third-order Butterworth Tx anti-imaging filter. The Tx filter is normally calibrated to 1.6x the BBBW. For more information, see AD9361_Reference_Manual_UG-570.pdf p. 10."/>
+                                                 Description="The maximum configurable cutoff frequency in MHz of the E3XX's AD9361's third-order Butterworth Tx anti-imaging filter. The Tx filter is normally calibrated to 1.6x the BBBW. For more information, see AD9361_Reference_Manual_UG-570.pdf p. 10."/>
 
   <!-- OCS Properties -->
 
@@ -54,7 +73,7 @@
   <SpecProperty Name="rf_gain_dB" Volatile="true"
                                   ReadSync="true"
                                   WriteSync="true"
-                                  Default="-1"/>
+                                  Default="-1"/> <!-- note this is note NOT_SUPPORTED_p, -1 is a perfectly valid value -->
   <SpecProperty Name="bb_gain_dB" WriteSync="true"
                                   Default="NOT_SUPPORTED_p"/> <!-- TODO / FIXME - remove Writable from OCS for this property and remove WriteSync from the OWD for this property, the only reason we need WriteSync here is to ensure any write to this property of a value other than NOT_SUPPORTED_p causes a failure. -->
   <SpecProperty Name="frequency_MHz" Volatile="true"
@@ -68,7 +87,7 @@
   <SpecProperty Name="rf_cutoff_frequency_MHz" WriteSync="true"
                                                Default="NOT_SUPPORTED_p"/> <!-- TODO / FIXME - remove Writable from OCS for this property and remove WriteSync from the OWD for this property, the only reason we need WriteSync here is to ensure any write to this property of a value other than NOT_SUPPORTED_p causes a failure. -->
 
-  <!-- The cutoff frequency in MHz of the E310's AD9361's third-order
+  <!-- The cutoff frequency in MHz of the E3XX's AD9361's third-order
        Butterworth Tx anti-imaging filter. The Tx filter is located just after
        the DAC in the Tx signal path and is normally calibrated to 0.8x the
        desired complex bandwidth of the Butterworth filter. For more
@@ -98,14 +117,14 @@
                                       WriteSync="true"/>  <!-- TODO / FIXME - remove Writable from OCS for this property and remove WriteSync from the OWD for this property, the only reason we need WriteSync here is to ensure any write to this property causes a failure. -->
 
   <!-- We do declare a default value for TX rf_gain step size here because TX
-       rf_gain step is always a fixed value for E310's AD9361 -->
+       rf_gain step is always a fixed value for E3XX's AD9361 -->
   <!-- Indicates the precision which will be used to evaluate the value written
        to this worker's rf_gain_dB property
        before that value is applied to hardware. -->
   <SpecProperty Name="rf_gain_step_dB" Default="RF_GAIN_STEP_DB_p"
                                        WriteSync="true"/>  <!-- TODO / FIXME - remove Writable from OCS for this property and remove WriteSync from the OWD for this property, the only reason we need WriteSync here is to ensure any write to this property causes a failure. -->
   
-  <!-- TX bb_gain_dB is not supported on the E310's AD9361 -->
+  <!-- TX bb_gain_dB is not supported on the E3XX's AD9361 -->
   <SpecProperty Name="bb_gain_max_dB" Default="BB_GAIN_MAX_DB_p"
                                       WriteSync="true"/> <!-- TODO / FIXME - remove Writable from OCS for this property and remove WriteSync from the OWD for this property, the only reason we need WriteSync here is to ensure any write to this property of a value other than the default causes a failure. -->
   <SpecProperty Name="bb_gain_min_dB" Default="BB_GAIN_MIN_DB_p"
@@ -114,14 +133,14 @@
                                        WriteSync="true"/> <!-- TODO / FIXME - remove Writable from OCS for this property and remove WriteSync from the OWD for this property, the only reason we need WriteSync here is to ensure any write to this property of a value other than the default causes a failure. -->
   
   <!-- We do declare a default value TX RF LO frequency min/max here because
-       they are always a fixed value for E310's AD9361 -->
+       they are always a fixed value for E3XX's AD9361 -->
   <SpecProperty Name="frequency_max_MHz" Default="FREQUENCY_MAX_MHZ_p"
                                          WriteSync="true"/>  <!-- TODO / FIXME - remove Writable from OCS for this property and remove WriteSync from the OWD for this property, the only reason we need WriteSync here is to ensure any write to this property causes a failure. -->
   <SpecProperty Name="frequency_min_MHz" Default="FREQUENCY_MIN_MHZ_p"
                                          WriteSync="true"/>  <!-- TODO / FIXME - remove Writable from OCS for this property and remove WriteSync from the OWD for this property, the only reason we need WriteSync here is to ensure any write to this property causes a failure. -->
 
   <!-- We do NOT declare a default value for TX RF LO frequency step size
-       because its value is runtime dynamic on E310's AD9361 -->
+       because its value is runtime dynamic on E3XX's AD9361 -->
   <!-- Indicates the precision which will be used to evaluate the value written
        to this worker's frequency_MHz property
        before that value is applied to hardware. For example if the step is 2,
@@ -148,9 +167,9 @@
        the "maximum local oscillator (LO) step size" is 2.4 Hz. Further
        reading into the datasheet reveals that this value of 2.4 Hz is
        specific to an LO frequency of 2.4 GHz and a reference clock rate of 40
-       MHz. On E310, a crystal clock source is used whose frequency is 40
-       MHz, and as long as there is no external-to-the-E310 clock which
-       drives the TP102 test point on the E310 PCB, it is a safe
+       MHz. On E3XX, a crystal clock source is used whose frequency is 40
+       MHz, and as long as there is no external-to-the-E3XX clock which
+       drives the TP102 test point on the E3XX PCB, it is a safe
        assumption that the reference clock rate matches that of the crystal.
        However, it is important to note that both RX and TX RF LO step sizes
        are in fact dependent upon the currently configured LO frequency. A
@@ -160,7 +179,7 @@
   <SpecProperty Name="frequency_step_MHz" ReadSync="true"
                                           WriteSync="true"/>  <!-- TODO / FIXME - remove Writable from OCS for this property and remove WriteSync from the OWD for this property, the only reason we need WriteSync here is to ensure any write to this property causes a failure. -->
   
-  <SpecProperty Name="sample_rate_max_MHz" Default="SAMPLE_RATE_MAX_MHZ_p"
+  <SpecProperty Name="sample_rate_max_MHz" ReadSync="true"
                                            WriteSync="true"/>  <!-- TODO / FIXME - remove Writable from OCS for this property and remove WriteSync from the OWD for this property, the only reason we need WriteSync here is to ensure any write to this property causes a failure. -->
   <SpecProperty Name="sample_rate_min_MHz" Default="SAMPLE_RATE_MIN_MHZ_p"
                                            WriteSync="true"/>  <!-- TODO / FIXME - remove Writable from OCS for this property and remove WriteSync from the OWD for this property, the only reason we need WriteSync here is to ensure any write to this property causes a failure. -->
@@ -188,7 +207,7 @@
                                                    WriteSync="true"/>  <!-- TODO / FIXME - remove Writable from OCS for this property and remove WriteSync from the OWD for this property, the only reason we need WriteSync here is to ensure any write to this property causes a failure. -->
 
   <!-- We do NOT declare a default value for TX BB cutoff frequency step size
-       because its value is runtime dynamic on E310's AD9361 -->
+       because its value is runtime dynamic on E3XX's AD9361 -->
   <!-- Indicates the precision which will be used to evaluate the value written
        to this worker's bb_cutoff_frequency_MHz property
        before that value is applied to hardware. For example if the step is 2,
@@ -236,22 +255,12 @@
                           Volatile="true"
                           ReadSync="true"
                           WriteSync="true"
-                          Default="reference_clk_rate_Hz 40e6,duplex_mode FDD,are_using_REF_CLK_SMA false,SMA_channel TRXA">
-    <Member Name="reference_clk_rate_Hz" Type="double"
-                                         Description="Schematic crystal Y101 frequency"/>
-    <Member Name="duplex_mode"           Type="enum"
-                                         Enums="TDD,FDD"/>
-    <Member Name="are_using_REF_CLK_SMA" Type="bool"/>
-    <Member Name="SMA_channel"           Type="enum"
-                                         Enums="TRXA,TRXB"
-                                         Description="Indicates which SMA connector on the E310 PCB that the TX data stream controlled by an instance of this worker corresponds to."/>
+                          Default="duplex_mode FDD,SMA_channel TRXA">
+    <Member Name="duplex_mode" Type="enum"
+                               Enums="TDD,FDD"/>
+    <Member Name="SMA_channel" Type="enum"
+                               Enums="TRXA,TRXB"
+                               Description="Indicates which SMA connector on the E3XX that the TX data stream controlled by an instance of this worker corresponds to."/>
   </Property>
-  <Property Name="LO_source" Type="enum"
-                             Enums="internal,external"
-                             Readable="true"
-                             Writable="true"
-                             WriteSync="true"
-                             Default="internal"
-                             Description="The value 'external' should only be used if an external-to-the-E310 clock drives the TP102 test point on the E310 PCB."/>
 
 </RccWorker>

@@ -22,8 +22,8 @@
        control plane interface to this worker -->
   <Instance Component="ocpi.assets.devices.ad9361_config_proxy" Slave="ad9361_config"/>
 
-  <Instance component='ties.bsp.e310.devices.e3xx_mimo_xcvr_filter'/>
-  <Instance component='ties.bsp.e310.devices.e3xx_mimo_xcvr_filter_proxy' slave='e3xx_mimo_xcvr_filter' name='e3xx_mimo_xcvr_filter_proxy'/>
+  <Instance component='ocpi.bsp.e310.devices.e3xx_mimo_xcvr_filter'/>
+  <Instance component='ocpi.bsp.e310.devices.e3xx_mimo_xcvr_filter_proxy' slave='e3xx_mimo_xcvr_filter' name='e3xx_mimo_xcvr_filter_proxy'/>
 
   <Instance Component="ocpi.core.rx">      <!-- intended to be:                   e3xx_rx.rcc -->
     <Property Name="app_inst_name_e3xx_mimo_xcvr_filter_proxy" Value="e3xx_mimo_xcvr_filter_proxy"/>

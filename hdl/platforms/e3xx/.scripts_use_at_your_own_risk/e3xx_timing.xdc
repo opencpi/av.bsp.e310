@@ -1,3 +1,21 @@
+# This file is protected by Copyright. Please refer to the COPYRIGHT file
+# distributed with this source distribution.
+#
+# This file is part of OpenCPI <http://www.opencpi.org>
+#
+# OpenCPI is free software: you can redistribute it and/or modify it under the
+# terms of the GNU Lesser General Public License as published by the Free
+# Software Foundation, either version 3 of the License, or (at your option) any
+# later version.
+#
+# OpenCPI is distributed in the hope that it will be useful, but WITHOUT ANY
+# WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR
+# A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+# details.
+#
+# You should have received a copy of the GNU Lesser General Public License along
+# with this program. If not, see <http://www.gnu.org/licenses/>.
+
 ###############################################################################
 # Timing Constraints for E310 daughter board signals
 ###############################################################################
@@ -11,7 +29,7 @@ create_clock -period $cat_data_clk_period -name E3XX_CONN_CAT_DATA_CLK [get_port
 #
 # Modified for our design:
 #   E3XX_MIMO_XCVR TX_FB_CLK_P (forwarded version of DATA_CLK_P)
-create_generated_clock -name E3XX_CONN_CAT_FB_CLK -divide_by 1 -source [get_pins ftop/pfconfig_i/E3XX_CONN_ad9361_dac_sub_i/worker/dac_clock_forward/C] [get_ports E3XX_CONN_CAT_FB_CLK] -invert
+create_generated_clock -name E3XX_CONN_CAT_FB_CLK -source [get_pins {ftop/pfconfig_i/E3XX_CONN_ad9361_dac_sub_i/worker/data_mode_cmos.single_port_fdd_ddr.single_port_fdd_ddr_i/dac_clk_forward/C}] -divide_by 1 -invert [get_ports {E3XX_CONN_CAT_FB_CLK}]
 
 # TCXO clock 40 MHz
 create_clock -period 25.000 -name E3XX_CONN_TCXO_CLK [get_nets E3XX_CONN_TCXO_CLK]
@@ -20,7 +38,7 @@ set_input_jitter E3XX_CONN_TCXO_CLK 0.100
 # Asynchronous clock domains
 set_clock_groups -asynchronous \
   -group [get_clocks -include_generated_clocks E3XX_CONN_CAT_DATA_CLK] \
-  -group [get_clocks -include_generated_clocks clk_fpga_0]
+  -group [get_clocks -include_generated_clocks clk_fpga_1]
 
 # Setup ADC (AD9361) interface constraints.
 
@@ -41,7 +59,7 @@ set_input_delay -clock [get_clocks E3XX_CONN_CAT_DATA_CLK] -max $max_rx_frame_de
 set_input_delay -clock [get_clocks E3XX_CONN_CAT_DATA_CLK] -min $min_rx_frame_delay [get_ports {E3XX_CONN_CAT_RX_FRAME}] -clock_fall -add_delay
 
 # because RX_FRAME_P is sampled on the DATA_CLK_P falling edge (we use DDR primitive as a sample-in-the-middle), the rising edge latched output is unconnected and therefore should not be used in timing analysis
-set_false_path -from [get_ports E3XX_CONN_CAT_RX_FRAME] -rise_to [get_pins ftop/pfconfig_i/E3XX_CONN_ad9361_adc_sub_i/worker/data_mode_supported.rx_frame_p_ddr/D]
+set_false_path -from [get_ports E3XX_CONN_CAT_RX_FRAME] -rise_to [get_pins ftop/pfconfig_i/E3XX_CONN_ad9361_adc_sub_i/worker/supported_so_far.rx_frame_p_ddr/D]
 
 # From observation, I am guessing that cat_fb_data_prog_dly is equivalent to
 #   (FB_CLK_Delay-TX_Data_Delay)*0.3 = 3.6

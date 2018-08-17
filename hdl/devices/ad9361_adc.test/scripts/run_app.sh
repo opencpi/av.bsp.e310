@@ -21,8 +21,6 @@ if [ "$FOUND_PLATFORMS" == e3xx ]; then
   # FIXME: for now, all platforms except e3xx correspond to FMCOMMS3....
   # This assumption will not be valid as more platforms and ad9361 cards are added.
   BOARD_TYPE=E3XX
-else 
-  BOARD_TYPE=FMCOMMS3
 fi
 
 REF_CLK_RATE=40e6
@@ -62,20 +60,7 @@ fi
 
 RX_CHANNEL_SWAP_ENABLE=0
 DELAY_RX_DATA=0
-if [ "$BOARD_TYPE" == "FMCOMMS3" ]; then
-  if [ "$RX_DATA_CLOCK_DELAY" = "" ]; then
-    export RX_DATA_CLOCK_DELAY=2
-  fi
-  if [ "$RX_DATA_DELAY" = "" ]; then
-    export RX_DATA_DELAY=0
-  fi
-  if [ "$TX_FB_CLOCK_DELAY" = "" ]; then
-    export TX_FB_CLOCK_DELAY=7
-  fi
-  if [ "$TX_DATA_DELAY" = "" ]; then
-    export TX_DATA_DELAY=0
-  fi
-elif [ "$BOARD_TYPE" == "E3XX" ]; then
+if [ "$BOARD_TYPE" == "E3XX" ]; then
   if [ "$RX_DATA_CLOCK_DELAY" = "" ]; then
     export RX_DATA_CLOCK_DELAY=11
   fi
@@ -109,7 +94,7 @@ TX_CHANNEL_SWAP_ENABLE=0
 # Removed the -U option so that golden output files match output
 # (ad9361_init properties dumped only once followed by '(cached)')
 echo "ocpirun -d -v -t $APP_RUNTIME_SEC \
-  -pad9361_config_proxy=ad9361_init=\"reference_clk_rate $REF_CLK_RATE,frequency_division_duplex_mode_enable 1,xo_disable_use_ext_refclk_enable 0,two_t_two_r_timing_enable $TWO_R_TWO_T,pp_tx_swap_enable 0,pp_rx_swap_enable 0,tx_channel_swap_enable $TX_CHANNEL_SWAP_ENABLE,rx_channel_swap_enable $RX_CHANNEL_SWAP_ENABLE,delay_rx_data $DELAY_RX_DATA,rx_data_clock_delay $RX_DATA_CLOCK_DELAY,rx_data_delay $RX_DATA_DELAY,tx_fb_clock_delay $TX_FB_CLOCK_DELAY,tx_data_delay $TX_DATA_DELAY\" \
+  -pad9361_config_proxy=ad9361_init=\"reference_clk_rate $REF_CLK_RATE,frequency_division_duplex_mode_enable 1,xo_disable_use_ext_refclk_enable 1,two_t_two_r_timing_enable $TWO_R_TWO_T,pp_tx_swap_enable 0,pp_rx_swap_enable 0,tx_channel_swap_enable $TX_CHANNEL_SWAP_ENABLE,rx_channel_swap_enable $RX_CHANNEL_SWAP_ENABLE,delay_rx_data $DELAY_RX_DATA,rx_data_clock_delay $RX_DATA_CLOCK_DELAY,rx_data_delay $RX_DATA_DELAY,tx_fb_clock_delay $TX_FB_CLOCK_DELAY,tx_data_delay $TX_DATA_DELAY\" \
   -pad9361_config_proxy=en_state_machine_mode=$ENSM_MODE \
   $P $APP_XML" > $RUNFILE
 

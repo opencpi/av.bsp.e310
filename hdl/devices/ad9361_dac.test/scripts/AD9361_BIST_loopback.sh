@@ -76,25 +76,16 @@ firenables=( $DISABLE )
 twortwots=( 0 1 ) # force using 2R2T timing diagram regardless of number of enabled channels
 
 FOUND_PLATFORMS=$(./target-$OCPI_TOOL_DIR/get_comma_separated_ocpi_platforms)
-if [ "$FOUND_PLATFORMS" == "zed" ]; then
-    # DATA_CLK_P rate rounded via floor = floor(1/5.712 ns) ~= 175.070028 MHz
-    # for LVDS, max samp rate = DATA_CLK_P rate / 4         ~=  43.767507 Msps complex
-  samprates=( $AD9361_MIN_ADC_RATE 25e6 30e6 35e6 40e6 43767507 )
-elif [ "$FOUND_PLATFORMS" == "zed_ise" ]; then
-  # DATA_CLK_P rate rounded via floor = floor(1/4.294 ns) ~= 232.883092 MHz
-  # for LVDS, max samp rate = DATA_CLK_P rate / 4         ~=  58.220773 Msps complex
-  samprates=( $AD9361_MIN_ADC_RATE 25e6 30e6 35e6 40e6 45e6 50e6 55e6 58220773 )
-elif [ "$FOUND_PLATFORMS" == "ml605" ]; then
-  samprates=( $AD9361_MIN_ADC_RATE 25e6 30e6 35e6 40e6 45e6 50e6 55e6 $AD9361_MAX_ADC_RATE )
-elif [ "$FOUND_PLATFORMS" == "e3xx" ]; then
+if [ "$FOUND_PLATFORMS" == "e3xx" ]; then
   if [ -n "$SINGLE_PORT" ]; then
     samprates=( $AD9361_MIN_ADC_RATE 15e6 20e6 25e6 30720000 )
     # There is a different supported range of sample rates for 2r2t timing in CMOS
     samprates2r2t=( $AD9361_MIN_ADC_RATE 5e6 10e6 15360000 )
-  else
-    samprates=( $AD9361_MIN_ADC_RATE 25e6 30e6 35e6 40e6 45e6 50e6 55e6 $AD9361_MAX_ADC_RATE )
-    # There is a different supported range of sample rates for 2r2t timing in CMOS
-    samprates2r2t=( $AD9361_MIN_ADC_RATE 15e6 20e6 25e6 30720000 )
+#  else
+# TODO / FIXME - verify that dual port works
+#    samprates=( $AD9361_MIN_ADC_RATE 25e6 30e6 35e6 40e6 45e6 50e6 55e6 $AD9361_MAX_ADC_RATE )
+#    # There is a different supported range of sample rates for 2r2t timing in CMOS
+#    samprates2r2t=( $AD9361_MIN_ADC_RATE 15e6 20e6 25e6 30720000 )
   fi
 else
   printf "platform found which is not supported: "
@@ -252,6 +243,8 @@ do
          -pfile_write=filename=$FILENAME" \
         runtest
       dogrep
+
+      #cp $FILENAME $FILENAME.$firenable.$samprate
 
       #no md5sum, relying on calculate_AD9361_BIST_PRBS_RX_BER
 

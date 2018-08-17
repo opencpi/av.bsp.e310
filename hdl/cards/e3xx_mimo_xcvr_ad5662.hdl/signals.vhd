@@ -19,33 +19,41 @@
 library IEEE; use IEEE.std_logic_1164.all, ieee.numeric_std.all;
 library util; use util.util.all;
 entity signals is
-  port (w_SPI_DI     : in  std_logic;
-        w_SPI_CLK    : in  std_logic;
-        w_SPI_ENB    : in  std_logic;
-        SPI_DI       : out std_logic;
-        SPI_CLK      : out std_logic;
-        SPI_ENB      : out std_logic);
+  port (w_TUNE_DAC_SDIN  : in  std_logic;
+        w_TUNE_DAC_SCLK  : in  std_logic;
+        w_TUNE_DAC_SYNCn : in  std_logic;
+        w_VCTCXO_TO_MB   : out std_logic;
+        TUNE_DAC_SDIN    : out std_logic;
+        TUNE_DAC_SCLK    : out std_logic;
+        TUNE_DAC_SYNCn   : out std_logic;
+        VCTCXO_TO_MB     : in  std_logic);
 end entity signals;
 architecture rtl of signals is
 begin
 
-  -- device worker signal SPI_DI (output)
-  SPI_DI_buffer : BUFFER_OUT_1
+  -- device worker signal TUNE_DAC_SDIN (output)
+  TUNE_DAC_SDIN_buffer : BUFFER_OUT_1
     generic map(DIFFERENTIAL => false)
-    port map(I => w_SPI_DI,
-             O => SPI_DI);
+    port map(I => w_TUNE_DAC_SDIN,
+             O => TUNE_DAC_SDIN);
 
-  -- device worker signal SPI_CLK (output)
-  SPI_CLK_buffer : BUFFER_OUT_1
+  -- device worker signal TUNE_DAC_SCLK (output)
+  TUNE_DAC_SCLK_buffer : BUFFER_OUT_1
     generic map(DIFFERENTIAL => false)
-    port map(I => w_SPI_CLK,
-             O => SPI_CLK);
+    port map(I => w_TUNE_DAC_SCLK,
+             O => TUNE_DAC_SCLK);
 
-  -- device worker signal SPI_ENB (output)
-  SPI_ENB_buffer : BUFFER_OUT_1
+  -- device worker signal TUNE_DAC_SYNCn (output)
+  TUNE_DAC_SYNCn_buffer : BUFFER_OUT_1
     generic map(DIFFERENTIAL => false)
-    port map(I => w_SPI_ENB,
-             O => SPI_ENB);
+    port map(I => w_TUNE_DAC_SYNCn,
+             O => TUNE_DAC_SYNCn);
+
+  -- device worker signal VCTCXO_TO_MB (input)
+  VCTCXO_TO_MB_buffer : BUFFER_IN_1
+    generic map(DIFFERENTIAL => false)
+    port map(I => VCTCXO_TO_MB,
+             O => w_VCTCXO_TO_MB);
 
 end rtl;
 

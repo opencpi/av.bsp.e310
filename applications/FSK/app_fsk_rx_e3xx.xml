@@ -22,7 +22,6 @@
     <property name="DATA_RATE_CONFIG_p" value="DDR"/>
   </Instance>
 
-  <Instance Component="ocpi.assets.devices.qadc" Model="hdl"/>
   <Instance Component="ocpi.assets.dsp_comps.dc_offset_filter">
     <Property Name="bypass" Value="false"/>
   </Instance>
@@ -72,8 +71,8 @@
   
   <!-- RCC Proxies -->
   <!-- RX Chain -->
-  <Instance Component='ties.bsp.e310.devices.e3xx_mimo_xcvr_filter'/>
-  <Instance Component='ties.bsp.e310.devices.e3xx_mimo_xcvr_filter_proxy' Slave='e3xx_mimo_xcvr_filter' Name='e3xx_mimo_xcvr_filter_proxy'/>
+  <Instance Component='ocpi.bsp.e310.devices.e3xx_mimo_xcvr_filter'/>
+  <Instance Component='ocpi.bsp.e310.devices.e3xx_mimo_xcvr_filter_proxy' Slave='e3xx_mimo_xcvr_filter' Name='e3xx_mimo_xcvr_filter_proxy'/>
 
   <!-- must be instantiated in this app because ocpi.core rx requires control
        plane interface to this ad9361_config_proxy -->
@@ -126,4 +125,7 @@
     <Port Instance="real_digitizer" Name="out"/>
     <Port Instance="file_write" Name="in"/>
   </Connection>
+
+  <!-- must be instanced last in app XML to avoid erroneous overrun -->
+  <Instance Component="ocpi.assets.devices.qadc" Model="hdl"/>
 </Application>

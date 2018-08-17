@@ -1,3 +1,23 @@
+/*
+ * This file is protected by Copyright. Please refer to the COPYRIGHT file
+ * distributed with this source distribution.
+ *
+ * This file is part of OpenCPI <http://www.opencpi.org>
+ *
+ * OpenCPI is free software: you can redistribute it and/or modify it under the
+ * terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation, either version 3 of the License, or (at your option) any
+ * later version.
+ *
+ * OpenCPI is distributed in the hope that it will be useful, but WITHOUT ANY
+ * WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR
+ * A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
+ */
+
 #ifndef _READERS_AD9361_BBPLL_H
 #define _READERS_AD9361_BBPLL_H
 
@@ -93,7 +113,6 @@ const char* get_AD9361_BBPLL_N_Integer(
 }
 
 const char* get_AD9361_BBPLL_N_Integer_step(
-    OCPI::API::Application& app, const char* app_inst_name_proxy,
     double& val)
 {
   val = 1.;
@@ -112,7 +131,6 @@ const char* get_AD9361_BBPLL_N_Fractional(
 }
 
 const char* get_AD9361_BBPLL_N_Fractional_step(
-    OCPI::API::Application& app, const char* app_inst_name_proxy,
     double& val)
 {
   val = 1.;
@@ -218,9 +236,9 @@ const char* get_AD9361_BBPLL_FREQ_step_Hz(
     if(ret != 0) { return ret; }
     ret = (char*) get_AD9361_BBPLL_ref_scaler(       app, inst, ref_scaler       );
     if(ret != 0) { return ret; }
-    ret = (char*) get_AD9361_BBPLL_N_Integer_step(   app, inst, N_Integer_step   );
+    ret = (char*) get_AD9361_BBPLL_N_Integer_step(              N_Integer_step   );
     if(ret != 0) { return ret; }
-    ret = (char*) get_AD9361_BBPLL_N_Fractional_step(app, inst, N_Fractional_step);
+    ret = (char*) get_AD9361_BBPLL_N_Fractional_step(           N_Fractional_step);
     if(ret != 0) { return ret; }
 
     d_input_F_REF       = (double) input_F_REF;

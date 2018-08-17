@@ -52,7 +52,7 @@ int main()
   }
   catch(...)
   {
-    std::cerr << "unknown exeception occured\n";
+    std::cerr << "unknown exception occurred\n";
     return EXIT_FAILURE;
   }
   return EXIT_SUCCESS;

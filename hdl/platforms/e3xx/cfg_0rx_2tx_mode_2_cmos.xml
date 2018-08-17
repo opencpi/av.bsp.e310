@@ -1,5 +1,5 @@
 <HdlConfig Constraints="e3xx_mimo_xcvr_mode_2_cmos">
-  <device name="ad5662"                    card="e3xx_mimo_xcvr"/>
+  <device name="e3xx_mimo_xcvr_ad5662" card="e3xx_mimo_xcvr"/>
   <device name="e3xx_mimo_xcvr_filter"     card="e3xx_mimo_xcvr"/>
 
   <!-- comm buses (e.g. I2C/SPI) -->

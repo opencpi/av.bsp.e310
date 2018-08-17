@@ -85,11 +85,12 @@ static void usage(const char *name, const char *error_message) {
 	  "    runtime            # Runtime of app in seconds (1 - 5)\n"
   	  "    enable_timestamps  # Enable timestamps (1 or 0)\n"
     "    frontend           # Only required for Zedboard or ML605, (FMCOMMS2 or FMCOMMS3 or zipper)\n"
-    "    sma_channel        # (optional) specify which PCB SMA is used when FMCOMMS2/3 is used (RX1A or RX2A)\n"
-         "Example: rx_app 1000   5     400 10 14   51 15   1 1 matchstiq_z1\n"
-         "Example: rx_app 1000   2.5   -1  6  1.25 51 1    1 1 zipper\n"
-         "Example: rx_app 2400.1 1.1   -1  24 3.2  -1 0.4  1 1 FMCOMMS2 RX1A\n"
-         "Example: rx_app 3000.1 1.1   -1  24 3.2  -1 0.4  1 1 FMCOMMS3 RX1A\n",
+    "    sma_channel        # (optional) specify which PCB SMA is used when multiple are available (FMCOMMS2/3 values are RX1A or RX2A, E3xx values are TRXA, RX2A, RX2B, TRXB))\n"
+         "Example: rx_app 1000   5     400 10 14   51 15    1 1 matchstiq_z1\n"
+         "Example: rx_app 1000   2.5   -1  6  1.25 51 1     1 1 zipper\n"
+         "Example: rx_app 2400.1 1.1   -1  24 3.2  -1 0.4   1 1 FMCOMMS2 RX1A\n"
+         "Example: rx_app 3000.1 1.1   -1  24 3.2  -1 0.4   1 1 FMCOMMS3 RX1A\n",
+         "Example: rx_app 1000   0.512 -1  24 1    -1 0.256 1 1 e3xx TRXA\n",
                  error_message,name);
   exit(1);
 }
@@ -145,7 +146,7 @@ int main(int argc, char **argv) {
   std::string xml_name;
 
   FMCOMMS_2_3_SMA_port_RF_t FMCOMMS_2_3_SMA_channel;
-  std::string sma_channel;
+  std::string sma_channel("TRXA"); // default for E3xx platform
 
   //Check what platform we are on
   bool validContainerFound = false;
@@ -439,7 +440,7 @@ int main(int argc, char **argv) {
       app.setProperty("rx", "config", "reference_clk_rate_Hz 40e6,duplex_mode FDD,are_using_REF_CLK_SMA false,SMA_channel RX2A");
     }
   } else if (currentFrontend == e3xxFrontend) {
-      app.setProperty("rx", "config", ("reference_clk_rate_Hz 40e6,duplex_mode FDD,are_using_REF_CLK_SMA false,SMA_channel " + sma_channel).c_str());
+      app.setProperty("rx", "config", ("duplex_mode FDD,SMA_channel " + sma_channel).c_str());
   }
 
   //Check arguments associated with RF frontend
@@ -653,6 +654,9 @@ int main(int argc, char **argv) {
     {
       printf("WARNING: problem obtaining SMA channel to print to screen: %s", err);
     }
+  }
+  else if (currentFrontend == e3xxFrontend) {
+    printf("SMA channel           : %s\n", sma_channel.c_str());
   }
 
   // copy file to local location from ram

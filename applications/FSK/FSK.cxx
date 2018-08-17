@@ -111,7 +111,6 @@ template<typename T> void prompt_default_min(OA::Application& app,
     const char* propmax)
 {
   T min = get_worker_prop_val<T>(app, worker, propmin);
-  printf("min=%.19f\n", min);
   T max = get_worker_prop_val<T>(app, worker, propmax);
   val = min; // set default for prompt
 
@@ -901,7 +900,7 @@ int main(int argc, char **argv) {
           input != "TRXB") {
           usage(argv[0],"Error: invalid e3xx channel specified: only supported values are {TRXA, RX2A, RX2B, TRXB}).\n");
         }
-        app.setProperty("rx", "config", ("reference_clk_rate_Hz 40e6,duplex_mode FDD,are_using_REF_CLK_SMA false,SMA_channel " + input).c_str());
+        app.setProperty("rx", "config", ("duplex_mode FDD,SMA_channel " + input).c_str());
       }
 
       if ((mode == "tx") || (mode == "txrx"))
@@ -912,7 +911,7 @@ int main(int argc, char **argv) {
           input != "TRXB") {
           usage(argv[0],"Error: invalid e3xx channel specified: only supported values are {TRXA, TRXB}).\n");
         }
-        app.setProperty("tx", "config", ("reference_clk_rate_Hz 40e6,duplex_mode FDD,are_using_REF_CLK_SMA false,SMA_channel " + input).c_str());
+        app.setProperty("tx", "config", ("duplex_mode FDD,SMA_channel " + input).c_str());
       }
     }
 

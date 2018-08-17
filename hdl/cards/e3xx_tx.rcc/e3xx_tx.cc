@@ -1,4 +1,24 @@
 /*
+ * This file is protected by Copyright. Please refer to the COPYRIGHT file
+ * distributed with this source distribution.
+ *
+ * This file is part of OpenCPI <http://www.opencpi.org>
+ *
+ * OpenCPI is free software: you can redistribute it and/or modify it under the
+ * terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation, either version 3 of the License, or (at your option) any
+ * later version.
+ *
+ * OpenCPI is distributed in the hope that it will be useful, but WITHOUT ANY
+ * WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR
+ * A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
+ */
+
+/*
  * THIS FILE WAS ORIGINALLY GENERATED ON Fri Nov 10 13:34:54 2017 EST
  * BASED ON THE FILE: e3xx_tx.xml
  * YOU *ARE* EXPECTED TO EDIT IT
@@ -16,6 +36,7 @@
 #include <iomanip> // std::setprecision()
 #include <cstdint> // uint32_t, uint64_t
 #include <utility> // std::pair
+#include <cinttypes> // PRIu64
 
 #include "ad9361.h"   // for RFPLL_MODULUS
 #include "OcpiApi.hh" // OCPI::API::Application
@@ -56,12 +77,14 @@
 
 using namespace OCPI::RCC; // for easy access to RCC data types and constants
 using namespace E3xx_txWorkerTypes;
+namespace OA = OCPI::API;
 
 class E3xx_txWorker : public E3xx_txWorkerBase {
 
 private:
-
   const std::string m_worker_str;
+
+  uint8_t m_two_t_two_r_timing_enable;
 
   const double m_No_OS_API_precision_tx_sampling_freq;
   const double m_No_OS_API_precision_tx_rf_bandwidth;
@@ -119,7 +142,6 @@ public:
     // frequency_step_MHz is not fixed
 
     // sample_rate_MHz is not fixed
-    m_map_fixedval["sample_rate_max_MHz"         ] = E3XX_TX_SAMPLE_RATE_MAX_MHZ_P;
     m_map_fixedval["sample_rate_min_MHz"         ] = E3XX_TX_SAMPLE_RATE_MIN_MHZ_P;
     // sample_rate_step_MHz is not fixed
 
@@ -213,42 +235,149 @@ private:
     app.setProperty(inst, "tx_fir_en_dis", DISABLE_str.c_str());
   }
 
-  void set_ad9361_init(ad9361_config_proxy_ad9361_init& ad9361_init)
-  {
-    std::string ad9361_init_str = to_string(ad9361_init);
+  /*! @brief Get value from worker array property read. This is just a
+   *         convenience function to reduce lines of code.
+   *  @param[in] w            application's worker instance name of the worker
+   *                          whose property is to be accessed
+   *  @param[in] p            property name
+   ****************************************************************************/
+  template<typename T>
+  T get_prop_val(const std::string& w, const std::string& p, size_t array_idx) {
+
+    OA::AccessList list({array_idx});
+    return getApplication().getPropertyValue<T>(w, p, list);
+  }
+
+  /*! @brief Set worker array property value for a single array index. This is
+   *         just a convenience function to reduce lines of code
+   *  @param[in] w            application's worker instance name of the worker
+   *                          whose property is to be accessed
+   *  @param[in] p            property name
+   *  @param[in] val          value to assign
+   ****************************************************************************/
+  template<typename T>
+  void set_prop_val(const std::string& w, const std::string& p, size_t array_idx,
+                    T val) {
+    OA::AccessList list({array_idx});
+    getApplication().setPropertyValue<T>(w, p, val, list);
+  }
+
+  /*! @brief Get a single channel's rx_gain_control_mode from the AD9361.
+   *  @param[in] chan         channel forwarded onto No-OS call (0 or 1)
+   ****************************************************************************/
+  uint8_t get_rx_gain_control_mode(size_t chan) {
+
+    const char* inst = m_properties.app_inst_name_ad9361_config_proxy;
+    return get_prop_val<uint8_t>(inst, "rx_gain_control_mode", chan);
+  }
+
+  /*! @brief Get a single channel's rx_rf_gain dB from the AD9361. Note
+   *         that this uses the No-OS API call to retrieve the value, which
+   *         returns the theoretical value based on register settings.
+   *  @param[in] chan         channel forwarded onto No-OS call (0 or 1)
+   ****************************************************************************/
+  int32_t get_rx_rf_gain_dB(size_t chan) {
+
+    const char* inst = m_properties.app_inst_name_ad9361_config_proxy;
+    return get_prop_val<int32_t>(inst, "rx_rf_gain", chan);
+  }
+
+  /*! @brief Get the nominal rx_rf_bandwidth in Hz from the AD9361. Note that
+   *         this uses the No-OS API call to retrieve the value.
+   ****************************************************************************/
+  uint32_t get_rx_rf_bandwidth_Hz() {
+
+    const char* inst = m_properties.app_inst_name_ad9361_config_proxy;
+    return getApplication().getPropertyValue<uint32_t>(inst, "rx_rf_bandwidth");
+  }
+
+  /*! @brief Get nominal tx_lo_freq in Hz from the AD9361. Note this is the
+   *         No-OS API call with nominal (integer) precision, which is less
+   *         precise than get_AD9361_Rx_RFPLL_LO_freq_Hz().
+   ****************************************************************************/
+  uint64_t get_rx_lo_freq_Hz() {
+
+    const char* inst = m_properties.app_inst_name_ad9361_config_proxy;
+    return getApplication().getPropertyValue<uint64_t>(inst, "rx_lo_freq");
+  }
+
+  /*! @brief Get a single channel's rx_gain_control_mode from the AD9361.
+   *  @param[in] chan         channel forwarded onto No-OS call (0 or 1)
+   ****************************************************************************/
+  void set_rx_gain_control_mode(size_t chan, uint8_t gc_mode) {
+
+    const char* inst = m_properties.app_inst_name_ad9361_config_proxy;
+    set_prop_val(inst, "rx_gain_control_mode", chan, gc_mode);
+  }
+
+  /*! @brief Set a single channel's rx_rf_gain in dB on the AD9361.
+   *  @param[in] chan         channel forwarded onto No-OS call (0 or 1)
+   ****************************************************************************/
+  void set_rx_rf_gain_dB(size_t chan, int32_t rx_rf_gain_dB) {
+
+    const char* inst = m_properties.app_inst_name_ad9361_config_proxy;
+    set_prop_val(inst, "rx_rf_gain", chan, rx_rf_gain_dB);
+  }
+
+  /*! @brief Set rx_rf_bandwidth in Hz on the AD9361.
+   ****************************************************************************/
+  void set_rx_rf_bandwidth_Hz(uint32_t rx_rf_bandwidth_Hz) {
+
     OCPI::API::Application& app = getApplication();
     const char* inst = m_properties.app_inst_name_ad9361_config_proxy;
+    app.setPropertyValue<uint32_t>(inst, "rx_rf_bandwidth", rx_rf_bandwidth_Hz);
+  }
+
+  /*! @brief Set rx_lo_freq in Hz on the AD9361.
+   ****************************************************************************/
+  void set_rx_lo_freq_Hz(uint64_t rx_lo_freq_Hz) {
+
+    OCPI::API::Application& app = getApplication();
+    const char* inst = m_properties.app_inst_name_ad9361_config_proxy;
+    app.setPropertyValue<uint64_t>(inst, "rx_lo_freq", rx_lo_freq_Hz);
+  }
+
+  void set_ad9361_init(ad9361_config_proxy_ad9361_init& ad9361_init) {
+
+    const size_t chan = 0;
 
     // save property values which may change during write to ad9361_init
 
-    OCPI::API::Property p_rx_rf_bandwidth(app, inst, "rx_rf_bandwidth" );
-    OCPI::API::Property p_rx_lo_freq(     app, inst, "rx_lo_freq"      );
-    // we do not set ad9361_config_proxy's rx_sampling_freq because this worker's sample_rate_MHz's value will affect both the ad9361_config_proxy's tx_sampling_freq and rx_sampling_freq properties
-    std::string str_rx_gain_control_mode;
-    app.getProperty(inst, "rx_gain_control_mode", str_rx_gain_control_mode);
-    std::string str_rx_rf_gain;
-    app.getProperty(inst, "rx_rf_gain", str_rx_rf_gain);
+    /// @TODO/FIXME - chan==0 assumes 1R1T
+    const uint8_t gc_mode       = get_rx_gain_control_mode(chan);
+    const int32_t rx_rf_gain_dB = get_rx_rf_gain_dB(       chan);
 
-    ocpi_ulong_t     rx_rf_bandwidth = p_rx_rf_bandwidth.getULongValue();
-    ocpi_ulonglong_t rx_lo_freq      = p_rx_lo_freq.getULongLongValue();
-    // we do not set ad9361_config_proxy's rx_sampling_freq because this worker's sample_rate_MHz's value will affect both the ad9361_config_proxy's tx_sampling_freq and rx_sampling_freq properties
-    ad9361_config_proxy_rx_rf_gain_t rx_rf_gain;
-    parse(str_rx_rf_gain.c_str(), rx_rf_gain); //! @todo TODO/FIXME -  ignoring return value, idk if this is the right thing to to...
+    const uint32_t rx_rf_bandwidth_Hz = get_rx_rf_bandwidth_Hz();
+    const uint64_t rx_lo_freq_Hz      = get_rx_lo_freq_Hz();
 
     // write ad9361_init
-
-    app.setProperty(inst, "ad9361_init", ad9361_init_str.c_str());
+    {
+      const char* inst = m_properties.app_inst_name_ad9361_config_proxy;
+      std::string ad9361_init_str = to_string(ad9361_init);
+      getApplication().setProperty(inst, "ad9361_init",ad9361_init_str.c_str());
+    }
 
     // re-apply saved properties property values which may have changed during
     // write to ad9361_init
 
-    p_rx_rf_bandwidth.setULongValue( rx_rf_bandwidth );
-    p_rx_lo_freq.setULongLongValue(  rx_lo_freq      );
-    // we do not set ad9361_config_proxy's rx_sampling_freq because this worker's sample_rate_MHz's value will affect both the ad9361_config_proxy's tx_sampling_freq and rx_sampling_freq properties
-    app.setProperty(inst, "rx_gain_control_mode", str_rx_gain_control_mode.c_str());
-    std::string rx_rf_gain_str = to_string(rx_rf_gain);
-    app.setProperty(inst, "rx_rf_gain", rx_rf_gain_str.c_str());
+    /// @TODO/FIXME - chan==0 assumes 1R1T
+    if(not(get_rx_gain_control_mode(chan) == gc_mode)) {
+      set_rx_gain_control_mode(chan, gc_mode);
+    }
+    if(not(get_rx_rf_gain_dB(chan) == rx_rf_gain_dB)) {
+      set_rx_rf_gain_dB(chan, rx_rf_gain_dB);
+    }
 
+    if(not(get_rx_rf_bandwidth_Hz() == rx_rf_bandwidth_Hz)) {
+      set_rx_rf_bandwidth_Hz(rx_rf_bandwidth_Hz);
+    }
+    if(not(get_rx_lo_freq_Hz() == rx_lo_freq_Hz)) {
+      set_rx_lo_freq_Hz(rx_lo_freq_Hz);
+    }
+
+    // we do not set ad9361_config_proxy's rx_sampling_freq because this
+    // worker's sample_rate_MHz's value will affect both the
+    // ad9361_config_proxy's tx_sampling_freq and rx_sampling_freq properties
   }
 
   /* @brief calc_difference_between_desired_and_in_situ_after_hw_write
@@ -406,7 +535,17 @@ private:
     }
     else if(prop == PROP_STR_SAMPLE_RATE_MHZ)
     {
-      max =   E3XX_TX_SAMPLE_RATE_MAX_MHZ_P;
+      OCPI::API::Application& app = getApplication();
+      const char* inst = m_properties.app_inst_name_ad9361_config_proxy;
+      /// @todo / FIXME - read from ad9361_config_proxy's ad9361_phy.rx2tx2 property instead of m_two_t_two_r_timing_enable
+      if (m_two_t_two_r_timing_enable &&
+          !app.getPropertyValue<bool>(inst, "LVDS") &&
+          app.getPropertyValue<bool>(inst, "single_port") &&
+          !app.getPropertyValue<bool>(inst, "half_duplex")) {
+        max = 15.36;
+      } else {
+        max = 30.72;
+      }
     }
     else if(prop == PROP_STR_RF_CUTOFF_FREQUENCY_MHZ)
     {
@@ -488,7 +627,7 @@ private:
       std::string err = "invalid property: " + prop;
       throw err.c_str();
     }
-    log_info("attempted property write: prop=%s,\tdesired value=%.15f,\tvalue to be written (after potential adjustment due to No-OS API precision limitations) is %lu %s", prop.c_str(), val_desired, adjusted.first, adjusted.second.c_str());
+    log_info("attempted property write: prop=%s,\tdesired value=%.15f,\tvalue to be written (after potential adjustment due to No-OS API precision limitations) is %" PRIu64 " %s", prop.c_str(), val_desired, adjusted.first, adjusted.second.c_str());
   }
 
   /*void get_adjusted_val_to_be_applied_to_hw(
@@ -716,7 +855,7 @@ private:
     if(prop.compare(PROP_STR_RF_GAIN_DB) == 0)
     {
       double atten;
-      //! @todo TODO/FIXME - attenuation[0] assumes 1R1T
+      /// @TODO/FIXME - attenuation[0] assumes 1R1T
       const char* err = get_AD9361_tx_attenuation_TX1_mdB(app, inst, atten);
       val = -atten; // gain = -attenuation
       in_situ_after_hw_write = std::make_pair(val, "mdB");
@@ -832,9 +971,6 @@ private:
   // rf_gain_dB, etc are OCS properties). To avoid this undesirable
   // behavior , we skip all the initial writes to rf_gain_dB, etc, and
   // finally perform them here now that init property write is complete.
-  // We *really* want not only the init property, but also the LO_source
-  // property to be initialized before performing the calculations in
-  // rf_gain_dB_written(), etc.
   void dequeue_prop_writes_dependant_upon_config() {
     bool all_entries_processed = false;
     while(not all_entries_processed)
@@ -885,13 +1021,6 @@ private:
           bb_cutoff_frequency_MHz_written();
           break;
         }
-        else if(*it == "LO_source")
-        {
-          all_entries_processed = false;
-          m_pending_prop_write_queue.erase(it);
-          LO_source_written();
-          break;
-        }
         it++;
       }
     }
@@ -922,7 +1051,7 @@ private:
     }
     if(previously_skipped)
     {
-      log_debug("executing previously skipped %s property initialization because 'init' and 'LO_source' properties have been initialized", prop.c_str());
+      log_debug("executing previously skipped %s property initialization because 'init' property has been initialized", prop.c_str());
       previously_skipped = false;
     }
 
@@ -1317,8 +1446,33 @@ private:
     // because it is writable we need to call
     // error_if_prop_val_is_not_prop_fixedval() to ensure end users never write
     // an invalid value
-    RCCResult res = error_if_max_prop_val_is_not_prop_fixedval(prop);
-    return res;
+    double diff;
+    diff = m_properties.sample_rate_max_MHz - 15.36;
+
+    // ideally the only acceptable difference would be 0. but we have to give
+    // some wiggle room due to double precision rounding 0.00000000000001 was
+    // arbitrarily chosen to be "very little wiggle room"
+    if(std::abs(diff) > 0.00000000000001) {
+
+      diff = m_properties.sample_rate_max_MHz - 30.72;
+
+      if(std::abs(diff) > 0.00000000000001) {
+
+        return setError("attempted to overwrite value of sample_rate_max_MHz with an invalid value of %.19f", m_properties.sample_rate_max_MHz);
+      }
+    }
+    return RCC_OK;
+  }
+  // notification that sample_rate_max_MHz property will be read
+  RCCResult sample_rate_max_MHz_read() {
+    /// @todo / FIXME - read from ad9361_config_proxy's ad9361_phy.rx2tx2 property instead of m_two_t_two_r_timing_enable
+    if(m_two_t_two_r_timing_enable == 0) {
+      m_properties.sample_rate_max_MHz = 30.72;
+    }
+    else { // m_two_t_two_r_timing_enable should be 1
+      m_properties.sample_rate_max_MHz = 15.36;
+    }
+    return RCC_OK;
   }
   // notification that sample_rate_min_MHz property has been written
   RCCResult sample_rate_min_MHz_written() {
@@ -1547,21 +1701,18 @@ private:
     const char* retc = parse(pstr.c_str(), ad9361_init);
     if(retc != 0) { return setError(retc); }
 
-    ad9361_init.reference_clk_rate =
-        round(m_properties.config.reference_clk_rate_Hz); // will be later applied
+    ad9361_init.reference_clk_rate = 40e6;
 
     uint8_t FDD_enable = (m_properties.config.duplex_mode == CONFIG_DUPLEX_MODE_TDD)
                          ? 0 : 1;
     ad9361_init.frequency_division_duplex_mode_enable = FDD_enable; // will be later applied
 
-    if(m_properties.config.are_using_REF_CLK_SMA)
-    {
-      ad9361_init.xo_disable_use_ext_refclk_enable = 1; // will be later applied
-    }
-    else
-    {
-      ad9361_init.xo_disable_use_ext_refclk_enable = 0; // will be later applied
-    }
+    // the E3xx's AD9361's XTALP pin is disconnected/floating, meaning the
+    // AD9361 uses an external reference clock
+    ad9361_init.xo_disable_use_ext_refclk_enable = 1;
+
+    // important - this is the only value supported for now
+    ad9361_init.two_t_two_r_timing_enable = m_two_t_two_r_timing_enable;
 
     // no I/Q swap for TX channel(s)
     ad9361_init.pp_tx_swap_enable = (ocpi_uchar_t) 0;
@@ -1570,7 +1721,6 @@ private:
     //
     if(m_properties.config.SMA_channel == CONFIG_SMA_CHANNEL_TRXA)
     {
-      // (this is what performs channel swap)
       ad9361_init.tx_channel_swap_enable = 0; // will be later applied
       // (this is what ensures desired channel TX_2 is enabled)
       std::string TX_2_str = get_TX_2_str();
@@ -1579,7 +1729,6 @@ private:
     }
     else // i.e. (m_properties.config.SMA_channel == CONFIG_SMA_CHANNEL_TRXB)
     {
-      // (this is what performs no channel swap)
       ad9361_init.tx_channel_swap_enable = 0; // will be later applied
       // (this is what ensures desired channel TX_1 is enabled)
       std::string TX_1_str = get_TX_1_str();
@@ -1651,46 +1800,6 @@ private:
     if(err1 != 0) { return setError(err1); }
     m_properties.config.duplex_mode = (mode == AD9361_duplex_mode_t::FDD) ? CONFIG_DUPLEX_MODE_FDD : CONFIG_DUPLEX_MODE_FDD;
 
-    bool use_extclk;
-    const char* err2 = get_AD9361_use_extclk(app, inst, use_extclk);
-    if(err2 != 0) { return setError(err2); }
-    m_properties.config.are_using_REF_CLK_SMA = use_extclk;
-
-    return RCC_OK;
-  }
-  // notification that LO_source property has been written
-  RCCResult LO_source_written() {
-    log_trace("start of LO_source_written()");
-    const std::string prop("LO_source");
-
-    static bool previously_skipped = false;
-
-    if(not m_config_initialized)
-    {
-      previously_skipped = true;
-
-      m_pending_prop_write_queue.push_back(prop);
-
-      log_trace("end of LO_source_written()");
-      return RCC_OK;
-    }
-    if(previously_skipped)
-    {
-      log_debug("executing previously skipped %s property initialization because app_inst_name* properties have been initialized", prop.c_str());
-      previously_skipped = false;
-    }
-
-    std::string INT_LO_str = get_INT_LO_str();
-    std::string EXT_LO_str = get_EXT_LO_str();
-    const std::string valstr = (m_properties.LO_source == LO_SOURCE_INTERNAL)
-                               ? INT_LO_str : EXT_LO_str;
-
-    OCPI::API::Application& app = getApplication();
-
-    const char* inst = m_properties.app_inst_name_ad9361_config_proxy;
-    app.setProperty(inst, "tx_lo_int_ext", valstr.c_str());
-
-    log_trace("end of LO_source_written()");
     return RCC_OK;
   }
   RCCResult run(bool /*timedout*/) {
