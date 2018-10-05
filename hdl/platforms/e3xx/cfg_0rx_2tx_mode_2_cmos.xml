@@ -1,4 +1,4 @@
-<HdlConfig Constraints="e3xx_mimo_xcvr_mode_2_cmos">
+<HdlConfig Constraints="e3xx_mimo_xcvr_ad9361_dac_sub_mode_2_cmos">
   <device name="e3xx_mimo_xcvr_ad5662" card="e3xx_mimo_xcvr"/>
   <device name="e3xx_mimo_xcvr_filter"     card="e3xx_mimo_xcvr"/>
 
@@ -12,7 +12,7 @@
     <property name="half_duplex_p" value="false"/>
     <property name="single_port_p" value="true"/>
     <property name="swap_ports_p" value="false"/>
-    <property name="DATA_CLK_Delay" value="11"/>
+    <property name="DATA_CLK_Delay" value="7"/>
     <property name="RX_Data_Delay" value="0"/>
     <property name="FB_CLK_Delay" value="12"/>
     <property name="TX_Data_Delay" value="0"/>

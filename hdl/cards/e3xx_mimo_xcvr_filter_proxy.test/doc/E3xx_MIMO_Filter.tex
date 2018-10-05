@@ -113,13 +113,13 @@ with this program. If not, see <http://www.gnu.org/licenses/>.
 	\hline
 	Version           & v\docVersion \\
 	\hline
-	Release Date      & January 2018 \\
+	Release Date      & Sep 2018 \\
 	\hline
 	Component Library & ocpi.bsp.e310.devices   \\
 	\hline
 	Workers           & \comp.hdl, \proxy.rcc                \\
 	\hline
-	Tested Platforms  & E310(PS \& PL)                       \\
+	Tested Platforms  & E310 (Vivado only)                       \\
 	\hline
 \end{tabular}
 
@@ -137,11 +137,11 @@ Consult the E310 schematics in Reference \cite{schematics} for documentation of 
 \section*{Source Dependencies}
 \subsection*{\comp.hdl}
 \begin{itemize}
-	\item \$\{E310\_REPO\}/hdl/cards/\comp.hdl/\comp.vhd
+	\item hdl/cards/\comp.hdl/\comp.vhd
 \end{itemize}
 \subsection*{\proxy.rcc}
 \begin{itemize}
-	\item \$\{E310\_REPO\}/hdl/cards/\proxy.rcc/\proxy.cc
+	\item hdl/cards/\proxy.rcc/\proxy.cc
 \end{itemize}
 
 \begin{landscape}
@@ -354,34 +354,7 @@ The E3xx MIMO XCVR Filter device worker uses the standard Control Plane signals.
 \end{scriptsize}
 
 \section*{Test and Verification}
-The testbench for this device worker and proxy is meant to exercise the properties of the proxy worker dynamically while the application is running. The different modes of the frontend are cycled through for various different frequency/filter bank settings to visually verify the LEDs are responding appropriately. Please consult the test executable for further details on operation.
-\\\medskip
-The following steps are taken in the testbench:
-	\begin{itemize}
-		\item[1.] Set the frequency of the RX and TX LOs
-		\item[2.] Set the mode for Frontend A to TX,RX i.e. full duplex
-		\item[3.] Set the mode for Frontend B to TX,RX i.e. full duplex
-		\item[4.] Request user input for validation
-		\item[5.] Set the mode for Frontend A to RX,off
-		\item[6.] Set the mode for Frontend B to TX,RX i.e. full duplex
-		\item[7.] Request user input for validation
-		\item[8.] Set the mode for Frontend A to RX,off
-		\item[9.] Set the mode for Frontend B to RX,off
-		\item[10.] Request user input for validation
-		\item[11.] Set the mode for Frontend A to TX,RX i.e. full duplex
-		\item[12.] Set the mode for Frontend B to RX,off
-		\item[13.] Request user input for validation
-		\item[14.] Set the mode for Frontend A to TX,RX i.e. full duplex
-		\item[15.] Set the mode for Frontend B to off,off
-		\item[16.] Request user input for validation
-		\item[17.] Set the mode for Frontend A to off,off
-		\item[18.] Set the mode for Frontend B to TX,RX i.e. full duplex
-		\item[19.] Request user input for validation
-		\item[20.] Set the mode for Frontend A to off,off
-		\item[21.] Set the mode for Frontend B to off,off
-		\item[22.] Request user input for validation
-		\item[23.] Repeat steps 1 through 22 for each frequency being tested
-	\end{itemize}
+No unit test for this component exists. However, a hardware-in-the-loop application (which is NOT a unit test) exists for testing purposes (see applications/e3xx\_mimo\_xcvr\_filter\_proxy\_test).
 
 \begin{thebibliography}{2}
 \bibitem{usermanual}

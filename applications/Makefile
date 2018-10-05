@@ -22,4 +22,13 @@ $(if $(realpath $(OCPI_CDK_DIR)),,\
 # variable to the specific list of which ones you want to build and run, e.g.:
 # Applications=app1 app3
 # Otherwise all applications will be built and run
+
+# Because none of the applications in this directory are expected to work with
+# 'ocpidev run' called from the top-level project directory, 'Applications='
+# must be set, which has the side effect of disabling their build. The
+# applications should be built by calling 'ocpidev build' from within each
+# application's directory, and should be run by directly executing the
+# application binary with its appropriate arguments.
+Applications=
+
 include $(OCPI_CDK_DIR)/include/applications.mk

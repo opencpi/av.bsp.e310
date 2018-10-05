@@ -1,0 +1,7 @@
+<!-- The e3xx_mimo_xcvr_ad5662_test application xml file -->
+<application>
+    <instance component='ocpi.bsp.e310.cards.e3xx_mimo_xcvr_ad5662'>
+        <property name='voltageScale' value='0x00007afe'/>
+    </instance>
+    <instance component='ocpi.bsp.e310.cards.e3xx_mimo_xcvr_ad5662_em'/>
+</application>

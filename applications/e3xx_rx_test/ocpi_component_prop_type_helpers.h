@@ -1,0 +1,1 @@
+../../hdl/cards/e3xx_rx.rcc/include/ocpi_component_prop_type_helpers.h

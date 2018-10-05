@@ -1,0 +1,1 @@
+../../ad9361_adc_test/scripts/run_app.sh

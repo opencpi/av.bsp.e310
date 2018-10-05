@@ -71,8 +71,8 @@
   
   <!-- RCC Proxies -->
   <!-- RX Chain -->
-  <Instance Component='ocpi.bsp.e310.devices.e3xx_mimo_xcvr_filter'/>
-  <Instance Component='ocpi.bsp.e310.devices.e3xx_mimo_xcvr_filter_proxy' Slave='e3xx_mimo_xcvr_filter' Name='e3xx_mimo_xcvr_filter_proxy'/>
+  <Instance Component='ocpi.bsp.e310.cards.e3xx_mimo_xcvr_filter'/>
+  <Instance Component='ocpi.bsp.e310.cards.e3xx_mimo_xcvr_filter_proxy' Slave='e3xx_mimo_xcvr_filter' Name='e3xx_mimo_xcvr_filter_proxy'/>
 
   <!-- must be instantiated in this app because ocpi.core rx requires control
        plane interface to this ad9361_config_proxy -->

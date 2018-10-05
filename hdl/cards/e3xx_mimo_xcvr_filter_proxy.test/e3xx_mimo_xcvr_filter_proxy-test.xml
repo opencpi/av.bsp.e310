@@ -1,5 +1,0 @@
-<!-- This is the test xml for testing component "e3xx_mimo_xcvr_filter_proxy" -->
-<application>
-    <instance component='ocpi.bsp.e310.devices.e3xx_mimo_xcvr_filter'/>
-    <instance component='ocpi.bsp.e310.devices.e3xx_mimo_xcvr_filter_proxy' slave='e3xx_mimo_xcvr_filter'/>
-</application>

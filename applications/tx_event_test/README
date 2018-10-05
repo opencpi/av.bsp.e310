@@ -1,0 +1,11 @@
+Example 1 - E310 w/ SMA TRXA connected to spectrum analyzer w/ 2.4 GHz visible
+export OCPI_LIBRARY_PATH=<location-to-ad9361_config_proxy-artifact>
+OCPI_LIBRARY_PATH=../../hdl/assemblies/data_src_to_dac_test_tx_event/:../../hdl/:../../components/:$OCPI_LIBRARY_PATH ocpirun -t 10 tx_event_test_toggle_e3xx.xml
+Spectrum analyzer is used to observe tone at 2.4 GHz toggle on/off once a second for 10 sec.
+
+Example 2 - E310 w/ SMA TRXA connected to spectrum analyzer w/ 2.4 GHz visible
+export OCPI_LIBRARY_PATH=<location-to-ad9361_config_proxy-artifact>
+OCPI_LIBRARY_PATH=../../hdl/assemblies/data_src_to_dac/:../../hdl/:../../components/:$OCPI_LIBRARY_PATH ocpirun -t 10 tx_event_test_const_tone_e3xx.xml
+Use E3xx SMA TRXA -> spectrum analyzer @ 2.4 GHz, observe constant tone
+
+For more info, see TX_Event_Test.tex / TX_Event_Test.pdf (in assets project)

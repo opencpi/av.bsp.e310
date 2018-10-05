@@ -59,8 +59,8 @@
   <Instance Component="ocpi.assets.devices.ad9361_config_proxy" Slave="ad9361_config"/>
 
   <!-- TX Chain -->
-  <Instance Component='ocpi.bsp.e310.devices.e3xx_mimo_xcvr_filter'/>
-  <Instance Component='ocpi.bsp.e310.devices.e3xx_mimo_xcvr_filter_proxy' Slave='e3xx_mimo_xcvr_filter' Name='e3xx_mimo_xcvr_filter_proxy'/>
+  <Instance Component='ocpi.bsp.e310.cards.e3xx_mimo_xcvr_filter'/>
+  <Instance Component='ocpi.bsp.e310.cards.e3xx_mimo_xcvr_filter_proxy' Slave='e3xx_mimo_xcvr_filter' Name='e3xx_mimo_xcvr_filter_proxy'/>
   <!-- Command and Control -->
   
   <!-- RCC Frontend Proxies -->
