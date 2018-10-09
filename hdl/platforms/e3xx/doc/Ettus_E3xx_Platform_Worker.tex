@@ -65,6 +65,7 @@ with this program. If not, see <http://www.gnu.org/licenses/>.
 %----------------------------------------------------------------------------------------
 % Table packages
 %----------------------------------------------------------------------------------------
+\usepackage{longtable} % for long possibly multi-page tables
 \usepackage{tabularx} % c=center,l=left,r=right,X=fill
 \usepackage{float}
 \floatstyle{plaintop}
@@ -93,7 +94,7 @@ with this program. If not, see <http://www.gnu.org/licenses/>.
 % Update the docTitle and docVersion per document
 %----------------------------------------------------------------------------------------
 \def\docTitle{Platform Data Sheet}
-\def\docVersion{1.3}
+\def\docVersion{1.4}
 %----------------------------------------------------------------------------------------
 \date{Version \docVersion} % Force date to be blank and override date with version
 \title{\docTitle}
@@ -102,6 +103,10 @@ with this program. If not, see <http://www.gnu.org/licenses/>.
 \def\comp{e3xx}
 \def\Comp{e3xx Platform}
 \graphicspath{ {figures/} }
+
+\def\comp{e3xx}
+\edef\ecomp{e3xx}
+\def\Comp{E3xx}
 
 \begin{document}
 
@@ -117,7 +122,7 @@ with this program. If not, see <http://www.gnu.org/licenses/>.
 	\hline
 	Version           & v\docVersion \\
 	\hline
-	Release Date      & March 2018 \\
+	Release Date      & Sept 2018 \\
 	\hline
 	Component Library & ocpi.bsp.e310.platforms                                \\
 	\hline
@@ -127,37 +132,27 @@ with this program. If not, see <http://www.gnu.org/licenses/>.
 
 \section*{Functionality}
 \begin{flushleft}
-The E3xx Platform worker is the interface between the Processing System and the FPGA on the Ettus E310 Platform. It makes the connections between the AXI buses on the ARM and the OpenCPI Control and Data Planes. 
+The E3xx Platform worker is the interface between the Processing System and the FPGA on the Ettus E310 Platform. It makes the connections between the AXI buses on the ARM and the OpenCPI Control and Data Planes.
 %Optionally, it can also be used to interface with the SPI, I2C, and buses with device workers.
 
 \end{flushleft}
+\begin{landscape}
 \section*{Worker Implementation Details}
 \begin{flushleft}
-The E3XX platform has certain peripherals connected to the FPGA.  To incorporate these peripherals into the OpenCPI framework, HDL device workers and Software control proxy workers needed to be written.  An overview of these software control proxy workers, HDL Device workers and their interactions can be seen in the diagram below:
-\begin{figure}[ht]
-	\centerline{\includegraphics[scale=0.43]{E310_Workers}}
-	\caption{E3XX Device Workers and Software Control Proxy Workers}
-	\label{fig:wks}
-\end{figure}
-
-\begin{landscape}
-The E3XX Platform Worker provides the device, proxy, and application workers with interfaces to the control and data planes as necessary. The Platform Worker also instantiates and connects to the time\_server worker. A block diagram of the full Board Support Package is shown below:
+The E3XX Platform Worker provides the device, device proxy, and application workers with interfaces to the control and data planes as necessary. The Platform Worker also instantiates and connects to the time\_server.hdl device worker. A block diagram of the full Board Support Package, including device workers, device proxy workers, the platform Worker, and their connections is shown below:\\
 \begin{figure}[ht]
 	\centerline{\includegraphics[scale=0.45]{E310_BSP}}
 	\caption{E3XX BSP - Top Level Block Diagram}
 	\label{fig:top}
 \end{figure}
-\end{landscape}
 \end{flushleft}
+\end{landscape}
 
 \subsubsection*{Daughterboard}
 \begin{flushleft}
-This platform contains a daughterboard which is comprised of an AD9361 RF IC, an analog filter bank along with control signals, an AD5662 device, and an I2C device. Each of these has a device worker(s) and/or a software proxy for control. The AD9361 device workers are truly platform agnostic, and therefore were not developed specifically for the E310 radio. That being said, modifications were made to these device workers in order to support the E310 and its CMOS configurations in particular. More information on each of these devices and proxies can be found in each respective data sheet.
+This platform contains a daughterboard which is comprised of an AD9361 RF IC, an analog filter bank along with control signals, and an AD5662 IC. Each of these has one or more device workers and/or a device proxy worker for control. Because the AD9361 device workers are platform-agnostic, they do not contain E310-specific support. More information on each of these workers can be found in its respective data sheet.
 
 \end{flushleft}
-
-\section*{Theory}
-Because there are no data processing algorithms implemented in this worker, no corresponding data processing theory is relevant herein.
 
 \section*{Block Diagrams}
 \subsection*{Top level}
@@ -370,9 +365,9 @@ opencpi/hdl/primitives/sdp/sdp\_body.vhd
                                  &half\_duplex\_p   & false                       & -             & -                       \\ 
                                  &single\_port\_p   & true                        & -             & -                       \\ 
                                  &swap\_ports\_p    & false (true also supported) & -             & -                       \\ 
-                                 &DATA\_CLK\_Delay  & 11                          & -             & -                       \\
+                                 &DATA\_CLK\_Delay  & 7                           & -             & -                       \\
                                  &RX\_Data\_Delay   & 0                           & -             & -                       \\
-                                 &FB\_CLK\_Delay    & 3                           & -             & -                       \\
+                                 &FB\_CLK\_Delay    & 12                          & -             & -                       \\
                                  &TX\_Data\_Delay   & 0                           & -             & -                       \\                                 
 			\hline
       \multirow{3}{*}{ad9361\_adc\_sub} &lvds\_p    & false                       & -             & -                       \\ 
@@ -430,73 +425,16 @@ The following table enumerates the available slots for this platform and the sig
 \footnotetext[1]{\label{adcnumpresent}Depending on the mode (0rx1tx,1rx0tx,1rxtx...2rx2tx), there may be between 0 and 2 ad9361\_adc/dac workers in the platform configuration.}
 \section*{Control Timing and Signals}
 \subsection*{Control Domain}
-All control clocking in the E3XX platform originates from the PS7 processing clock 0 (FCLK0), which is set to 100 MHz.
+All control clocking in the E3XX platform originates from the PS7 processing clock 1 (FCLK1), which is set to 100 MHz.
 
 \subsection*{Sampling Domain}
 The sampling clock domain originates from the AD9361's DATA\_CLK\_P output. It is labeled CAT\_DATA\_CLK on the daughterboard connector, and is ultimately assigned to the E3XX\_CONN\_CAT\_DATA\_CLK input pin in the constraints file. This clock is routed to the AD9361 device workers (specifically ad9361\_data\_sub.hdl) via OpenCPI card/slot constructs.\par\medskip
 \noindent This clock is used by the ad9361\_adc\_sub.hdl and ad9361\_dac\_sub.hdl workers. Additionally, the ad9361\_dac\_sub.hdl generates FB\_CLK, which is routed through the card/slot to the E3XX\_CONN\_CAT\_FB\_CLK output pin in the constraints file. This clock is transmitted alongside TX data in a source synchronous fashion. See the AD9361 device worker documentation and ADI's UG-570 for more information regarding the relationships between these clocks.
 
+\begin{landscape}
 \section*{Performance and Resource Utilization}
-\todo{Update tables with final utilization}
-\subsection*{E3xx `Base' Configuration}
-\begin{scriptsize}
-	\begin{tabular}{|c|c|c|c|c|c|}
-		\hline
-		\rowcolor{blue}
-		Device                & Registers & LUTs & Fmax        & Memory/Special Functions & Design Suite \\
-		\hline
-		Zynq XC7Z020-1-CLG484 & 2290      & 2702 & 173.973 MHz & N/A                      & Vivado 2017.1    \\
-		\hline
-	\end{tabular}
-\end{scriptsize}
-
-\subsection*{E3xx `1rx0tx\_mode\_2' Configuration (CMOS Single Port Full Duplex)}
-\begin{scriptsize}
-	\begin{tabular}{|c|c|c|c|c|c|c|c|}
-		\hline
-		\rowcolor{blue}
-		Device                & Registers & LUTs & Fmax        & Memory/Special Functions & Design Suite \\
-		\hline
-		Zynq XC7Z020-1-CLG484 & 2960      & 3775 & 173.973 MHz & N/A                      & Vivado 2017.1    \\
-		\hline
-	\end{tabular}
-\end{scriptsize}
-
-\subsection*{E3xx `0rx1tx\_mode\_2' Configuration (CMOS Single Port Full Duplex)}
-\begin{scriptsize}
-	\begin{tabular}{|c|c|c|c|c|c|c|c|}
-		\hline
-		\rowcolor{blue}
-		Device                & Registers & LUTs & Fmax        & Memory/Special Functions & Design Suite \\
-		\hline
-		Zynq XC7Z020-1-CLG484 & 2960      & 3775 & 173.973 MHz & N/A                      & Vivado 2017.1    \\
-		\hline
-	\end{tabular}
-\end{scriptsize}
-
-\subsection*{E3xx `1rx1tx\_mode\_2' Configuration (CMOS Single Port Full Duplex)}
-\begin{scriptsize}
-	\begin{tabular}{|c|c|c|c|c|c|c|c|}
-		\hline
-		\rowcolor{blue}
-		Device                & Registers & LUTs & Fmax        & Memory/Special Functions & Design Suite \\
-		\hline
-		Zynq XC7Z020-1-CLG484 & 2960      & 3775 & 173.973 MHz & N/A                      & Vivado 2017.1    \\
-		\hline
-	\end{tabular}
-\end{scriptsize}
-
-\subsection*{E3xx `2rx2tx\_mode\_2' Configuration (CMOS Single Port Full Duplex)}
-\begin{scriptsize}
-	\begin{tabular}{|c|c|c|c|c|c|c|c|}
-		\hline
-		\rowcolor{blue}
-		Device                & Registers & LUTs & Fmax        & Memory/Special Functions & Design Suite \\
-		\hline
-		Zynq XC7Z020-1-CLG484 & 2960      & 3775 & 173.973 MHz & N/A                      & Vivado 2017.1    \\
-		\hline
-	\end{tabular}
-\end{scriptsize}\\
+\input{../../\ecomp/utilization.inc}
+\end{landscape}
 
 \noindent Note that there are many possible configurations of this platform. For each combination of CMOS Single/Dual Port, Half/Full Duplex and ports-swapped/not swapped, there is also a 0rx1tx, 1rx0tx, 1rx1tx, ... 2rx2tx. The resource utilization is only listed here for some of these, but can be extracted from the synthesized platform configuration for the supported modes. For now, the only supported modes are those corresponding to CMOS Single Port Full Duplex.
 \section*{Test and Verification}

@@ -45,14 +45,6 @@ with this program. If not, see <http://www.gnu.org/licenses/>.
 			\hline
 			\rowcolor{blue}
 			\textbf{Revision} & \textbf{Description of Change} & \textbf{Date} \\
-		    \hline
-		    v1.1 & Initial Release & 3/2017 \\
-		    \hline
-		    v1.2 & Updated for OpenCPI Release 1.2 & 8/2017 \\
-			\hline
-			v1.3 & Updated for OpenCPI Release 1.3 & 1/2018 \\
-			\hline
-			v1.3.1 & Updated for OpenCPI Release 1.3.1, including FMCOMMS2/3 support & 3/2018 \\
 			\hline
 			v1.3.1-E3XX & Updated for E310 support & 3/2018 \\
 			\hline
@@ -73,6 +65,10 @@ This document describes the ANGRYVIPER Receive demo application or ``Rx App". It
 
 \section{Description}
 \assetsdoc
+
+\section{Hardware Portability}
+This application is specific to the \verb+e3xx+ platform.
+
 \section{Building the Application}
 \subsection{Common Application Worker Dependencies}
 The following application workers, sorted by component library name, must be built prior to building the RX application assembly. See Appendix A for the parameter configurations used in the application, and see the individual component datasheets for more information.\par\bigskip
@@ -108,35 +104,10 @@ The following workers, sorted by component library name, must be built prior to 
 
 \subsection{HDL Assembly and HDL Container}
 \assetsdoc
+\begin{landscape}
 \subsection{Performance and Resource Utilization}
-\begin{scriptsize}
-\begin{tabular}{|P{3.1cm}|c|P{1.5cm}|c|c|c|c|}
-\hline
-\rowcolor{blue}
-Hardware Configuration & FPGA                & Registers (typ) & LUTs (typ) & Fmax (typ)   & Memory/Special Functions & Design Suite       \\
-\hline\
-Matchstiq-Z1               & XC7Z020-1-CLG484    & 9813     & 9918 & 100 MHz & \begin{tabular}{@{}c@{}}DSP48E1s=15 (7\%) \\ RAMB36E1s=21 \\ BUFGs=2 \\ BUFGCTRLs=2\end{tabular} & Vivado 2017.1 \\
-\hline\
-ML605/FMCOMMS2/3 HPC   & XC6VLX240T-1-FF1156 & 13,972 (4\%) & 18,149 (12\%) & 125 MHz & \begin{tabular}{@{}c@{}}DSP48E1s=15 (1\%) \\ BUFG/BUFGCTRLs=6\end{tabular} & ISE 14.7           \\
-\hline
-ML605/FMCOMMS2/3 LPC   & XC6VLX240T-1-FF1156 & 13,972 (4\%) & 18,103 (12\%) & 125 MHz & \begin{tabular}{@{}c@{}}DSP48E1s=15 (1\%) \\ BUFG/BUFGCTRLs=6\end{tabular} & ISE 14.7           \\
-\hline
-ML605/Zipper HPC       & XC6VLX240T-1-FF1156 & 13850     & 18325 & 125 MHz & \begin{tabular}{@{}c@{}}DSP48E1s=15 (1\%) \\ BUFG/BUFGCTRLs=7\end{tabular}                  & ISE 14.7           \\
-\hline
-ML605/Zipper LPC       & XC6VLX240T-1-FF1156 & 13850     & 18404 & 125 MHz & \begin{tabular}{@{}c@{}}DSP48E1s=15 (1\%) \\ BUFG/BUFGCTRLs=7\end{tabular}                  & ISE 14.7           \\
-\hline
-Stratix IV/Zipper HSMCA& EP4SGX230K-C2-F40   & 41017     & 27147 & 125 MHz & \begin{tabular}{@{}c@{}}DSP18x18s=26 (2\%) \\ GXB Receiver PCSs=4 \\ GXB Transmitter PCSs=4 \\ GXB Receiver PMAs=4 \\ GXB Transmitter PMAs=4 \\ PLLs=1\end{tabular}           & Quartus 15.1.0 \\
-\hline
-Stratix IV/Zipper HSMCB& EP4SGX230K-C2-F40   & 41017     & 27147 & 125 MHz & \begin{tabular}{@{}c@{}}DSP18x18s=26 (2\%) \\ GXB Receiver PCSs=4 \\ GXB Transmitter PCSs=4 \\ GXB Receiver PMAs=4 \\ GXB Transmitter PMAs=4 \\ PLLs=1\end{tabular}           & Quartus 15.1.0 \\
-\hline
-Zedboard/FMCOMMS2/3    & XC7Z020-1-CLG484    & 8,882 (9\%) & 8,865 (17\%) & 100 MHz & \begin{tabular}{@{}c@{}}DSP48E1s=15 (7\%) \\ RAMB36E1s=18 \\ BUFGs=1 \\ BUFGCTRLs=2\end{tabular}& Vivado 2017.1 \\
-\hline
-Zedboard/Zipper        & XC7Z020-1-CLG484    & 8759     & 8872 & 100 MHz & \begin{tabular}{@{}c@{}}DSP48E1s=15 (7\%) \\ RAMB36E1s=21 \\ BUFGs=2 \\ BUFGCTRLs=2\end{tabular}& Vivado 2017.1 \\
-\hline
-E310                   & XC7Z020-1-CLG484    & 9560     & 9357 & 100 MHz & \begin{tabular}{@{}c@{}}DSP48E1s=15 (7\%) \\ RAMB36E1s=18 \\ BUFGs=1 \\ BUFGCTRLs=1\end{tabular}& Vivado 2017.1 \\
-\hline
-\end{tabular}
-\end{scriptsize}
+\input{../../../hdl/assemblies/dc_offset_iq_imbalance_mixer_cic_dec_timestamper/utilization.inc}
+\end{landscape}
 
 \subsection{Executable}
 \noindent To build for the E310 (which runs the xilinx13\_4 PetaLinux operating system), run the following command from the \textit{rx\_app} directory:\par\medskip
@@ -153,21 +124,8 @@ E310                   & XC7Z020-1-CLG484    & 9560     & 9357 & 100 MHz & \begi
 \subsection{Library Path Requirements}
 \noindent Prior to running the application, the environment variable OCPI\_LIBRARY\_PATH must be configure, such that, all of the Rx application's run-time artifacts can be located. OpenCPI conveniently provides access to a project's run-time artifacts at the top-level of each project in a directory called artifacts. Reference the OpenCPI Application Development Guide for more about OCPI\_LIBRARY\_PATH. \par\medskip
 
-\noindent The following are recommendations for configuring the OCPI\_LIBRARY\_PATH based on the platform, the use of a daughter card and specific slot that card is installed. For all recommendations:
-\begin{itemize}
-  \item All paths are relative to the applications/rx\_app/ directory.\\
-\end{itemize}
+\noindent Run ``\code{make show}'' in the application directory for a recommended \code{OCPI\_LIBRARY\_PATH}.
 
-\noindent\textbf{Recommended Library Path for E310}\\
-Note: assumes running from the e310 project \\
-\noindent
-\verb|OCPI_LIBRARY_PATH=../../hdl/cards/lib:| \\
-\verb|../../ocpi.bsp.e310.dc_offset_iq_imbalance_mixer_cic_dec_timestamper_e3xx_cfg| \\
-\verb|_1rx_0tx_mode_2_cmos_cnt_1rx_0tx_thruasm_mode_2_cmos_e3xx.hdl.0.e3xx.gz:| \\
-\verb|<path-to-core-project>/exports/artifacts:| \\
-\verb|<path-to-assets-project>/exports/artifacts| \\
-\par\medskip
-\pagebreak
 \subsection{Expected results}
 \noindent A python script is included with the application for plotting the received data in both the time and frequency domain. Using the test setup shown above and the default settings for the GNUradio block diagram, run the application with the following arguments:\par\medskip
 
@@ -199,7 +157,6 @@ Note: assumes running from the e310 project \\
 \noindent Alternatively, the shortened file can be plotted which will ignore optionally unwanted startup data:\par\medskip
 \noindent\texttt{python ./scripts/plotAndFftAndTime.py odata/rx\_app\_shortened.out complex 18000 256000 16352}\par\medskip
 \noindent The default sample rate for the GNUradio block diagram is 512 kS/s. It is recommended that when using RX app with this input signal that a sample rate close to 512 kS/s be used. Higher sample rates are still valid, but may produce plots that look drastically different than those shown here.\par\medskip
-\newpage
 \noindent Timestamps are embedded, optionally, in the output file, and in addition to plotting, the script parses out and prints the timestamps. An example output gathered using the syntax above:\par\medskip
 \scriptsize\noindent\texttt{Timestamp at index: 000000000 :  1.0728292 Seconds: 0x1 Fraction: 0x12a4eec4  \\
 Timestamp at index: 000008180 :  1.0887978 Seconds: 0x1 Fraction: 0x16bb73ba ('Delta: 0.0159686', 'Expected:, 0.0159688')\\
@@ -208,31 +165,62 @@ Timestamp at index: 000016360 :  1.1047664 Seconds: 0x1 Fraction: 0x1ad1f906 ('D
 \par\medskip
 
 \subsection{Using a RF Signal Generator}
-\noindent As mentioned earlier, an arbitrary RF signal generator can be used with RX app instead of the Ettus N210. Below is an example using a signal generator and a E310.\par\medskip
-\noindent In this example, the signal generator is set to 1.001250 GHz with an amplitude of -40 dBm for the E310. The following parameters can be passed to the executable:\par\medskip
+\noindent An arbitrary RF signal generator can be used with RX app instead of the Ettus N210. \\
 
-\small
-\normalsize
-\noindent\textbf{E310}\\
-\scriptsize
-\noindent
-\begin{verbatim}
-# Usage is:
-# ./target-xilinx13_4/rx_app rf_tune_freq data_bw rf_bw rf_gain bb_bw bb_gain if_tune_freq runtime enable_timestamps frontend
-  ./target-xilinx13_4/rx_app 1000         2.5     -1    24      2.5   -1      1            1       1                 e3xx
-\end{verbatim}
-\par\medskip
-\small
-\noindent Here we plot output data:\par\medskip
-\noindent\texttt{python ./scripts/plotAndFftAndTime.py odata/rx\_app\_shortened.out complex 65536 2500000 16352}\par\medskip
+\noindent\textbf{Hardware Setup}
+\begin{itemize}
+  \item Signal generator is set to 2400.8 MHz with an amplitude of -40 dBm.
+  \item Signal generator is connected to the E310 TRXA SMA.
+\end{itemize}
+\textbf{\\Example 1 - Execution (remote system)}\\
+An example run with an IF tune freq of 0.1 MHz would be as follows.
+\lstset{language=bash, backgroundcolor=\color{lightgray}, columns=flexible, breaklines=true, prebreak=\textbackslash, basicstyle=\ttfamily, showstringspaces=false,upquote=true, aboveskip=\baselineskip, belowskip=\baselineskip}
+\begin{lstlisting}
+SAMP_RATE_MHZ=2.5
+RF_TUNE_FREQ_MHZ=2400
+IF_TUNE_FREQ_MHZ=0.1
+./<target>/rx_app $RF_TUNE_FREQ_MHZ $SAMP_RATE_MHZ -1 24 2.5 -1 $IF_TUNE_FREQ_MHZ 1 1 e3xx TRXA
+\end{lstlisting}
+\noindent\textbf{Example 1 - Verification (development system)}\\
+Verify that the signal generator tone exists at 700,000 Hz in the plotted baseband signal FFT (calculated as signal generator frequency - RF tune frequency - IF tune frequency = 2400.8 MHz - 2400 MHz - 0.1 MHz = 700,000 Hz).
+\begin{lstlisting}
+SAMP_RATE_HZ=2500000
+python ./scripts/plotAndFftAndTime.py odata/rx_app_shortened.out complex 65536 $SAMP_RATE_HZ 16352 &
+\end{lstlisting}
         \begin{figure}[H]
-                \centering
-                \includegraphics[scale=.5]{rx_app_sig_gen_time_domain}
+        \begin{minipage}{.5\textwidth}
+                \includegraphics[width=7cm,height=5.5cm,keepaspectratio]{rx_app_sig_gen_time_domain}
                 \label{fig:rx_app_sig_gen_time_domain}
+        \end{minipage}%
+        \begin{minipage}{.5\textwidth}
+                \includegraphics[width=7cm,height=5.5cm,keepaspectratio]{rx_app_sig_gen_fft}
+        \end{minipage}
+                \caption{Output of RX app}
+                \label{fig:rx_app_sig_gen_fft}
         \end{figure}
+\pagebreak
+\textbf{\\Example 2 - Execution (remote system)}\\
+An example run with an IF tune freq of 0 MHz would be as follows.
+\begin{lstlisting}
+SAMP_RATE_MHZ=2.5
+RF_TUNE_FREQ_MHZ=2400
+IF_TUNE_FREQ_MHZ=0
+./<target>/rx_app $RF_TUNE_FREQ_MHZ $SAMP_RATE_MHZ -1 24 2.5 -1 $IF_TUNE_FREQ_MHZ 1 1 e3xx TRXA
+\end{lstlisting}
+\noindent\textbf{Example 2 - Verification (development system)}\\
+Verify that the signal generator tone exists at 800,000 Hz in the plotted baseband signal FFT (calculated as signal generator frequency - RF tune frequency - IF tune frequency = 2400.8 MHz - 2400 MHz - 0 MHz = 800,000 Hz).
+\begin{lstlisting}
+SAMP_RATE_HZ=2500000
+python ./scripts/plotAndFftAndTime.py odata/rx_app_shortened.out complex 65536 $SAMP_RATE_HZ 16352 &
+\end{lstlisting}
         \begin{figure}[H]
-                \centering
-                \includegraphics[scale=.5]{rx_app_sig_gen_fft}
+        \begin{minipage}{.5\textwidth}
+                \includegraphics[width=7cm,height=5.5cm,keepaspectratio]{rx_app_sig_gen_time_domain}
+                \label{fig:rx_app_sig_gen_time_domain}
+        \end{minipage}%
+        \begin{minipage}{.5\textwidth}
+                \includegraphics[width=7cm,height=5.5cm,keepaspectratio]{rx_app_sig_gen_fft_800k}
+        \end{minipage}
                 \caption{Output of RX app}
                 \label{fig:rx_app_sig_gen_fft}
         \end{figure}

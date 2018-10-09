@@ -62,6 +62,7 @@ with this program. If not, see <http://www.gnu.org/licenses/>.
 %----------------------------------------------------------------------------------------
 % Table packages
 %----------------------------------------------------------------------------------------
+\usepackage{longtable} % for long possibly multi-page tables
 \usepackage{tabularx} % c=center,l=left,r=right,X=fill
 \usepackage{float}
 \floatstyle{plaintop}
@@ -97,6 +98,10 @@ with this program. If not, see <http://www.gnu.org/licenses/>.
 \def\comp{e3xx\_mimo\_xcvr\_ad5662}
 \def\Comp{E3xx MIMO XCVR AD5662}
 \graphicspath{ {figures/} }
+
+\def\comp{e3xx\_mimo\_xcvr\_ad5662}
+\edef\ecomp{e3xx_mimo_xcvr_ad5662}
+\def\Comp{E3xx MIMO XCVR AD5662}
 
 \begin{document}
 
@@ -189,18 +194,14 @@ The \comp\ device worker is used to configure the \comp\ MicroDAC hardware block
 \section*{Control Timing and Signals}
 The \comp\ device worker uses the standard Control Plane signals and the raw property interface.
 
+\begin{landscape}
+\section*{Worker Configuration Parameters}
+\subsubsection*{\comp.hdl}
+\input{../../\ecomp.hdl/configurations.inc}
 \section*{Performance and Resource Utilization}
 \subsubsection*{\comp.hdl}
-\begin{scriptsize}
-	\begin{tabular}{|c|c|c|c|c|c|}
-		\hline
-		\rowcolor{blue}
-		Device             & Registers & LUTs & Fmax        & Memory/Special Functions & Design Suite \\
-		\hline
-		Zynq XC7Z020-1-CLG484 & 38      & 51  & 168.350 & N/A                         & Vivado 2017.1/SDK 2013.4    \\
-		\hline
-	\end{tabular}
-\end{scriptsize}
+\input{../../\ecomp.hdl/utilization.inc}
+\end{landscape}
 
 \section*{Test and Verification}
 No unit test for this component exists. However, a simulation-only application (which is NOT a unit test) exists for testing purposes (see applications/e3xx\_mimo\_xcvr\_ad5662\_test).

@@ -14,11 +14,17 @@ Notes:
 
   applications/FSK,
   applications/rx_app,
-  hdl/devices/ad9361_adc.test,
-  hdl/devices/ad9361_dac.test
-    Contains copies of ACI applications from the OpenCPI assets project, with
+  applications/ad9361_adc_test,
+  applications/ad9361_dac_test,
+  applications/tx_event_test
+    Contains copies of ACI and XML applications from the OpenCPI assets project, with
     ACI modifications and new application XML files for E310 support. A
     desirable improvement to the aforementioned ACI applications would be to
     make their ACI implementations completely platform/BSP-agonstic, which would
     mitigate the need to copy ACI among platform/BSP-specifc projects. Ongoing
     work is being done to make this possible.
+  applications/e3xx_mimo_xcvr_ad5662_test,
+  applications/e3xx_mimo_xcvr_filter_proxy_test,
+  applications/e3xx_rx_test,
+  applications/e3xx_tx_test,
+    Unit tests for e310 specific workers

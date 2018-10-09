@@ -20,13 +20,13 @@ with this program. If not, see <http://www.gnu.org/licenses/>.
 %----------------------------------------------------------------------------------------
 % Update the docTitle and docVersion per document
 %----------------------------------------------------------------------------------------
-\def\docTitle{OpenCPI\\ AD9361 ADC Test App Guide (E3xx platform)}
+\def\docTitle{OpenCPI\\ E3xx RX Test App Guide}
 \def\docVersion{1.4}
 %----------------------------------------------------------------------------------------
 \input{../../../snippets/LaTeX_Header.tex}
 \date{Version \docVersion} % Force date to be blank and override date with version
 \title{\docTitle}
-\lhead{AD9361 ADC Test App Guide (E3xx platform)}
+\lhead{E3xx RX Test App Guide}
 %----------------------------------------------------------------------------------------
 %\usepackage[T1]{fontenc} % http://tex.stackexchange.com/a/181119
 \usepackage{graphicx}
@@ -53,7 +53,10 @@ with this program. If not, see <http://www.gnu.org/licenses/>.
 	\end{center}
 
 \section{Description}
-This application is intended to perform a hardware-in-the-loop test of the ad9361\_adc.hdl worker.
+This application is intended to perform a hardware-in-the-loop test of the e3xx\_rx.rcc worker. At a minimum, it tests to ensure that the default values and the expected possible min/max values are applied successfully for the various RF frontend parameters.
+
+\section{Hardware Portability}
+This application is intended to test e3xx\_rx.rcc, which is by design specific to the \verb+e3xx+ platform.
 
 \section{Execution}
 \subsection{Prerequisites}
@@ -63,19 +66,22 @@ The following must be true before application execution:
   \begin{itemize}
     \item for \verb+e3xx+/\verb+xilinx13_4+ HDL/RCC platforms:
     \begin{itemize}
-      \item \verb+ad9361_1r1t_test_adc_asm+/\verb+cnt_1rx_0tx_thruasm_mode_2_cmos_e3xx+ assembly/container
+      \item \verb+empty+/\verb+cnt_1rx_1tx_bypassasm_mode_2_cmos_e3xx+ assembly/container
+      \item \verb+e3xx_mimo_xcvr_filter_proxy.rcc+
+      \item \verb+e3xx_rx.rcc+
       \item \verb+ad9361_config_proxy.rcc+ (from assets project)
-      \item \verb+file_write.rcc+ (from core project)
     \end{itemize}
   \end{itemize}
-\item The current directory is the applications/ad9361\_adc\_test directory.
+\item The current directory is the applications/e3xx\_rx\_test directory.
 \end{itemize}
 \subsection{Command(s)}
 \lstset{language=bash, backgroundcolor=\color{lightgray}, columns=flexible, breaklines=true, prebreak=\textbackslash, basicstyle=\ttfamily, showstringspaces=false,upquote=true, aboveskip=\baselineskip, belowskip=\baselineskip}
 \begin{lstlisting}
-./<target-dir>/ad9361_adc_test
+./<target-dir>/e3xx_rx_test
 \end{lstlisting}
 \section{Verification}
 An application exit status of 0 indicates success, and non-zero indicates failure.
+
+
 
 \end{document}

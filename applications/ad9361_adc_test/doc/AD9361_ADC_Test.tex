@@ -20,13 +20,13 @@ with this program. If not, see <http://www.gnu.org/licenses/>.
 %----------------------------------------------------------------------------------------
 % Update the docTitle and docVersion per document
 %----------------------------------------------------------------------------------------
-\def\docTitle{OpenCPI\\ E3xx MIMO RCVR AD5662 Test App Guide}
+\def\docTitle{OpenCPI\\ AD9361 ADC Test App Guide (E3xx platform)}
 \def\docVersion{1.4}
 %----------------------------------------------------------------------------------------
 \input{../../../snippets/LaTeX_Header.tex}
 \date{Version \docVersion} % Force date to be blank and override date with version
 \title{\docTitle}
-\lhead{E3xx MIMO RCVR AD5662 Test App Guide}
+\lhead{AD9361 ADC Test App Guide (E3xx platform)}
 %----------------------------------------------------------------------------------------
 %\usepackage[T1]{fontenc} % http://tex.stackexchange.com/a/181119
 \usepackage{graphicx}
@@ -53,35 +53,32 @@ with this program. If not, see <http://www.gnu.org/licenses/>.
 	\end{center}
 
 \section{Description}
-This application is intended to perform a simulation-only test of the e3xx\_mimo\_xcvr\_ad5662.dhl device worker. The application is meant to analyze the properties of the device worker in a simulation environment. An emulator of the e3xx\_mimo\_xcvr\_ad5662 device was written in order to be able to inspect the timing of the SPI and ensure the transaction was written properly. ocpirun is used to launch the application and then ocpiview is used to analyze the results via manual inspection. The timing diagram should show the property value clocked in on the falling edge of the clock. The data word is formatted as 23..18 don't-cares, 17..16 power down mode bits, and 15..0 data bits.
+This application is intended to perform a hardware-in-the-loop test of the ad9361\_adc.hdl worker.
 
+\section{Hardware Portability}
+This application is specific to the \verb+e3xx+ platform.
+
+\section{Execution}
 \subsection{Prerequisites}
 The following must be true before application execution:
 \begin{itemize}
   \item The following assets are built and their build artifacts (FPGA bitstream file/shared object file) are contained within the directory list of the OCPI\_LIBRARY\_PATH environment variable.
   \begin{itemize}
-    \item for \verb+xsim/+ HDL platform:
+    \item for \verb+e3xx+/\verb+xilinx13_4+ HDL/RCC platforms:
     \begin{itemize}
-      \item \verb+empty+/\verb+cnt_e3xx_mimo_xcvr_ad5662_test_xsim+ assembly/container
+      \item \verb+ad9361_1r1t_test_adc_asm+/\verb+cnt_1rx_0tx_thruasm_mode_2_cmos_e3xx+ assembly/container
+      \item \verb+ad9361_config_proxy.rcc+ (from assets project)
+      \item \verb+file_write.rcc+ (from core project)
     \end{itemize}
   \end{itemize}
+\item The current directory is the applications/ad9361\_adc\_test directory.
 \end{itemize}
 \subsection{Command(s)}
 \lstset{language=bash, backgroundcolor=\color{lightgray}, columns=flexible, breaklines=true, prebreak=\textbackslash, basicstyle=\ttfamily, showstringspaces=false,upquote=true, aboveskip=\baselineskip, belowskip=\baselineskip}
 \begin{lstlisting}
-ocpirun -v -l8 -t3 <e310-project-dir>/applications/e3xx_mimo_xcvr_ad5662_test/e3xx_mimo_xcvr_ad5662_test.xml
-ocpiview
+./<target-dir>/ad9361_adc_test
 \end{lstlisting}
 \section{Verification}
-The following steps are taken for verification:
-	\begin{itemize}
-		\item[1.] In the simulation window, add \verb!ftop->e3xx_mimo_xcvr_ad5662_i->worker->signals! to the wave window
-		\item[2.] The timing diagram should look like the following (after zooming in), clocking in the word 0x7afe after 6 don't-care bits and two 0s for shutdown mode
-		\begin{figure}[ht]
-	\centerline{\includegraphics[scale=0.75]{timing}}
-	\caption{Timing diagram of a transaction of 0x7afe}
-	\label{fig:tb}
-\end{figure}
-	\end{itemize}
+An application exit status of 0 indicates success, and non-zero indicates failure.
 
 \end{document}
