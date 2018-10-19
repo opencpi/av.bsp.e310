@@ -1,0 +1,5 @@
+<!-- this container is intended to be used for e3xx_mimo_xcvr_filter.hdl
+     testing purposes -->
+<HdlContainer platform="e3xx">
+  <device name="e3xx_mimo_xcvr_filter" card="e3xx_mimo_xcvr"/>
+</HdlContainer>

@@ -1,0 +1,123 @@
+\iffalse
+This file is protected by Copyright. Please refer to the COPYRIGHT file
+distributed with this source distribution.
+
+This file is part of OpenCPI <http://www.opencpi.org>
+
+OpenCPI is free software: you can redistribute it and/or modify it under the
+terms of the GNU Lesser General Public License as published by the Free Software
+Foundation, either version 3 of the License, or (at your option) any later
+version.
+
+OpenCPI is distributed in the hope that it will be useful, but WITHOUT ANY
+WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A
+PARTICULAR PURPOSE. See the GNU Lesser General Public License for more details.
+
+You should have received a copy of the GNU Lesser General Public License along
+with this program. If not, see <http://www.gnu.org/licenses/>.
+\fi
+
+%----------------------------------------------------------------------------------------
+% Update the docTitle and docVersion per document
+%----------------------------------------------------------------------------------------
+\def\docTitle{OpenCPI\\ AD9361 DAC Test App Guide (E3xx platform)}
+\def\docVersion{1.4}
+%----------------------------------------------------------------------------------------
+\input{../../../snippets/LaTeX_Header.tex}
+\date{Version \docVersion} % Force date to be blank and override date with version
+\title{\docTitle}
+\lhead{AD9361 DAC Test App Guide (E3xx platform)}
+%----------------------------------------------------------------------------------------
+%\usepackage[T1]{fontenc} % http://tex.stackexchange.com/a/181119
+\usepackage{graphicx}
+\graphicspath{ {figures/} }
+\usepackage{textcomp}
+\usepackage{listings}
+
+\begin{document}
+\maketitle
+%\thispagestyle{fancy}
+	\begin{center}
+	\textit{\textbf{Revision History}}
+		\begin{table}[H]
+		\label{table:revisions} % Add "[H]" to force placement of table
+			\begin{tabularx}{\textwidth}{|c|X|l|}
+			\hline
+			\rowcolor{blue}
+			\textbf{Revision} & \textbf{Description of Change} & \textbf{Date} \\
+		    \hline
+		    v1.4 & Initial release. & 9/2018 \\
+			\hline
+			\end{tabularx}
+		\end{table}
+	\end{center}
+
+\section{Description}
+This application is intended to perform a hardware-in-the-loop test of the ad9361\_dac.hdl worker.
+
+\section{Hardware Portability}
+This application is specific to the \verb+e3xx+ platform.
+
+\section{Execution}
+\subsection{Prerequisites}
+The following must be true before application execution:
+\begin{itemize}
+  \item The following assets are built and their build artifacts (FPGA bitstream file/shared object file) are contained within the directory list of the OCPI\_LIBRARY\_PATH environment variable.
+  \begin{itemize}
+    \item for \verb+e3xx+/\verb+xilinx13_4+ HDL/RCC platforms:
+    \begin{itemize}
+      \item \verb+ad9361_1r1t_test_asm+/\verb+cnt_1rx_1tx_thruasm_mode_2_cmos_e3xx+ assembly/container
+      \item \verb+ad9361_config_proxy.rcc+ (from assets project)
+      \item \verb+iqstream_max_calculator.rcc+ (from assets project)
+      \item \verb+file_write.rcc+ (from core project)
+    \end{itemize}
+  \end{itemize}
+\item The current directory is the applications/ad9361\_dac\_test directory.
+\end{itemize}
+\subsection{Command(s)}
+\lstset{language=bash, backgroundcolor=\color{lightgray}, columns=flexible, breaklines=true, prebreak=\textbackslash, basicstyle=\ttfamily, showstringspaces=false,upquote=true, aboveskip=\baselineskip, belowskip=\baselineskip}
+\begin{lstlisting}
+./<target-dir>/ad9361_dac_test
+\end{lstlisting}
+
+\pagebreak
+\section{Verification}
+An application exit status of 0 indicates success, and non-zero indicates failure. This application is always expected to fail as it is currently written. \\ \\
+The application verbosely tests all AD9361 modes whose configuration are possible on the E3xx platform. This includes forcing 2R2T timing for 1R1T mode. There are known issues with the DAC data fidelity on the E3xx platform for any of the following AD9361 configurations, all of which are currently unsupported for the E3xx platform: 2R1T mode, 1R2T mode, 2R2T mode, and 1R1T mode with forced 2R2T timing. Consequently, the application is expected to print TEST FAILED and return a non-zero exit status (indicating failure). Verification can be performed for the only the currently supported modes by performing the following diff and verifying that differences only occur for the runs (runs are separated by lines containing only dashes in the odata/AD9361\_BIST\_loopback.log file) where the ad9361\_config\_proxy.ad9361\_init property's two\_t\_two\_r\_timing\_enable member has a value of true.
+\begin{lstlisting}
+diff -U 25 odata/AD9361_BIST_loopback.log scripts/AD9361_BIST_loopback.delays_7_0_12_0.use_ext_refclk.cmos_single_port_fdd.golden
+\end{lstlisting}
+For example, the following diff would be considered a 2R2T-only failure, and therefore permissible if verifying only the currently supported modes is desired.
+\begin{lstlisting}
+@@ -1477,27 +1477,27 @@
+ Property  ad9361_adc_sub.r1_samps_dropped = "false"
+ Property  ad9361_adc_sub.r2_samps_dropped = "false"
+ Property  file_write.bytesWritten = "32768"
+ --------------------------------------------------------------------------------
+ loopback LFSR
+ Property  ad9361_config_proxy.bb_pll_is_locked = "true"
+ Property  ad9361_config_proxy.rx_pll_is_locked = "true"
+ Property  ad9361_config_proxy.tx_pll_is_locked = "true"
+ Property  ad9361_config_proxy.rx_fir_en_dis = "0"
+ Property  ad9361_config_proxy.rx_sampling_freq = "15360000"
+ Property  ad9361_config_proxy.bist_prbs = "0"
+ Property  ad9361_config_proxy.ad9361_init = "reference_clk_rate 40000000,one_rx_one_tx_mode_use_rx_num 0,one_rx_one_tx_mode_use_tx_num 0,frequency_division_duplex_mode_enable 1,xo_disable_use_ext_refclk_enable 1,two_t_two_r_timing_enable true,pp_tx_swap_enable 0,pp_rx_swap_enable 0,tx_channel_swap_enable 0,rx_channel_swap_enable 0,delay_rx_data 0,rx_data_clock_delay 7,rx_data_delay 0,tx_fb_clock_delay 12,tx_data_delay 0" (cached)
+ Property  ad9361_config_proxy.DATA_CLK_Delay = "7"
+ Property  ad9361_config_proxy.Rx_Data_Delay = "0"
+ Property  ad9361_config_proxy.FB_CLK_Delay = "12"
+ Property  ad9361_config_proxy.Tx_Data_Delay = "0"
+ Property  ad9361_data_sub.DATA_CLK_Delay = "7" (parameter)
+ Property  ad9361_data_sub.RX_Data_Delay = "0" (parameter)
+ Property  ad9361_data_sub.FB_CLK_Delay = "12" (parameter)
+ Property  ad9361_data_sub.TX_Data_Delay = "0" (parameter)
+ Property  qadc.overrun = "false"
+ Property  qdac.underrun = "false"
+ Property  ad9361_adc_sub.r1_samps_dropped = "false"
+ Property  ad9361_adc_sub.r2_samps_dropped = "false"
+ Property  file_write.bytesWritten = "32768"
+-estimated_BER : 18.9682%
++estimated_BER : 0%
+ --------------------------------------------------------------------------------
+\end{lstlisting}
+
+\end{document}

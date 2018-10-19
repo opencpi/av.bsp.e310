@@ -62,6 +62,7 @@ with this program. If not, see <http://www.gnu.org/licenses/>.
 %----------------------------------------------------------------------------------------
 % Table packages
 %----------------------------------------------------------------------------------------
+\usepackage{longtable} % for long possibly multi-page tables
 \usepackage{tabularx} % c=center,l=left,r=right,X=fill
 \usepackage{float}
 \floatstyle{plaintop}
@@ -98,6 +99,10 @@ with this program. If not, see <http://www.gnu.org/licenses/>.
 \def\Comp{E3xx MIMO XCVR AD5662}
 \graphicspath{ {figures/} }
 
+\def\comp{e3xx\_mimo\_xcvr\_ad5662}
+\edef\ecomp{e3xx_mimo_xcvr_ad5662}
+\def\Comp{E3xx MIMO XCVR AD5662}
+
 \begin{document}
 
 \section*{Summary - \Comp}
@@ -112,13 +117,13 @@ with this program. If not, see <http://www.gnu.org/licenses/>.
 	\hline
 	Version           & v\docVersion \\
 	\hline
-	Release Date      & January 2018 \\
+	Release Date      & Sep 2018 \\
 	\hline
 	Component Library & ocpi.bsp.e310.cards \\
 	\hline
 	Workers           & \comp.hdl                \\
 	\hline
-	Tested Platforms  & xsim, E310(PL)                       \\
+	Tested Platforms  & xsim, E310 (Vivado only)                       \\
 	\hline
 \end{tabular}
 
@@ -135,8 +140,8 @@ The \comp\ device worker is used to configure the \comp\ MicroDAC hardware block
 \section*{Source Dependencies}
 \subsection*{\comp.hdl}
 \begin{itemize}
-	\item \$\{E310\_REPO\}/hdl/cards/\comp.hdl/\comp.vhd
-	\item \$\{E310\_REPO\}/hdl/cards/\comp.hdl/signals.vhd
+	\item hdl/cards/\comp.hdl/\comp.vhd
+	\item hdl/cards/\comp.hdl/signals.vhd
 \end{itemize}
 
 \begin{landscape}
@@ -189,48 +194,17 @@ The \comp\ device worker is used to configure the \comp\ MicroDAC hardware block
 \section*{Control Timing and Signals}
 The \comp\ device worker uses the standard Control Plane signals and the raw property interface.
 
+\begin{landscape}
+\section*{Worker Configuration Parameters}
+\subsubsection*{\comp.hdl}
+\input{../../\ecomp.hdl/configurations.inc}
 \section*{Performance and Resource Utilization}
 \subsubsection*{\comp.hdl}
-\begin{scriptsize}
-	\begin{tabular}{|c|c|c|c|c|c|}
-		\hline
-		\rowcolor{blue}
-		Device             & Registers & LUTs & Fmax        & Memory/Special Functions & Design Suite \\
-		\hline
-		Zynq XC7Z020-1-CLG484 & 38      & 51  & 168.350 & N/A                         & Vivado 2017.1/SDK 2013.4    \\
-		\hline
-	\end{tabular}
-\end{scriptsize}
+\input{../../\ecomp.hdl/utilization.inc}
+\end{landscape}
 
 \section*{Test and Verification}
-The testbench for this device worker is meant to analyze the properties of the device worker in a simulation environment. An emulator of the \comp\ hardware was written in order to be able to inspect the timing of the SPI and ensure the transaction was written properly. ocpirun is used to launch the application and then ocpiview is used to analyze the results via manual inspection. The timing diagram should show the property value clocked in on the falling edge of the clock. The data word is formatted as 23..18 don't-cares, 17..16 power down mode bits, and 15..0 data bits.
-\\\medskip
-The following steps are taken in the testbench:
-	\begin{itemize}
-		\item[1.] Navigate to the \comp.test directory
-		\begin{verbatim}		
-		$ cd hdl/cards/e3xx_mimo_xcvr_ad5662.test
-		\end{verbatim}
-		\item[2.] Build the assembly used in the test:
-		\begin{verbatim}		
-		$ ocpidev build --hdl-platform xsim		
-		\end{verbatim}
-		\item[2.] Run the application as follows:
-		\begin{verbatim}		
-		$ OCPI_LIBRARY_PATH=$PWD ocpirun -v -l8 -t3 test.xml
-		\end{verbatim}
-		\item[3.] Run `ocpiview' to start Vivado to analyze the simulation
-		\begin{verbatim}		
-		$ ocpiview	
-		\end{verbatim}
-		\item[4.] Add \verb!ftop->ad5662.i->worker->signals! to the wave window
-		\item[5.] The timing diagram should look like the following, clocking in the word 0x7afe after 6 don't-care bits and two 0s for shutdown mode
-		\begin{figure}[ht]
-	\centerline{\includegraphics[scale=0.75]{timing}}
-	\caption{Timing diagram of a transaction of 0x7afe}
-	\label{fig:tb}
-\end{figure}
-	\end{itemize}
+No unit test for this component exists. However, a simulation-only application (which is NOT a unit test) exists for testing purposes (see applications/e3xx\_mimo\_xcvr\_ad5662\_test).
 
 \begin{thebibliography}{2}
 \bibitem{usermanual}

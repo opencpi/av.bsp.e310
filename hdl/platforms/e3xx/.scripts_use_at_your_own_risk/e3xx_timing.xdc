@@ -29,7 +29,7 @@ create_clock -period $cat_data_clk_period -name E3XX_CONN_CAT_DATA_CLK [get_port
 #
 # Modified for our design:
 #   E3XX_MIMO_XCVR TX_FB_CLK_P (forwarded version of DATA_CLK_P)
-create_generated_clock -name E3XX_CONN_CAT_FB_CLK -source [get_pins {ftop/pfconfig_i/E3XX_CONN_ad9361_dac_sub_i/worker/data_mode_cmos.single_port_fdd_ddr.single_port_fdd_ddr_i/dac_clk_forward/C}] -divide_by 1 -invert [get_ports {E3XX_CONN_CAT_FB_CLK}]
+create_generated_clock -name E3XX_CONN_CAT_FB_CLK -source [get_pins {ftop/pfconfig_i/E3XX_CONN_ad9361_data_sub_i/worker/dac_clock_forward/C}] -divide_by 1 -invert [get_ports {E3XX_CONN_CAT_FB_CLK}]
 
 # TCXO clock 40 MHz
 create_clock -period 25.000 -name E3XX_CONN_TCXO_CLK [get_nets E3XX_CONN_TCXO_CLK]

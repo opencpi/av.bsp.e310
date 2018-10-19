@@ -29,8 +29,6 @@
     <Signal name='FB_CLK_N'      slot=''            />
     <Signal name='TX_FRAME_P'    slot='CAT_TX_FRAME'/>    <!-- G9            -->
     <Signal name='TX_FRAME_N'    slot=''            />
-    <Signal name='TXNRX'         slot='CAT_TXNRX'   />    <!-- H4            -->
-    <Signal name='ENABLE'        slot='CAT_ENABLE'  />    <!-- H4            -->
     <Signal name='P0_D_5_0(0)'   slot='CAT_P0_D_0'  />    <!-- E12   TX_D0_N -->
     <Signal name='P0_D_5_0(1)'   slot='CAT_P0_D_1'  />    <!-- D11   TX_D0_P -->
     <Signal name='P0_D_5_0(2)'   slot='CAT_P0_D_2'  />    <!-- E11   TX_D1_N -->
@@ -60,7 +58,10 @@
     <Property name='LVDS_P' value='false'/>
   </device>
 
-  <device worker='ad9361_config'/>
+  <device worker='ad9361_config'>
+    <Signal name='TXNRX'  slot='CAT_TXNRX'/>
+    <Signal name='ENABLE' slot='CAT_ENABLE'/>
+  </device>
 
   <device worker='e3xx_mimo_xcvr_filter'>
     <Signal name='TX_BANDSEL(0)'       slot='TX_BANDSEL_0'   /> <!--    -->

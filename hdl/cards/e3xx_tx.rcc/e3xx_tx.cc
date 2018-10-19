@@ -177,6 +177,9 @@ public:
     m_map_val[PROP_STR_SAMPLE_RATE_MHZ        ] = &m_properties.sample_rate_MHz;
     m_map_val[PROP_STR_RF_CUTOFF_FREQUENCY_MHZ] = (double*) &m_properties.rf_cutoff_frequency_MHz;
     m_map_val[PROP_STR_BB_CUTOFF_FREQUENCY_MHZ] = &m_properties.bb_cutoff_frequency_MHz;
+
+    // important - this is the only value supported for now
+    m_two_t_two_r_timing_enable = 0;
   }
 
 private:
@@ -1715,7 +1718,9 @@ private:
     ad9361_init.two_t_two_r_timing_enable = m_two_t_two_r_timing_enable;
 
     // no I/Q swap for TX channel(s)
-    ad9361_init.pp_tx_swap_enable = (ocpi_uchar_t) 0;
+    // (from AD9361_Register_Map_Reference_Manual_UG-671.pdf pg. 9:
+    // "Clearing this bit swaps I and Q (performs spectral inversion).")
+    ad9361_init.pp_tx_swap_enable = 1;
 
     // See Table 1: Channel Connectivity in AD9361 DAC Sub Component Data Sheet
     //
@@ -1771,12 +1776,6 @@ private:
 
     //! @todo TODO/FIXME - remove disabling of rx FIR and add FIR support paradigm
     disable_TX_FIR_filter();
-
-    OCPI::API::Application& app = getApplication();
-    const char* inst = m_properties.app_inst_name_ad9361_config_proxy;
-    std::string DISABLE_str;
-    app.getProperty(inst, "DISABLE",               DISABLE_str);
-    app.setProperty(inst, "en_state_machine_mode", DISABLE_str.c_str());
 
     dequeue_prop_writes_dependant_upon_config();
 

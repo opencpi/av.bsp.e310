@@ -1,0 +1,109 @@
+\iffalse
+This file is protected by Copyright. Please refer to the COPYRIGHT file
+distributed with this source distribution.
+
+This file is part of OpenCPI <http://www.opencpi.org>
+
+OpenCPI is free software: you can redistribute it and/or modify it under the
+terms of the GNU Lesser General Public License as published by the Free Software
+Foundation, either version 3 of the License, or (at your option) any later
+version.
+
+OpenCPI is distributed in the hope that it will be useful, but WITHOUT ANY
+WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A
+PARTICULAR PURPOSE. See the GNU Lesser General Public License for more details.
+
+You should have received a copy of the GNU Lesser General Public License along
+with this program. If not, see <http://www.gnu.org/licenses/>.
+\fi
+
+%----------------------------------------------------------------------------------------
+% Update the docTitle and docVersion per document
+%----------------------------------------------------------------------------------------
+\def\docTitle{OpenCPI\\ E3xx MIMO RCVR Filter Proxy Test App Guide}
+\def\docVersion{1.4}
+%----------------------------------------------------------------------------------------
+\input{../../../snippets/LaTeX_Header.tex}
+\date{Version \docVersion} % Force date to be blank and override date with version
+\title{\docTitle}
+\lhead{E3xx MIMO RCVR Filter Proxy Test App Guide}
+%----------------------------------------------------------------------------------------
+%\usepackage[T1]{fontenc} % http://tex.stackexchange.com/a/181119
+\usepackage{graphicx}
+\graphicspath{ {figures/} }
+\usepackage{textcomp}
+\usepackage{listings}
+
+\begin{document}
+\maketitle
+%\thispagestyle{fancy}
+	\begin{center}
+	\textit{\textbf{Revision History}}
+		\begin{table}[H]
+		\label{table:revisions} % Add "[H]" to force placement of table
+			\begin{tabularx}{\textwidth}{|c|X|l|}
+			\hline
+			\rowcolor{blue}
+			\textbf{Revision} & \textbf{Description of Change} & \textbf{Date} \\
+		    \hline
+		    v1.4 & Initial release. & 9/2018 \\
+			\hline
+			\end{tabularx}
+		\end{table}
+	\end{center}
+
+\section{Description}
+This application is intended to perform a hardware-in-the-loop test of the e3xx\_mimo\_xcvr\_filter\_proxy.rcc device proxy.
+The application is meant to exercise the properties of the proxy worker dynamically while the application is running. The different modes of the frontend are cycled through for various different frequency/filter bank settings to visually verify the LEDs are responding appropriately. The following steps are taken in the application:
+	\begin{itemize}
+		\item[1.] Set the frequency of the RX and TX LOs
+		\item[2.] Set the mode for Frontend A to TX,RX i.e. full duplex
+		\item[3.] Set the mode for Frontend B to TX,RX i.e. full duplex
+		\item[4.] Request user input for validation
+		\item[5.] Set the mode for Frontend A to RX,off
+		\item[6.] Set the mode for Frontend B to TX,RX i.e. full duplex
+		\item[7.] Request user input for validation
+		\item[8.] Set the mode for Frontend A to RX,off
+		\item[9.] Set the mode for Frontend B to RX,off
+		\item[10.] Request user input for validation
+		\item[11.] Set the mode for Frontend A to TX,RX i.e. full duplex
+		\item[12.] Set the mode for Frontend B to RX,off
+		\item[13.] Request user input for validation
+		\item[14.] Set the mode for Frontend A to TX,RX i.e. full duplex
+		\item[15.] Set the mode for Frontend B to off,off
+		\item[16.] Request user input for validation
+		\item[17.] Set the mode for Frontend A to off,off
+		\item[18.] Set the mode for Frontend B to TX,RX i.e. full duplex
+		\item[19.] Request user input for validation
+		\item[20.] Set the mode for Frontend A to off,off
+		\item[21.] Set the mode for Frontend B to off,off
+		\item[22.] Request user input for validation
+		\item[23.] Repeat steps 1 through 22 for each frequency being tested
+	\end{itemize}
+
+\section{Hardware Portability}
+This application is intended to test e3xx\_mimo\_filter\_proxy.rcc, which is by design specific to the \verb+e3xx+ platform.
+
+\section{Execution}
+\subsection{Prerequisites}
+The following must be true before application execution:
+\begin{itemize}
+  \item The following assets are built and their build artifacts (FPGA bitstream file/shared object file) are contained within the directory list of the OCPI\_LIBRARY\_PATH environment variable.
+  \begin{itemize}
+    \item for \verb+e3xx+/\verb+xilinx13_4+ HDL/RCC platforms:
+    \begin{itemize}
+      \item \verb+empty+/\verb+cnt_e3xx_mimo_xcvr_filter+ assembly/container
+      \item \verb+e3xx_mimo_xcvr_filter_proxy.rcc+
+    \end{itemize}
+  \end{itemize}
+\item The current directory is the applications/e3xx\_mimo\_xcvr\_filter\_proxy\_test directory.
+\end{itemize}
+\subsection{Command(s)}
+\lstset{language=bash, backgroundcolor=\color{lightgray}, columns=flexible, breaklines=true, prebreak=\textbackslash, basicstyle=\ttfamily, showstringspaces=false,upquote=true, aboveskip=\baselineskip, belowskip=\baselineskip}
+\begin{lstlisting}
+./<target-dir>/e3xx_mimo_xcvr_filter_proxy_test
+\end{lstlisting}
+\section{Verification}
+Verification is performed by running the application and visually verifying that the LEDs on the E3xx match the values printed to stdout. An application exit status which is non-zero indicates that the test could not complete.
+
+\end{document}

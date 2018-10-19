@@ -1,4 +1,3 @@
-% Any changes to this document should be made in both opencpi.git AND ocpiassets
 \documentclass{article}
 \iffalse
 This file is protected by Copyright. Please refer to the COPYRIGHT file
@@ -18,6 +17,7 @@ PARTICULAR PURPOSE. See the GNU Lesser General Public License for more details.
 You should have received a copy of the GNU Lesser General Public License along
 with this program. If not, see <http://www.gnu.org/licenses/>.
 \fi
+% Any changes to this document should be made in opencpi.git
 \author{} % Force author to be blank
 %----------------------------------------------------------------------------------------
 % Paper size, orientation and margins
@@ -63,9 +63,14 @@ with this program. If not, see <http://www.gnu.org/licenses/>.
 \usepackage{pdflscape} % for landscape view
 \usepackage{subfig}
 \hyphenation{ANGRY-VIPER} % Tell it where to hyphenate
+\hyphenation{Cent-OS} % Tell it where to hyphenate
+\hyphenation{install-ation} % Tell it where to hyphenate
+\uchyph=0 % Never hyphenate acronyms like RCC (I think this overrides ANGRYVIPER above)
+\renewcommand\_{\textunderscore\allowbreak} % Allow words to break/newline on underscores
 %----------------------------------------------------------------------------------------
 % Table packages
 %----------------------------------------------------------------------------------------
+\usepackage{longtable} % for long possibly multi-page tables
 \usepackage{tabularx} % c=center,l=left,r=right,X=fill
 % These define tabularx columns "C" and "R" to match "X" but center/right aligned
 \newcolumntype{C}{>{\centering\arraybackslash}X}

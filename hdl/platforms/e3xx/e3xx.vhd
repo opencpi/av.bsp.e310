@@ -138,7 +138,7 @@ begin
   props_out.romData         <= metadata_in.romData;
 
   -- e3xx_mimo_xcvr card is always present
-  props_out.slotCardIsPresent <= (0 => To_bool('0'), -- active low, this coincides with index 0 of slotName property
+  props_out.slotCardIsPresent <= (0 => '1', -- this coincides with index 0 of slotName property
                                   others => '0');
 
   -- Drive metadata interface

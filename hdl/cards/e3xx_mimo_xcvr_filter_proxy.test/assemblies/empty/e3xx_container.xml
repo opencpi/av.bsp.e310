@@ -1,3 +1,0 @@
-<HdlContainer platform="e3xx">
-  <device name="e3xx_mimo_xcvr_filter" card="e3xx_mimo_xcvr"/>
-</HdlContainer>

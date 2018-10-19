@@ -20,7 +20,12 @@
 # is used to run the respective application. This file handles hardware workers
 # and has been tested on the Matchstiq-Z1 and Zedboard platforms.
 
-$(if $(realpath $(OCPI_CDK_DIR)),,$(error The OCPI_CDK_DIR environment variable is not set correctly.))
+$(if $(realpath $(OCPI_CDK_DIR)),,\
+  $(error The OCPI_CDK_DIR environment variable is not set correctly.))
+# This is the application Makefile for the "rx_app" application
+# If there is a rx_app.cc (or rx_app.cxx) file, it will be assumed to be a C++ main program to build and run
+# If there is a rx_app.xml file, it will be assumed to be an XML app that can be run with ocpirun.
+# The RunArgs variable can be set to a standard set of arguments to use when executing either.
 
 APP=rx_app
 RccOnlyPlatforms=xilinx13_4
@@ -44,41 +49,61 @@ show:
 	echo "$$showhelp"
 
 define showhelp
+-- -------------------------------------------------------------------------
 ----------------------------------------------------------------------------
-Instructions for setup/execution on remote platforms '(i.e. Matchstiq-Z1, Zedboard)'
-These steps may be repeated to test each available HDL assembly
+The instructions below are used to test the Rx application on the Ettus E310
+remote platform.
+
+There are four steps for executing a test:
+1) Build ACI and/or input test data (developement system)
+2) Setup the OCPI_LIBRARY_PATH (remote system)
+3) Execution of application (remote system)
+4) Verification of output data (development system)
+
 ----------------------------------------------------------------------------
+1) Build ACI and/or input test data: (developement system)
+NOTE: Required only if ACI has never been built.
+ocpidev build --rcc-platform xilinx13_4
 ----------------------------------------------------------------------------
-Setup:
-----------------------------------------------------------------------------
-Development Computer - generate test ACI executable
-'OCPI_TARGET_PLATFORM=xilinx13_3 make'
-----------------------------------------------------------------------------
-Zynq-Based Platform - setup environment
+2) Setup the OCPI_LIBRARY_PATH: (remote system)
+
+IMPORTANT NOTE: this guide assumes you are operating in NFS/Network mode on the
+radio and you have your projects mounted at:
+/mnt/bsp_e310, /mnt/ocpi_core and /mnt/ocpi_assets
+
+NOTE: Reminder to setup the run-time OCPI environment on remote system.
 . /mnt/card/opencpi/mynetsetup.sh {DEVELOPMENT HOST IPADDRESS}
 
-cd /mnt/ocpi_assets/applications/rx_app
+NOTE: Convenience cmd to quickly switch to application directory.
+cd /mnt/bsp_e310/applications/rx_app
 
-export OCPI_LIBRARY_PATH=$$OCPI_CDK_DIR/../projects/core/exports/lib/components/rcc::$$(pwd)/../../exports/lib:$$(pwd)/../../hdl/assemblies/dc_offset_iq_imbalance_mixer_cic_dec_timestamper
-#NOTE: If copy/paste of the above exports, the redundant '$' must be removed.
+REQUIRED - Configure for Rx operation.
+Copy/paste string to terminal of remote system:
+export OCPI_LIBRARY_PATH=$$(pwd)/../../artifacts/ocpi.bsp.e310.dc_offset_iq_imbalance_mixer_cic_dec_timestamper_e3xx_cfg_1rx_0tx_mode_2_cmos_cnt_1rx_0tx_thruasm_mode_2_cmos_e3xx.hdl.0.e3xx.gz:$$(pwd)/../../artifacts:/mnt/ocpi_core/artifacts:/mnt/ocpi_assets/artifacts
 ----------------------------------------------------------------------------
+3) Execution of application on E310: (remote system)
 ----------------------------------------------------------------------------
-Execution:
-----------------------------------------------------------------------------
-Zynq-Based Platform - execute (pick one)
-HDL (Matchstiq-Z1):
-Configure signal generator: freq=1.001250 GHz and amp=-60 dBm
-./target-linux-x13_3-arm/rx_app 1000 2.5 400 10 1.25 51 1 1 1 matchstiq_z1
+Example signal generator settings:
+	* Signal generator is set to 2400.8 MHz with an amplitude of -40 dBm.
+	* Signal generator is connected to the E310 TRXA SMA.
 
-HDL (Zedboard):
-Configure signal generator: freq=1.001250 GHz and amp=-40 dBm
-./target-linux-x13_3-arm/rx_app 1000 2.5  -1  6 1.25 51 1 1 1 zipper
-----------------------------------------------------------------------------
-Development Computer - verify output data
-python ./scripts/plotAndFftAndTime.py odata/rx_app_raw.out complex 65536 2500000 16352 &
-* Alternatively, plot shortened data which skips potentially undesirable setup-time data
-python ./scripts/plotAndFftAndTime.py odata/rx_app_shortened.out complex 65536 2500000 16352 &
+SAMP_RATE_MHZ=2.5
+RF_TUNE_FREQ_MHZ=2400
+IF_TUNE_FREQ_MHZ=0.1
+./target-xilinx13_4/rx_app $$RF_TUNE_FREQ_MHZ $$SAMP_RATE_MHZ -1 24 2.5 -1 $$IF_TUNE_FREQ_MHZ 1 1 e3xx
+SAMP_RATE_HZ=2500000
 
+----------------------------------------------------------------------------
+4) Verification of output data: (development system)
+SAMP_RATE_HZ=2500000
+python ./scripts/plotAndFftAndTime.py odata/rx_app_shortened.out complex 65536 $$SAMP_RATE_HZ 16352 &
+
+Verify that the signal generator tone exists at 700,000 Hz in the plotted baseband signal FFT (calculated as signal generator frequency - RF tune frequency - IF tune frequency = 2400.8 MHz - 2400 MHz - 0.1 MHz = 700,000 Hz).
+
+Alternatively, use non-shortened rx_app_raw.out (results in potentially slow plot script)
+SAMP_RATE_HZ=2500000
+python ./scripts/plotAndFftAndTime.py odata/rx_app_raw.out complex 65536 $$SAMP_RATE_HZ 16352 &
+----------------------------------------------------------------------------
 ----------------------------------------------------------------------------
 endef
 export showhelp

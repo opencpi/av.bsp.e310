@@ -1,0 +1,5 @@
+<!-- The e3xx_mimo_xcvr_filter_proxy_test application xml file -->
+<application>
+    <instance component='ocpi.bsp.e310.cards.e3xx_mimo_xcvr_filter'/>
+    <instance component='ocpi.bsp.e310.cards.e3xx_mimo_xcvr_filter_proxy' slave='e3xx_mimo_xcvr_filter'/>
+</application>
