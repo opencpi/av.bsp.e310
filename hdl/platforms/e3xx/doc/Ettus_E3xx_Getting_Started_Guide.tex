@@ -233,7 +233,7 @@ This section provides the simplest instructions for copying files over to the SD
 
 \noindent Copy the following directory onto the SD card:
 \begin{verbatim}
-$ cp -r /opt/opencpi/cdk/e3xx/sdcard-xilinx13_4/* /run/media/<user>/<partition>/
+$ cp -rL /opt/opencpi/cdk/e3xx/sdcard-xilinx13_4/* /run/media/<user>/<partition>/
 \end{verbatim}
 
 \subsubsection{Copy Standalone Mode specific files to SD card}
@@ -309,16 +309,7 @@ Unlike Network mode, there is no required modifications to this script. \medskip
 
 3) Copy any additional artifacts to SD card's \path{opencpi/artifacts/} directory \medskip
 
-\subsection{Setup system time reference}
-\textbf{If Linux system time is not required to be accurate, this step may be skipped.} \\ \medskip
-
-\textit{For either Network or Standalone mode}, the following settings that are passed by \texttt{mynetsetup.sh/mysetup.sh} to the \texttt{zynq\_net\_setup.sh/zynq\_setup.sh} scripts \textit{may} require modification:
-
-\begin{itemize}
- \item Identify the system that is to be used as a time server, where the default is ``time.nist.gov''. A valid time server must support RFC-868.
- \item Identify the current timezone description, where the default is ``EST5EDT,M3.2.0,M11.1.0''. Change this if required for the local timezone. See \texttt{man tzset} on the host PC for more information.
- \item If a time server is not required, or cannot connect to a time server, the user is required to manually set the time at start up.  Use the \code{date} command to manually set the Linux system time. See \texttt{man date} on the host PC for more information.
-\end{itemize}
+\input{../../../../snippets/Setup_System_Time.tex}
 \end{flushleft}
 
 \pagebreak
@@ -371,7 +362,7 @@ Available containers:
  0  hdl   e3xx                                       PL:0
  1  rcc   xilinx13_4     linux  x13_4       arm      rcc0
 \end{verbatim}
-Note: If the output includes ``\verb+rdate: bad address `time.nist.gov'+'', comment out the \code{rdate} command in \code{zynq\_net\_setup.sh}, reboot the radio, and start back at step 1 of this section.
+\input{../../../../snippets/Ntp_Alarm_Clock.tex}
 \end{flushleft}
 \end{enumerate}
 
@@ -420,7 +411,7 @@ Available containers:
  0  hdl   e3xx                                       PL:0
  1  rcc   xilinx13_4     linux  x13_4       arm      rcc0
 \end{verbatim}
-Note: If the output includes ``\verb+rdate: bad address `time.nist.gov'+'', comment out the \code{rdate} command in \code{zynq\_setup.sh}, reboot the radio, and start back at step 1 of this section.
+\input{../../../../snippets/Ntp_Alarm_Clock.tex}
 \end{flushleft}
 \end{enumerate}
 
@@ -634,7 +625,7 @@ After performing the steps from \ref{sec:Copy embedded OS and boot files to SD c
 
 \begin{verbatim}
 
-$ cp -r /opt/opencpi/cdk/e3xx/sdcard-xilinx13_4/opencpi /run/media/<user>/<partition>/
+$ cp -rL /opt/opencpi/cdk/e3xx/sdcard-xilinx13_4/opencpi /run/media/<user>/<partition>/
 
 $ cp /home/<user>/ocpi_projects/assets/hdl/assemblies/testbias/container-testbias_e3xx_base/\
 target-zynq/testbias_e3xx_base.bit.gz /run/media/<user>/<partition>/opencpi/xilinx13_4/artifacts
