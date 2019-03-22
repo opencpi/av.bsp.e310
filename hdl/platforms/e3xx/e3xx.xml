@@ -14,6 +14,14 @@
   </device>
   <sdp name="zynq" master='true' count='4'/>
   <property name='useGP1' type='bool' parameter='1' default='false'/>
+
+  <!-- candidate for (future?) platform component spec -->
+  <!-- 0 : generic PPS input,
+       1 : GPS PPS,
+       2 : externally drivable PPS connector,
+       3-255 : reserved for future use -->
+  <property name='pps_src' type='uchar' parameter='1' default='0'/>
+
   <property name="axi_error" type="bool" arraylength='4' volatile='true'/>
   <property name="sdpDropCount" type='uchar' volatile='true'/>
   <!-- The E310 Daughter Board slot.
@@ -27,7 +35,8 @@
   <property name="debug_state1" type="Ulonglong" arraylength='4' volatile='true' debug='false'/>
   <property name="debug_state2" type="Ulonglong" arraylength='4' volatile='true' debug='false'/>
 
-  <signal input="PPS_EXT_IN"     /> <!-- 1 PPS input to FPGA from PPS External-->
+  <signal input="PPS_EXT_IN"     /> <!-- 1 PPS input to FPGA from PPS External (SYNC)-->
+  <signal input="GPS_PPS"/>         <!-- 1 PPS input to FPGA from GPS -->
 
   <!-- This ONSWITCH_DB signal and property are needed to force a pullup on this pin.
        Even if there is a pullup in the XDC, it may be optimized out without this property.

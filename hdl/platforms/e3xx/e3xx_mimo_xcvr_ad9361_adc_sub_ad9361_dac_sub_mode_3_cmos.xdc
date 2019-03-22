@@ -620,7 +620,7 @@ set_false_path -to   [get_ports E3XX_CONN_VCTX*]
 ###############################################################################
 
 # 10MHz / PPS References
-create_clock -period 100.000 -name PPS_EXT_IN [get_nets PPS_EXT_IN]
+#create_clock -period 100.000 -name PPS_EXT_IN [get_nets PPS_EXT_IN]
 #create_clock -period 100.000 -name GPS_PPS [get_nets GPS_PPS]
 
 # Asynchronous clock domains

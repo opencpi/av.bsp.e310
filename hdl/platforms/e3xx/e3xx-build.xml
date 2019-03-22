@@ -1,0 +1,10 @@
+<Build>
+  <!-- GPS PPS -->
+  <Configuration id='0'>
+    <Parameter name='pps_src' value='1'/>
+  </Configuration>
+  <!-- externally drivable PPS connector (E3xx SYNC SMB connector) -->
+  <!--Configuration id='1'>
+    <Parameter name='pps_src' value='2'/>
+  </Configuration--> <!-- TODO / FIXME - comment in once tested -->
+</Build>
