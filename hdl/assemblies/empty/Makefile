@@ -47,6 +47,7 @@ Containers= \
 	cnt_1rx_0tx_bypassasm_mode_2_cmos_e3xx \
 	cnt_1rx_1tx_bypassasm_mode_2_cmos_e3xx \
 	cnt_e3xx_mimo_xcvr_ad5662_test_xsim \
-	cnt_e3xx_mimo_xcvr_filter
+	cnt_e3xx_mimo_xcvr_filter \
+	cnt_1rx_0tx_bypassasm_mode_2_cmos_e3xx_ts
 
 include $(OCPI_CDK_DIR)/include/hdl/hdl-assembly.mk

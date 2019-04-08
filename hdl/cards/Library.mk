@@ -26,6 +26,8 @@
 # PackageName defaults to the name of the directory
 # PackagePrefix defaults to package of parent (project)
 # Package defaults to PackagePrefix.PackageName
+ComponentLibraries+=devices # required in order to build ocpi.core.time_serve
+                            # as a slave
 
 
 
@@ -33,3 +35,4 @@
 
 
 
+ComponentLibraries+=devices

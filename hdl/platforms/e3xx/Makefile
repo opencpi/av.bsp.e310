@@ -24,6 +24,10 @@ Libraries=axi zynq sdp
 ExportFiles=e3xx.xdc e3xx.mk
 ComponentLibraries=devices
 
+SourceFiles+=vivado_ip_ref_10mhz/mmcm_10mhz_ref/mmcm_10mhz_ref.v
+
+Cores+=vivado_ip_ref_10mhz/mmcm_10mhz_ref/mmcm_10mhz_ref.xci
+
 # Append the per-mode configurations to our list
 Configurations=\
 	base \

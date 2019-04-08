@@ -38,6 +38,11 @@
   <signal input="PPS_EXT_IN"     /> <!-- 1 PPS input to FPGA from PPS External (SYNC)-->
   <signal input="GPS_PPS"/>         <!-- 1 PPS input to FPGA from GPS -->
 
+  <!-- General Purpose IO
+       - PL_GPIO(5) : timebase PPS output
+  -->
+  <signal output="PL_GPIO" width='6'/>
+
   <!-- This ONSWITCH_DB signal and property are needed to force a pullup on this pin.
        Even if there is a pullup in the XDC, it may be optimized out without this property.
        The pullup is required, or the radio (when running xilinx13_3) will freeze up indefinitely

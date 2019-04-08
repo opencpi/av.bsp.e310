@@ -1,0 +1,1 @@
+../../platforms/e3xx/e3xx_mimo_xcvr_ad9361_adc_sub_mode_2_cmos.xdc

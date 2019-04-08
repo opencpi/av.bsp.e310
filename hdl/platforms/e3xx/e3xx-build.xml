@@ -3,8 +3,10 @@
   <Configuration id='0'>
     <Parameter name='pps_src' value='1'/>
   </Configuration>
+  <!-- TODO / FIXME - more than once configuration may not build correctly for
+                      platform workers, need to investigate bug -->
   <!-- externally drivable PPS connector (E3xx SYNC SMB connector) -->
   <!--Configuration id='1'>
     <Parameter name='pps_src' value='2'/>
-  </Configuration--> <!-- TODO / FIXME - comment in once tested -->
+  </Configuration-->
 </Build>

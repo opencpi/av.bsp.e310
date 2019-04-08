@@ -1,0 +1,70 @@
+<!--      CPU                  FPGA                                          -->
+<!--     ______     _________________________________________                -->
+<!--    +      +   +                                         +               -->
+<!--    |      | i |          container               ___    |               -->
+<!--    |      | n |                                 +   +   |               -->
+<!--    |      |*t*|*********************************|dev|   |               -->
+<!--    |      | e |    (3)                    *     +___+   |               -->
+<!--    |      | r |                           *             |               -->
+<!--    |      | c |          ______________   *             |               -->
+<!--    |      | o |         +  assembly   +   *(1)          |               -->
+<!--    |      | n |         |             |   *             |               -->
+<!--    |      | n |   (2)   |             |   *             |               -->
+<!--    |      |*e*|*********|             |****             |               -->
+<!--    |      | c |         |             |                 |               -->
+<!--    |      | t |         |             |                 |               -->
+<!--    +______+   +_________+_____________+_________________+               -->
+<!--                                                                         -->
+<HdlContainer Config="base" Only="e3xx" Constraints="e3xx_mimo_xcvr_ad9361_adc_sub_mode_2_cmos.xdc">
+
+  <device name="e3xx_mimo_xcvr_ad5662" card="e3xx_mimo_xcvr_ts"/>
+  <device name="e3xx_mimo_xcvr_filter"     card="e3xx_mimo_xcvr_ts"/>
+
+  <!-- comm buses (e.g. I2C/SPI) -->
+  <device name="e3xx_i2c"                  card="e3xx_mimo_xcvr_ts"/>
+  <device name="ad9361_spi_ts"  card="e3xx_mimo_xcvr_ts">
+    <property name="CP_CLK_FREQ_HZ_p" value="100e6"/> <!-- we MUST provide to this worker the e3xx's control plane clock freq value -->
+  </device>
+  <device name="ad9361_data_ts_sub" card="e3xx_mimo_xcvr_ts">
+    <property name="lvds_p" value="false"/>
+    <property name="half_duplex_p" value="false"/>
+    <property name="single_port_p" value="true"/>
+    <property name="swap_ports_p" value="false"/>
+    <property name="DATA_CLK_Delay" value="7"/>
+    <property name="RX_Data_Delay" value="0"/>
+    <property name="FB_CLK_Delay" value="12"/>
+    <property name="TX_Data_Delay" value="0"/>
+  </device>
+  <device name="ad9361_config_ts" card="e3xx_mimo_xcvr_ts"/>
+  <device name="ad9361_adc_ts_sub" card="e3xx_mimo_xcvr_ts">
+    <property name="lvds_p" value="false"/>
+    <property name="half_duplex_p" value="false"/>
+    <property name="single_port_p" value="true"/>
+  </device>
+  <device name="ad9361_adc_ts0" card="e3xx_mimo_xcvr_ts"/>
+
+  <!-- (1) external-to-FPGA device (worker) to FPGA assembly connections -->
+  <!--Connection External="<assembly_port_name>"
+                 Port="<device_port_name>"
+                 Device="<device_name>"
+                 Card="<card_name>" (required if card is used)
+                 Slot="<slot_name>" (required if more than one platform slot of the card slot type exists) -->
+  <!-- e.g. <Connection External="in_to_asm_rx_path_from_adc"  Port="out" Device="lime_adc"/> -->
+  <!-- e.g. <Connection External="out_from_asm_tx_path_to_dac" Port="in"  Device="lime_dac"/> -->
+
+  <!-- (2) FPGA assembly to CPU interconnect connections -->
+  <!--Connection External="<assembly_port_name>"
+                 Interconnect="<interconnect_name, probably zynq or pcie>"/-->
+
+  <!-- (3) external-to-FPGA device (worker) to CPU interconnect connections (bypassing the assembly)-->
+  <!--Connection Device="<device_name>"
+                 Port="<device_port_name>"
+                 Card="<card_name>" (required if card is used)
+                 Slot="<slot_name>" (required if more than one platform slot of the card slot type exists)
+                 Interconnect="<interconnect_name, probably zynq or pcie>"/-->
+  <!-- e.g. <Connection Device="lime_adc" Port="out" Interconnect="pcie"/> -->
+  <!-- e.g. <Connection Device="lime_dac" Port="in"  Interconnect="pcie"/> -->
+  <Connection Device="ad9361_adc_ts0" Port="out" Card="e3xx_mimo_xcvr_ts" Interconnect="zynq"/>
+
+
+</HdlContainer>

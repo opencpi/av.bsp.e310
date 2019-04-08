@@ -60,6 +60,8 @@ begin
   timebase_out.clk   <= clk;
   timebase_out.reset <= reset;
 
+  PL_GPIO(5) <= timebase_in.ppsOut;
+
   pps_src_gps : if pps_src = 1 generate
     timebase_out.ppsIn <= GPS_PPS;
   end generate pps_src_gps;
@@ -67,7 +69,6 @@ begin
   pps_ext : if pps_src = 2 generate
     timebase_out.ppsIn <= PPS_EXT_IN;
   end generate pps_ext;
-
 
   clkbuf   : BUFG   port map(I => fclk(1),
                              O => clk);

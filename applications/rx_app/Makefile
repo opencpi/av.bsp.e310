@@ -16,10 +16,6 @@
 # You should have received a copy of the GNU Lesser General Public License along
 # with this program. If not, see <http://www.gnu.org/licenses/>.
 
-# This file is used to build the Application Control Interface api testbench and
-# is used to run the respective application. This file handles hardware workers
-# and has been tested on the Matchstiq-Z1 and Zedboard platforms.
-
 $(if $(realpath $(OCPI_CDK_DIR)),,\
   $(error The OCPI_CDK_DIR environment variable is not set correctly.))
 # This is the application Makefile for the "rx_app" application
@@ -27,20 +23,8 @@ $(if $(realpath $(OCPI_CDK_DIR)),,\
 # If there is a rx_app.xml file, it will be assumed to be an XML app that can be run with ocpirun.
 # The RunArgs variable can be set to a standard set of arguments to use when executing either.
 
-APP=rx_app
 RccOnlyPlatforms=xilinx13_4
-
-#include setup.mk
-
-.SILENT: show
-.PHONY: run clean show
-
-# build ...
-all:
-
-# build the testbench executable
-run: all
-	OCPI_LIBRARY_PATH=lib $(VG) $(PROG) $(OUT)
+include $(OCPI_CDK_DIR)/include/application.mk
 
 clean::
 	rm -rf odata/*
@@ -49,19 +33,18 @@ show:
 	echo "$$showhelp"
 
 define showhelp
--- -------------------------------------------------------------------------
 ----------------------------------------------------------------------------
 The instructions below are used to test the Rx application on the Ettus E310
 remote platform.
 
 There are four steps for executing a test:
-1) Build ACI and/or input test data (developement system)
+1) Build ACI and/or input test data (development system)
 2) Setup the OCPI_LIBRARY_PATH (remote system)
 3) Execution of application (remote system)
 4) Verification of output data (development system)
 
 ----------------------------------------------------------------------------
-1) Build ACI and/or input test data: (developement system)
+1) Build ACI and/or input test data: (development system)
 NOTE: Required only if ACI has never been built.
 ocpidev build --rcc-platform xilinx13_4
 ----------------------------------------------------------------------------
@@ -85,7 +68,7 @@ export OCPI_LIBRARY_PATH=$$(pwd)/../../artifacts/ocpi.bsp.e310.dc_offset_iq_imba
 ----------------------------------------------------------------------------
 Example signal generator settings:
 	* Signal generator is set to 2400.8 MHz with an amplitude of -40 dBm.
-	* Signal generator is connected to the E310 TRXA SMA.
+	* Signal generator is connected to the E310 TRXA SMB.
 
 SAMP_RATE_MHZ=2.5
 RF_TUNE_FREQ_MHZ=2400
@@ -98,7 +81,7 @@ SAMP_RATE_HZ=2500000
 SAMP_RATE_HZ=2500000
 python ./scripts/plotAndFftAndTime.py odata/rx_app_shortened.out complex 65536 $$SAMP_RATE_HZ 16352 &
 
-Verify that the signal generator tone exists at 700,000 Hz in the plotted baseband signal FFT (calculated as signal generator frequency - RF tune frequency - IF tune frequency = 2400.8 MHz - 2400 MHz - 0.1 MHz = 700,000 Hz).
+Verify that the signal generator tone exists at 700,000 Hz in the plotted baseband signal FFT (calculated as signal generator frequency - RF tune frequency - IF tune frequency = 2400.8 MHz - 2400 MHz - 0.1 MHz = 700,000Hz).
 
 Alternatively, use non-shortened rx_app_raw.out (results in potentially slow plot script)
 SAMP_RATE_HZ=2500000
@@ -107,5 +90,3 @@ python ./scripts/plotAndFftAndTime.py odata/rx_app_raw.out complex 65536 $$SAMP_
 ----------------------------------------------------------------------------
 endef
 export showhelp
-
-include $(OCPI_CDK_DIR)/include/application.mk
