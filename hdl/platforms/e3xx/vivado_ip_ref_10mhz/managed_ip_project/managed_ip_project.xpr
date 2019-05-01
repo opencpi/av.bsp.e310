@@ -3,7 +3,7 @@
 <!--                                                         -->
 <!-- Copyright 1986-2017 Xilinx, Inc. All Rights Reserved.   -->
 
-<Project Version="7" Minor="20" Path="/home/user/av.bsp.e310/hdl/platforms/e3xx/vivado_ip_ref_10mhz/managed_ip_project/managed_ip_project.xpr">
+<Project Version="7" Minor="20" Path=".">
   <DefaultLaunch Dir="$PRUNDIR"/>
   <Configuration>
     <Option Name="Id" Val="ae1ba4fdacda48dd94c1359a69e01523"/>

@@ -21,7 +21,11 @@ with this program. If not, see <http://www.gnu.org/licenses/>.
 % Update the docTitle and docVersion per document
 %----------------------------------------------------------------------------------------
 \def\docTitle{OpenCPI\\Ettus E3XX Getting Started Guide}
-\def\docVersion{1.4}
+\def\docVersion{1.5}
+\def\rccplatform{xilinx13\_4}
+\def\radioName{E310}
+\def\mountPoint{/mnt/}
+\def\copyLoc{<partition>}
 %----------------------------------------------------------------------------------------
 \input{../../../../snippets/LaTeX_Header.tex}
 \input{../../../../snippets/ocpidev_ide.tex}
@@ -64,6 +68,8 @@ with this program. If not, see <http://www.gnu.org/licenses/>.
 		    v1.3.1-E3XX & Initial Release & 3/2018 \\
 			\hline
 		    v1.4 & Updated for Release & 9/2018 \\
+			\hline
+		    v1.5 & Version bump only & 4/2019 \\
 			\hline
 			\end{tabularx}
 		\end{table}
@@ -249,70 +255,11 @@ No additional files required for Network Mode.
 \subsubsection{SD Card Source}
 The final SD Card artifacts are distributed in \path{/opt/opencpi/cdk/e3xx/} via RPM as noted previously. The end user is not required nor expected to generate the files, but the process is documented below in Appendix~\ref{app:sd_card}.
 
-
-\section{Script Setup}
-There are two type of setups or modes for running applications on any embedded radio: Network and Standalone. In Network mode, a development system hosts the OpenCPI tree as an NFS server to the E310 which is an NFS client. This configuration provides quick and dynamic access to all of OpenCPI, and presumably any applications, components and bitstreams. In Standalone mode, all the artifacts are located on the SDR's local storage (\textit{e.g.} SD card) and no network connection is required. This may be more suited for \textit{deployment} scenarios in which network connection is not possible or practical. Network mode is generally preferred during the development process.\\
-
-\noindent For both Network and Standalone mode, the following step is necessary:\\\\
-1) Enter the mounted SD card's \path{opencpi} directory
-\begin{verbatim}
-$ cd /run/media/<user>/<partition>/opencpi/
-\end{verbatim}
-
-\begin{flushleft}
-
-\subsection{Setting up the Network and Standalone Mode scripts}
-
-For each mode, a startup script is used to configure the environment of the embedded system. The OpenCPI framework provides a default script for each mode. The default scripts are to be copied, modified per the user's requirements.\par\medskip
-
-\subsubsection{Network Mode}
-1) Make a copy of the default script for editing
-\begin{verbatim}
-$ cp /run/media/<user>/<partition>/opencpi/default_mynetsetup.sh \
-/run/media/<user>/<partition>/opencpi/mynetsetup.sh
-\end{verbatim}\medskip
-
-2) Edit the copy
-\begin{enumerate}
-\item In \texttt{mynetsetup.sh}, uncomment the following lines which are necessary for mounting \textit{core}, \textit{assets}, and \textit{bsp\_e310} projects:
-
-\begin{verbatim}
-mkdir -p /mnt/ocpi_core
-mount -t nfs -o udp,nolock,soft,intr $1:/home/<user>/ocpi_projects/core /mnt/ocpi_core
-mkdir -p /mnt/ocpi_assets
-mount -t nfs -o udp,nolock,soft,intr $1:/home/<user>/ocpi_projects/assets /mnt/ocpi_assets
-mkdir -p /mnt/bsp_e310
-mount -t nfs -o udp,nolock,soft,intr $1:/home/<user>/ocpi_projects/bsp_e310 /mnt/bsp_e310
-\end{verbatim}
- \item Edit \texttt{/home/<user>/ocpi\_projects/core} and \texttt{/home/<user>/ocpi\_projects/assets} to reflect the paths to the \textit{core}, \textit{assets}, and \textit{bsp\_e310} projects on the host, for example:
-\begin{verbatim}
-mkdir -p /mnt/ocpi_core
-mount -t nfs -o udp,nolock,soft,intr $1:/home/johndoe/ocpi_projects/core /mnt/ocpi_core
-mkdir -p /mnt/ocpi_assets
-mount -t nfs -o udp,nolock,soft,intr $1:/home/johndoe/ocpi_projects/assets /mnt/ocpi_assets
-mkdir -p /mnt/bsp_e310
-mount -t nfs -o udp,nolock,soft,intr $1:/home/johndoe/ocpi_projects/bsp_e310 /mnt/bsp_e310
-\end{verbatim}
-\end{enumerate}
-
-\subsubsection{Standalone Mode}
-In this mode, all OpenCPI artifacts that are required to run any application on the E310 must be copied onto the SD card.  Building the provided projects to obtain such artifacts is discussed in Section~\ref{sec:Building OpenCPI projects}. Once the artifacts have been created, they must be copied to the SD card in Section \ref{sec:SD_Card_Setup}. In general, any required \texttt{.so} (RCC workers), \texttt{.bit.gz} (hdl assemblies), and application XMLs or executables must be copied to the SD card.\medskip
-
-1) Make a copy of the default script for editing
-\begin{verbatim}
-$ cp /run/media/<user>/<partition>/opencpi/default_mysetup.sh \
-/run/media/<user>/<partition>/opencpi/mysetup.sh
-\end{verbatim}\medskip
-
-2) Edit the copy\\ \medskip
-Unlike Network mode, there is no required modifications to this script. \medskip
-
-3) Copy any additional artifacts to SD card's \path{opencpi/artifacts/} directory \medskip
-
+\input{../../../../snippets/Script_Setup.tex}
 \input{../../../../snippets/Setup_System_Time.tex}
+\input{../../../../snippets/rsync_Setup_Snippet.tex}
 \end{flushleft}
 
-\pagebreak
 \section{Development Host Setup - Network Mode ONLY}
 
 % Bring in NFS setup snippet (has subsections)

@@ -114,8 +114,9 @@ class Q32p32:
 
     def __str__(self):
         """
-        This method is the main thing that makes this class necessary. This
-        method prints out every digit of the Q32.32 value.
+        This functionality provided by this method is the main thing that makes
+        this class necessary. This prints out every digit of the Q32.32
+        value.
         """
         return self.get_int_str() + "." + self.get_fract_str()
 
