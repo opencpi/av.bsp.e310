@@ -21,9 +21,12 @@ with this program. If not, see <http://www.gnu.org/licenses/>.
 % Update the docTitle and docVersion per document
 %----------------------------------------------------------------------------------------
 \def\docTitle{OpenCPI\\ E3xx TX Test App Guide}
-\def\docVersion{1.4}
+\def\docVersion{1.5}
 %----------------------------------------------------------------------------------------
-\input{../../../snippets/LaTeX_Header.tex}
+% AV-5479: Assume this is in projects/bsps/XXX of source checkout
+\def\snippetpath{../../../../../../doc/av/tex/snippets}
+\input{\snippetpath/includes}
+\input{LaTeX_Header}
 \date{Version \docVersion} % Force date to be blank and override date with version
 \title{\docTitle}
 \lhead{E3xx TX Test App Guide}
@@ -46,7 +49,9 @@ with this program. If not, see <http://www.gnu.org/licenses/>.
 			\rowcolor{blue}
 			\textbf{Revision} & \textbf{Description of Change} & \textbf{Date} \\
 		    \hline
-		    v1.4 & Initial release. & 9/2018 \\
+		    v1.4 & Initial release & 9/2018 \\
+			\hline
+		    v1.5 & Version bump only & 4/2019 \\
 			\hline
 			\end{tabularx}
 		\end{table}

@@ -26,7 +26,7 @@
 
   <!-- OWD Parameters -->
 
-  <Property Name="TYPE_p" Type="enum" Enums="e3xx" Parameter="true" Default="e3xx" Description="The purpose of this property is to provide the option for an application XML to specify this property in order to enforce use of a parameterized build for a particular frontend type."/>
+  <Property Name="TYPE_p" Type="enum" Enums="e3xx_ts" Parameter="true" Default="e3xx_ts" Description="The purpose of this property is to provide the option for an application XML to specify this property in order to enforce use of a parameterized build for a particular frontend type."/>
 
   <Property Name="NOT_SUPPORTED_p" Type="double" Parameter="true" Default="-1" Description="This value, when assigned to a frontend property, e.g. rf_gain_dB, indicates that the frontend setting corresponding to said property is not supported by the frontend hardware controlled by this worker."/>
 

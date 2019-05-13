@@ -72,7 +72,7 @@ def main():
 
     fo = open(sys.argv[6], 'w')
     #print "\tName of the output file:", fo.name
-    for i in taps[0:np.ceil(length/2.0)]:
+    for i in taps[0:int(np.ceil(length/2.0))]:
         stringy = ''.join(str(i)+'\n')
         fo.write(stringy)
     fo.close()
