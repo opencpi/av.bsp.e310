@@ -1,6 +1,8 @@
 This is the source distribution of the OpenCPI E3xx (E310/E312/E313) Board
 Support Package (BSP) project.
 
+OpenCPI is Open Source Software, licensed with the LGPL3.  See LICENSE.txt.
+
 Getting Started:
 ---
 See https://opencpi.github.io/bsp_e310/Ettus_E3xx_Getting_Started_Guide.pdf
