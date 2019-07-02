@@ -72,7 +72,7 @@ with this program. If not, see <http://www.gnu.org/licenses/>.
 			\hline
 		    v1.4 & Updated for Release & 9/2018 \\
 			\hline
-		    v1.5 & Version bump only & 4/2019 \\
+		    v1.5 & Added setup of udev file & 4/2019 \\
 			\hline
 			\end{tabularx}
 		\end{table}
@@ -262,6 +262,28 @@ The final SD Card artifacts are distributed in \path{/opt/opencpi/cdk/e3xx/} via
 \input{Setup_System_Time}
 \input{rsync_Setup_Snippet}
 \end{flushleft}
+
+\pagebreak
+\section{Hardware Setup}
+
+\subsection{Establish a Serial Connection}
+By default, the USB to Serial adapter connects as read-only, which requires sudo privileges for establishing a serial connection. OpenCPI recognizes that sudo may not be available and has provided an alternative for configuring the device thereby allowing all users access to the device. Specifically, this is accomplished by adding \texttt{udev} rules to instruct the device connection to have read and write permissions for all users.
+\begin{itemize}
+\item If OpenCPI was installed via RPMs, the \texttt{udev} rules are automatically setup for the user.
+\item If OpenCPI was installed from source, then the user must manually add the \texttt{udev} rules by copying the file from the host machine's installation directory to the host machine's \path{/etc/udev/rules.d/}. The following command can be used as a guide:
+\begin{verbatim}
+$ cd /etc/udev/rules.d/
+$ sudo ln -s /<install-path>/opencpi/cdk/e3xx/host-udev-rules/98-e3xx.rules \
+98-e3xx.rules
+\end{verbatim}
+\item Whether installed via RPMs or source (and manually creating the symbolic link), the USB to Serial adapter will be connected as \texttt{/dev/e3xx\_0} with read and write permissions for all users.
+\end{itemize}
+
+\noindent Once the E310 is powered on, use the following command to connect to the serial port:
+\begin{verbatim}
+$ screen /dev/e3xx_0 115200
+\end{verbatim}
+
 
 \section{Development Host Setup - Network Mode ONLY}
 

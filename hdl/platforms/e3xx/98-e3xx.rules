@@ -1,4 +1,3 @@
-#!/bin/bash
 # This file is protected by Copyright. Please refer to the COPYRIGHT file
 # distributed with this source distribution.
 #
@@ -17,9 +16,4 @@
 # You should have received a copy of the GNU Lesser General Public License along
 # with this program. If not, see <http://www.gnu.org/licenses/>.
 
-set -e
-for file in Ettus_E3xx_Getting_Started_Guide Ettus_E3xx_Platform_Worker; do
-  rubber -d ${file}.tex
-  echo Original $(stat -c "%s" ${file}.pdf) bytes
-  while ./optpdf.sh ${file}.pdf; do :; done
-done
+SUBSYSTEM=="tty" ATTRS{idVendor}=="0403" ATTRS{idProduct}=="6015" SYMLINK+="e3xx_%n" MODE:="0666"

@@ -64,8 +64,10 @@
   
   <!-- RCC Frontend Proxies -->
   <!-- TX Chain -->
-  <Instance Component="ocpi.core.tx">
-    <Property Name="TYPE_p" Value="e3xx"/>
+  <!-- Because the ACI requires writing the config property with a value that is
+       consistent with the e3xx_tx worker, the worker attribute is used to
+       enforce that proper worker is chosen -->
+  <Instance Component="ocpi.core.tx" Worker="e3xx_tx">
     <Property Name="app_inst_name_e3xx_mimo_xcvr_filter_proxy" Value="e3xx_mimo_xcvr_filter_proxy"/>
   </Instance>
   

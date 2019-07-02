@@ -16,6 +16,7 @@
 # You should have received a copy of the GNU Lesser General Public License along
 # with this program. If not, see <http://www.gnu.org/licenses/>.
 
+=<platform_dir>/98-e3xx.rules <target>/udev-rules/
 =<platform_dir>/sd_card/system.xml <target>/
 @<platform_dir>/sd_card/devicetree.dtb <target>/
 

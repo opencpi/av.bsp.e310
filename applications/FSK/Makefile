@@ -29,11 +29,11 @@ include $(OCPI_CDK_DIR)/include/application.mk
 .SILENT: show
 .PHONY: show
 
-all: tap_gen
+all: idata/tx_rrcos_taps.dat idata/rx_rrcos_taps.dat
 
-idata/tx_rrcos_taps.dat idata/rx_rrcos_taps.dat: tap_gen
+idata/tx_rrcos_taps.dat: idata/rx_rrcos_taps.dat
 
-tap_gen:
+idata/rx_rrcos_taps.dat:
 	$(eval numTaps=128)
 	$(eval alpha=0.95)
 	$(eval baudRate=64000)
@@ -46,7 +46,7 @@ tap_gen:
 	python scripts/gen_rrcos_taps.py $(numTaps) $(alpha) `echo "1/$(baudRate)" | bc -l` `echo "$(baudRate)*$(spb)" | bc -l` $(maxTap) idata/rx_rrcos_taps.dat
 
 clean::
-	rm -rf idata/*.dat idata/*.bin odata/* scripts/*.pyc
+	rm -rf idata/*.dat idata/*.bin odata/* scripts/*.pyc html/ latex/
 
 show:
 	echo "$$showhelp"

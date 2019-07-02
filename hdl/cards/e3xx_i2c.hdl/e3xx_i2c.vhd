@@ -25,7 +25,7 @@
 -- to match the e3xx daughterboard i2c device
 library IEEE, ocpi, i2c;
 use IEEE.std_logic_1164.all; use ieee.numeric_std.all;
-use ocpi.all; use ocpi.types.all; -- remove this to avoid all ocpi name collisions
+use ocpi.all; use ocpi.types.all; use ocpi.util.all;-- remove this to avoid all ocpi name collisions
 use i2c.i2c.all;
 architecture rtl of e3xx_i2c_worker is
   constant addr_width_c    : natural := 7;
