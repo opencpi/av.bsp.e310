@@ -94,7 +94,7 @@ with this program. If not, see <http://www.gnu.org/licenses/>.
 % Update the docTitle and docVersion per document
 %----------------------------------------------------------------------------------------
 \def\docTitle{Platform Data Sheet}
-\def\docVersion{1.4}
+\def\docVersion{1.5}
 %----------------------------------------------------------------------------------------
 \date{Version \docVersion} % Force date to be blank and override date with version
 \title{\docTitle}
@@ -122,7 +122,7 @@ with this program. If not, see <http://www.gnu.org/licenses/>.
 	\hline
 	Version           & v\docVersion \\
 	\hline
-	Release Date      & Sept 2018 \\
+	Release Date      & 4/2019 \\
 	\hline
 	Component Library & ocpi.bsp.e310.platforms                                \\
 	\hline
@@ -296,6 +296,8 @@ opencpi/hdl/primitives/sdp/sdp\_body.vhd
 
 			Property     & \verb+useGP1+         & Bool   & -             & -               & Parameter           & Standard    & false   &                              \\
 			\hline
+			Property     & \verb+pps_src+        & Bool   & -             & -               & Parameter           & Standard    & 0       & 0 : generic PPS input, 1 : GPS PPS, 2 : externally drivable PPS connector, 3-255 : reserved for future use \\
+			\hline
 			Property     & \verb+axi_error+      & Bool   & -             & 4               & Volatile            & Standard    & -       &                              \\
 			\hline
 			Property     & \verb+sdpDropCount+   & UChar  & -             & -               & Volatile            & Standard    & -       &                              \\
@@ -395,7 +397,9 @@ Note that this signal table does not include signals that may be provided by slo
 	\rowcolor{blue}
 	Name           & Type   & Differential & Width & Description                                          \\
 	\hline
-	PPS\_EXT\_IN & Output & false        & 1     & Connected to time\_server. Requires external connection. Note that the timer\_server has not been thoroughly tested on this system.\\
+	PPS\_EXT\_IN & Input & false        & 1     & 1 PPS input to FPGA from PPS External (SYNC). \\
+	\hline
+	GPS\_PPS & Input & false        & 1     & 1 PPS input to FPGA from GPS. \\
 	\hline
 	ONSWITCH\_DB    & Input & false        & 1     & Onswitch pin to be debounced - tied to pull-up and a volatile property. This is needed in order to enforce that the onswitch is tied to a pull-up, or the radio reboots when the bitstream is loaded. The volatile property forces the compilation tools \textit{not} to optimize the signal and pull-up out.\\
 	\hline

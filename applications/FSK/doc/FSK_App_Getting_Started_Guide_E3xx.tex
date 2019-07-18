@@ -21,7 +21,7 @@ with this program. If not, see <http://www.gnu.org/licenses/>.
 % Update the docTitle and docVersion per document
 %----------------------------------------------------------------------------------------
 \def\docTitle{OpenCPI\\ FSK App Getting Started Guide\\ (E310 Supplement)}
-\def\docVersion{1.4}
+\def\docVersion{1.5}
 %----------------------------------------------------------------------------------------
 \input{../../../snippets/LaTeX_Header.tex}
 \date{Version \docVersion} % Force date to be blank and override date with version
@@ -46,15 +46,9 @@ with this program. If not, see <http://www.gnu.org/licenses/>.
 			\rowcolor{blue}
 			\textbf{Revision} & \textbf{Description of Change} & \textbf{Date} \\
 		    \hline
-		    v1.1 & Initial Release & 3/2017 \\
-		    \hline
-		    v1.2 & Updated for OpenCPI Release 1.2 & 8/2017 \\
+			v1.4 & Updated with simplifications and references to assets' document & 9/2018 \\
 			\hline
-			v1.3 & Updated for OpenCPI Release 1.3 & 1/2018 \\
-			\hline
-			v1.3.1-E3XX & Updated for E310 support & 3/2018 \\
-			\hline
-			v1.4 & Updated with simplications and references to assets' document & 9/2018 \\
+			v1.5 & Version bump only & 4/2019 \\
 			\hline
 			\end{tabularx}
 		\end{table}
@@ -86,66 +80,74 @@ The purpose of this document is to provide a compact set of instructions to buil
 \section{Prerequisites}
 This document assumes that the OpenCPI framework has been installed. The application is supported on the Ettus E310 platform.
 
-\section{Build the Core Project}
-If the Core Project has not been created yet, follow the instructions in the OpenCPI Getting Started Guide. Once the Core project has been created, the following ocpidev command can be used to build the primitives and workers required by the FSK app. Navigate to the Core project directory and run the command:
-\begin{verbatim}
-ocpidev build --rcc --rcc-platform xilinx13_4 --hdl --hdl-platform e3xx --no-assemblies
-\end{verbatim}
+\section{Build the OpenCPI Core Project}
+If the Core Project has not been created yet, follow the instructions in the OpenCPI Getting Started Guide. Once the Core project has been created, the following ocpidev command can be used to build the primitives and workers required by the FSK app. Run the following:
+\lstset{language=bash, backgroundcolor=\color{lightgray}, columns=flexible, breaklines=true, prebreak=\textbackslash, basicstyle=\ttfamily, showstringspaces=false,upquote=true, aboveskip=\baselineskip, belowskip=\baselineskip}
+\begin{lstlisting}
+ocpidev -d <core-project-dir> build --rcc-platform xilinx13_4 --hdl-platform e3xx
+\end{lstlisting}
 
-Note: The --no-assemblies argument excludes the creation of executable bitstreams.\\
 This step takes approximately 20 minutes to complete.\\
 
-\section{Build the Assets Project}
-If the Assets Project has not been created yet, follow the instructions in the OpenCPI Getting Started Guide. Once the Assets project has been created, the following ocpidev command can be used to build the primitives and workers required by the FSK app. Navigate to the Assets project directory and run the command:
-\begin{verbatim}
-ocpidev build --rcc --rcc-platform xilinx13_4 --hdl --hdl-platform e3xx --no-assemblies
-\end{verbatim}
-Note: The --no-assemblies is necessary here because we cannot build assemblies for the e3xx platform until that platform has itself been built.\\
+\section{Build the OpenCPI Assets Project (Excluding Assemblies)}
+If the assets project has not been created yet, follow the instructions in the OpenCPI Getting Started Guide. Once the assets project has been created, the following ocpidev command can be used to build the primitives and workers required by the FSK app. Run the following:
+\begin{lstlisting}
+ocpidev build -d <assets-project-dir> --rcc-platform xilinx13_4 --hdl-platform e3xx --no-assemblies
+\end{lstlisting}
+Note: The \verb|--no-assemblies| is necessary here because we cannot build assemblies for the e3xx platform until that platform has itself been built.\\
 
 This step takes approximately 50 minutes to complete.
 
-\section{Build the E310 BSP Project}
-For the Ettus E310, there is a BSP project that contains a copy of the FSK assemblies, so you can build it \textit{after} the assets project. Navigate to the E310 BSP project directory and run the following command:
-\begin{verbatim}
-ocpidev build --rcc --rcc-platform xilinx13_4 --hdl --hdl-platform e3xx
-\end{verbatim}
+\section{Build the OpenCPI E310 BSP Project}
+\label{sec:build_bsp_asms}
+For the Ettus E310, there is a BSP project that contains a copy of the FSK assemblies. This project must be built \textit{after} the assets project. Run the following:
+\begin{lstlisting}
+ocpidev build -d <e310-project-dir> --rcc-platform xilinx13_4 --hdl-platform e3xx
+\end{lstlisting}
+Note that this step builds the assemblies necessary for the application's \code{tx}, \code{rx}, and \code{txrx} modes on the E310 (and not the \code{filerw} mode, which is built via the instructions in \ref{sec:build_assets_asm}).
 This step takes approximately 45 minutes to complete.
 
-\section{Build the Assets for E310}
-Now that the E310 platform has been built, we can return to the assets project and build the fsk\_filerw assembly for the E310 platform:
-\begin{verbatim}
-ocpidev build hdl assembly fsk_filerw --hdl-platform e3xx
-\end{verbatim}
+\section{Build the Assets Project's fsk\_filerw Assembly}
+\label{sec:build_assets_asm}
+Now that the E310 platform has been built, we can return to the assets project and build the fsk\_filerw assembly for the E310 platform. Run the following:
+\begin{lstlisting}
+ocpidev build -d <assets-project-dir> hdl assembly fsk_filerw --hdl-platform e3xx
+\end{lstlisting}
+Note that this step builds the assembly necessary for the application's \code{filerw} mode on E310 (and not the \code{tx}, \code{rx}, and \code{txrx} modes, which are built via the instructions in \ref{sec:build_bsp_asms}).
 This step takes approximately 10 minutes to complete.
 
 
-\section{Build the FSK Application Executable}
-Next, the executable for the FSK Application must be built. Navigate to the E310 BSP project's \texttt{applications/FSK} directory of the Assets project and run the command:
-\begin{verbatim}
-ocpidev build --rcc-platform xilinx13_4
-\end{verbatim}
-	If successful, a new directory named \code{target-xilinx13\_4} will contain the executable.
+\section{Build the E310 BSP Project's FSK Application Executable}
+Next, the executable for the FSK Application must be built. Run the following:
+\begin{lstlisting}
+ocpidev build -d <e310-project-dir/applications/FSK> --rcc-platform xilinx13_4
+\end{lstlisting}
+	If successful, a new directory named \code{target-xilinx13\_4} will be created in \verb|<e310-project-dir/applications/FSK>| that contains the executable.
 
 \section{Running the Application}
-For more information, see the full \textit{FSK\_App\_Getting\_Started\_Guide} in the Assets project. You can also reference the E310 \textit{FSK\_app} document, or run ``\code{make show}'' (on the host) in the E310 BSP's \texttt{applications/FSK} directory for more E310 specific information (especially \code{OCPI\_LIBRARY\_PATH} settings, etc...).\\\medskip
+For more information, see the full \textit{FSK\_App\_Getting\_Started\_Guide} in the assets project. You can also reference the E310 \textit{FSK\_app} document, or run ``\code{make show}'' (on the host) in the E310 BSP's \texttt{applications/FSK} directory for more E310 specific information (especially \code{OCPI\_LIBRARY\_PATH} settings, etc...).\\\medskip
 
-In short, once the radio is set up, run the application \textit{on the embedded radio} by running the executable and passing a ``mode'' such as \code{filerw}, \code{tx}, \code{rx} or \code{txrx}. For example:\\\medskip
-Connect port TRXA to RX2A using an SMA connector, enter the E310 BSP project's \texttt{applications/FSK} directory, and run the following:\\
-\begin{verbatim}
+In short, once the radio is set up, run the application \textit{on the embedded radio} by running the executable and passing a ``mode'' such as \code{filerw}, \code{tx}, \code{rx} or \code{txrx}.
+
+\subsection{Example txrx Mode Usage with SMB loopback}
+Connect port TRXA to RX2A using an SMB cable and run the following:\\
+\begin{lstlisting}
+cd <e310-project-dir/applications/FSK>
 ./target-xilinx13_4/FSK txrx
-\end{verbatim}
+\end{lstlisting}
 At the runtime, choose TX port: TRXA and RX port: RX2A. The default values should suffice for the remaining options.
 \subsection{View the Results}
-After the application completes, the output can be found in the \texttt{applications/FSK/odata} directory. To view the results on the Development Host, navigate to the E310 BSP project's \texttt{applications/FSK} directory and execute the command:
-\begin{verbatim}
+After the application completes, the results can be viewed on the Development Host by running the following:
+\begin{lstlisting}
+cd <e310-project-dir/applications/FSK>
 eog odata/out_app_fsk_txrx.bin
-\end{verbatim}
+\end{lstlisting}
 \end{flushleft}
 	\begin{figure}[ht]
 	 	\centering
 	 	\begin{minipage}{.325\textwidth}
 			\centering\includegraphics[width=1.0\linewidth]{Os}
-			\caption{FSK input file}
+			\caption{Output file produced by successful application execution}
 			\label{fig:os_pic}
 		\end{minipage}
 	 	\begin{minipage}{.45\textwidth}

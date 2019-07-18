@@ -1,0 +1,28 @@
+<RccWorker language='c++' controloperations='initialize'>
+
+  <Slave name='time_server' worker='time_server.hdl'/>
+  <!--Slave name='platform' worker='e3xx.hdl'/--> <!-- TODO / FIXME - report bug -->
+
+  <ComponentSpec/>
+
+  <!-- parameter because value is used during initialize() -->
+  <Property name='SYNC_TIMEOUT_SEC_p' type='ushort'
+                                      parameter='true'
+                                      default='60'/>
+
+  <Property name='FILENAME_p' type='string'
+                              stringlength='128'
+                              parameter='true'
+                              default='/dev/ttyPS1'/>
+
+  <Property name='sync' type='bool' writable='true' writesync='true'/>
+  <Property name='unix_epoch_time' type='double' volatile='true' readsync='true'/>
+
+  <!-- debugging -->
+
+  <Property name='pps_okay' type='bool' volatile='true' readsync='true'/>
+  <Property name='rolling_pps_count' type='uchar'
+                                     volatile='true'
+                                     readsync='true'/>
+
+</RccWorker>

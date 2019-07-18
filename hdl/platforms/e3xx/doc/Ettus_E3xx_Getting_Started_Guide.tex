@@ -21,7 +21,11 @@ with this program. If not, see <http://www.gnu.org/licenses/>.
 % Update the docTitle and docVersion per document
 %----------------------------------------------------------------------------------------
 \def\docTitle{OpenCPI\\Ettus E3XX Getting Started Guide}
-\def\docVersion{1.4}
+\def\docVersion{1.5}
+\def\rccplatform{xilinx13\_4}
+\def\radioName{E310}
+\def\mountPoint{/mnt/}
+\def\copyLoc{<partition>}
 %----------------------------------------------------------------------------------------
 \input{../../../../snippets/LaTeX_Header.tex}
 \input{../../../../snippets/ocpidev_ide.tex}
@@ -64,6 +68,8 @@ with this program. If not, see <http://www.gnu.org/licenses/>.
 		    v1.3.1-E3XX & Initial Release & 3/2018 \\
 			\hline
 		    v1.4 & Updated for Release & 9/2018 \\
+			\hline
+		    v1.5 & Version bump only & 4/2019 \\
 			\hline
 			\end{tabularx}
 		\end{table}
@@ -233,7 +239,7 @@ This section provides the simplest instructions for copying files over to the SD
 
 \noindent Copy the following directory onto the SD card:
 \begin{verbatim}
-$ cp -r /opt/opencpi/cdk/e3xx/sdcard-xilinx13_4/* /run/media/<user>/<partition>/
+$ cp -rL /opt/opencpi/cdk/e3xx/sdcard-xilinx13_4/* /run/media/<user>/<partition>/
 \end{verbatim}
 
 \subsubsection{Copy Standalone Mode specific files to SD card}
@@ -249,79 +255,11 @@ No additional files required for Network Mode.
 \subsubsection{SD Card Source}
 The final SD Card artifacts are distributed in \path{/opt/opencpi/cdk/e3xx/} via RPM as noted previously. The end user is not required nor expected to generate the files, but the process is documented below in Appendix~\ref{app:sd_card}.
 
-
-\section{Script Setup}
-There are two type of setups or modes for running applications on any embedded radio: Network and Standalone. In Network mode, a development system hosts the OpenCPI tree as an NFS server to the E310 which is an NFS client. This configuration provides quick and dynamic access to all of OpenCPI, and presumably any applications, components and bitstreams. In Standalone mode, all the artifacts are located on the SDR's local storage (\textit{e.g.} SD card) and no network connection is required. This may be more suited for \textit{deployment} scenarios in which network connection is not possible or practical. Network mode is generally preferred during the development process.\\
-
-\noindent For both Network and Standalone mode, the following step is necessary:\\\\
-1) Enter the mounted SD card's \path{opencpi} directory
-\begin{verbatim}
-$ cd /run/media/<user>/<partition>/opencpi/
-\end{verbatim}
-
-\begin{flushleft}
-
-\subsection{Setting up the Network and Standalone Mode scripts}
-
-For each mode, a startup script is used to configure the environment of the embedded system. The OpenCPI framework provides a default script for each mode. The default scripts are to be copied, modified per the user's requirements.\par\medskip
-
-\subsubsection{Network Mode}
-1) Make a copy of the default script for editing
-\begin{verbatim}
-$ cp /run/media/<user>/<partition>/opencpi/default_mynetsetup.sh \
-/run/media/<user>/<partition>/opencpi/mynetsetup.sh
-\end{verbatim}\medskip
-
-2) Edit the copy
-\begin{enumerate}
-\item In \texttt{mynetsetup.sh}, uncomment the following lines which are necessary for mounting \textit{core}, \textit{assets}, and \textit{bsp\_e310} projects:
-
-\begin{verbatim}
-mkdir -p /mnt/ocpi_core
-mount -t nfs -o udp,nolock,soft,intr $1:/home/<user>/ocpi_projects/core /mnt/ocpi_core
-mkdir -p /mnt/ocpi_assets
-mount -t nfs -o udp,nolock,soft,intr $1:/home/<user>/ocpi_projects/assets /mnt/ocpi_assets
-mkdir -p /mnt/bsp_e310
-mount -t nfs -o udp,nolock,soft,intr $1:/home/<user>/ocpi_projects/assets /mnt/bsp_e310
-\end{verbatim}
- \item Edit \texttt{/home/<user>/ocpi\_projects/core} and \texttt{/home/<user>/ocpi\_projects/assets} to reflect the paths to the \textit{core}, \textit{assets}, and \textit{bsp\_e310} projects on the host, for example:
-\begin{verbatim}
-mkdir -p /mnt/ocpi_core
-mount -t nfs -o udp,nolock,soft,intr $1:/home/johndoe/ocpi_projects/core /mnt/ocpi_core
-mkdir -p /mnt/ocpi_assets
-mount -t nfs -o udp,nolock,soft,intr $1:/home/johndoe/ocpi_projects/assets /mnt/ocpi_assets
-mkdir -p /mnt/bsp_e310
-mount -t nfs -o udp,nolock,soft,intr $1:/home/johndoe/ocpi_projects/assets /mnt/bsp_e310
-\end{verbatim}
-\end{enumerate}
-
-\subsubsection{Standalone Mode}
-In this mode, all OpenCPI artifacts that are required to run any application on the E310 must be copied onto the SD card.  Building the provided projects to obtain such artifacts is discussed in Section~\ref{sec:Building OpenCPI projects}. Once the artifacts have been created, they must be copied to the SD card in Section \ref{sec:SD_Card_Setup}. In general, any required \texttt{.so} (RCC workers), \texttt{.bit.gz} (hdl assemblies), and application XMLs or executables must be copied to the SD card.\medskip
-
-1) Make a copy of the default script for editing
-\begin{verbatim}
-$ cp /run/media/<user>/<partition>/opencpi/default_mysetup.sh \
-/run/media/<user>/<partition>/opencpi/mysetup.sh
-\end{verbatim}\medskip
-
-2) Edit the copy\\ \medskip
-Unlike Network mode, there is no required modifications to this script. \medskip
-
-3) Copy any additional artifacts to SD card's \path{opencpi/artifacts/} directory \medskip
-
-\subsection{Setup system time reference}
-\textbf{If Linux system time is not required to be accurate, this step may be skipped.} \\ \medskip
-
-\textit{For either Network or Standalone mode}, the following settings that are passed by \texttt{mynetsetup.sh/mysetup.sh} to the \texttt{zynq\_net\_setup.sh/zynq\_setup.sh} scripts \textit{may} require modification:
-
-\begin{itemize}
- \item Identify the system that is to be used as a time server, where the default is ``time.nist.gov''. A valid time server must support RFC-868.
- \item Identify the current timezone description, where the default is ``EST5EDT,M3.2.0,M11.1.0''. Change this if required for the local timezone. See \texttt{man tzset} on the host PC for more information.
- \item If a time server is not required, or cannot connect to a time server, the user is required to manually set the time at start up.  Use the \code{date} command to manually set the Linux system time. See \texttt{man date} on the host PC for more information.
-\end{itemize}
+\input{../../../../snippets/Script_Setup.tex}
+\input{../../../../snippets/Setup_System_Time.tex}
+\input{../../../../snippets/rsync_Setup_Snippet.tex}
 \end{flushleft}
 
-\pagebreak
 \section{Development Host Setup - Network Mode ONLY}
 
 % Bring in NFS setup snippet (has subsections)
@@ -371,7 +309,7 @@ Available containers:
  0  hdl   e3xx                                       PL:0
  1  rcc   xilinx13_4     linux  x13_4       arm      rcc0
 \end{verbatim}
-Note: If the output includes ``\verb+rdate: bad address `time.nist.gov'+'', comment out the \code{rdate} command in \code{zynq\_net\_setup.sh}, reboot the radio, and start back at step 1 of this section.
+\input{../../../../snippets/Ntp_Alarm_Clock.tex}
 \end{flushleft}
 \end{enumerate}
 
@@ -420,7 +358,7 @@ Available containers:
  0  hdl   e3xx                                       PL:0
  1  rcc   xilinx13_4     linux  x13_4       arm      rcc0
 \end{verbatim}
-Note: If the output includes ``\verb+rdate: bad address `time.nist.gov'+'', comment out the \code{rdate} command in \code{zynq\_setup.sh}, reboot the radio, and start back at step 1 of this section.
+\input{../../../../snippets/Ntp_Alarm_Clock.tex}
 \end{flushleft}
 \end{enumerate}
 
@@ -634,7 +572,7 @@ After performing the steps from \ref{sec:Copy embedded OS and boot files to SD c
 
 \begin{verbatim}
 
-$ cp -r /opt/opencpi/cdk/e3xx/sdcard-xilinx13_4/opencpi /run/media/<user>/<partition>/
+$ cp -rL /opt/opencpi/cdk/e3xx/sdcard-xilinx13_4/opencpi /run/media/<user>/<partition>/
 
 $ cp /home/<user>/ocpi_projects/assets/hdl/assemblies/testbias/container-testbias_e3xx_base/\
 target-zynq/testbias_e3xx_base.bit.gz /run/media/<user>/<partition>/opencpi/xilinx13_4/artifacts

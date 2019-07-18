@@ -1,0 +1,12 @@
+<!-- The e3xx_mimo_xcvr_gps_time_proxy_test application xml file -->
+<Application>
+
+  <Instance Component="ocpi.core.platform">
+    <Property Name="test_mode" Value="true"/>
+  </Instance>
+  <Instance Component="ocpi.core.devices.time_server"/>
+  <Instance Component="ocpi.bsp.e310.cards.e3xx_mimo_xcvr_gps_time_proxy">
+    <Slave Name="time_server"/>
+  </Instance>
+
+</Application>

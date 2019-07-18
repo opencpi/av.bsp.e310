@@ -1,0 +1,54 @@
+This core was generated in Vivado. It was used to generate a 10 MHz reference
+output from the E310 FPGA, and was included in the platform worker during the
+testing and verification of the E310 GPS PPS-disciplining of the
+Hardware Time Service. This 10 MHz reference was initially thought to be useful
+in the absence of proper test equipment, but this usefulness proved to be
+limited. The core is left here, along with a snippet of the code that use to
+exist in the platform worker, in case such a test is resurrected in the future.
+
+--- BEGIN CODE SNIPPET
+  -- 10 MHz reference for GPS testing
+  signal s_mmcm_10mhz_ref : std_logic;
+  signal s_mmcm_locked    : std_logic;
+  signal s_oddr_reset     : std_logic;
+  signal s_oddr_10mhz_ref : std_logic;
+
+  component mmcm_10mhz_ref
+    port (
+      clk_out1          : out    std_logic;
+      reset             : in     std_logic;
+      locked            : out    std_logic;
+      clk_in1           : in     std_logic
+      );
+  end component;
+
+  test_mode_circuit : if test_mode = btrue generate
+    gen_10mhz_reg : mmcm_10mhz_ref
+      port map (
+        clk_in1 => clk,
+        reset => reset,
+        locked => s_mmcm_locked,
+        clk_out1 => s_mmcm_10mhz_ref
+        );
+
+    s_oddr_reset <= not s_mmcm_locked;
+
+    -- clock forwarding
+    ODDR_inst : ODDR
+      generic map(
+        DDR_CLK_EDGE => "OPPOSITE_EDGE",--"OPPOSITE_EDGE"or"SAME_EDGE"
+        INIT => '0',--InitialvalueforQport('1'or'0')
+        SRTYPE => "SYNC")--ResetType("ASYNC"or"SYNC")
+      port map(
+        Q => s_oddr_10mhz_ref,
+        C => s_mmcm_10mhz_ref,
+        CE => '1',
+        D1 => '1',
+        D2 => '0',
+        R => s_oddr_reset,
+        S => '0'
+        );
+
+    PL_GPIO(0) <= s_oddr_10mhz_ref;
+  end generate test_mode_circuit;
+--- END CODE SNIPPET

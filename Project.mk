@@ -20,6 +20,6 @@
 PackageName=bsp.e310
 PackagePrefix=ocpi
 
-ProjectDependencies=ocpi.assets
+ProjectDependencies=ocpi.assets ocpi.assets_ts
 ComponentLibraries+=components comms_comps dsp_comps misc_comps util_comps
 

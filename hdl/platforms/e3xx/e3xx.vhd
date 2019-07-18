@@ -59,7 +59,16 @@ begin
   -- for time-keeping
   timebase_out.clk   <= clk;
   timebase_out.reset <= reset;
-  timebase_out.ppsIn <= PPS_EXT_IN;
+
+  PL_GPIO(5) <= timebase_in.ppsOut;
+
+  pps_src_gps : if pps_src = 1 generate
+    timebase_out.ppsIn <= GPS_PPS;
+  end generate pps_src_gps;
+
+  pps_ext : if pps_src = 2 generate
+    timebase_out.ppsIn <= PPS_EXT_IN;
+  end generate pps_ext;
 
   clkbuf   : BUFG   port map(I => fclk(1),
                              O => clk);
@@ -138,7 +147,7 @@ begin
   props_out.romData         <= metadata_in.romData;
 
   -- e3xx_mimo_xcvr card is always present
-  props_out.slotCardIsPresent <= (0 => To_bool('0'), -- active low, this coincides with index 0 of slotName property
+  props_out.slotCardIsPresent <= (0 => '1', -- this coincides with index 0 of slotName property
                                   others => '0');
 
   -- Drive metadata interface

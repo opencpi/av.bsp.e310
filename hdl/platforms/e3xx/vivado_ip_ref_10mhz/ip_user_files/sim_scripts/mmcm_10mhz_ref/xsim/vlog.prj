@@ -1,0 +1,4 @@
+verilog xil_defaultlib "../../../../mmcm_10mhz_ref/mmcm_10mhz_ref_clk_wiz.v" --include "../../../ipstatic"
+verilog xil_defaultlib "../../../../mmcm_10mhz_ref/mmcm_10mhz_ref.v" --include "../../../ipstatic"
+verilog xil_defaultlib "glbl.v"
+nosort
